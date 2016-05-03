@@ -1,0 +1,30 @@
+mongo_host=''
+mongo_port=''
+known_commands="export import perf stat dump files oplog restore top"
+if [ -f /etc/mongos.conf ]; then
+  mongo_host_tmp=`grep -e mongo_host /etc/mongos.conf | awk -F ":" '{print $2}' | tr -d '[[:space:]]'`
+  mongo_port_tmp=`grep -e mongo_port /etc/mongos.conf | awk -F ":" '{print $2}' | tr -d '[[:space:]]'`
+  if [ ! -z "$mongo_host_tmp" ]; then
+    mongo_host=$mongo_host_tmp
+  fi
+  if [ ! -z "$mongo_port_tmp" ]; then
+    mongo_port=$mongo_port_tmp
+  fi
+else
+  echo "Error: no /etc/mongos.conf found!"
+  exit 1
+fi
+
+if [ -z "$mongo_host" ]; then
+  echo "Error: no mongo_host found from /etc/mongos.conf"
+  exit 1
+fi
+if [ -z "$mongo_port" ]; then
+  echo "Error: no mongo_port found from /etc/mongos.conf"
+  exit 1
+fi
+mongo --host ${mongo_host} --port ${mongo_port} <<EOF
+   sh.addShard("10.0.71.15:27017")
+   sh.addShard("10.0.71.18:27017")
+   sh.addShard("10.0.71.19:27017")
+EOF
