@@ -28,6 +28,9 @@ class MongoMaster(MongoBase):
         db_hosts = config['clusterHostInfo']['mongodb_db_hosts']
         len_host=len(db_hosts)
         len_port=len(params.db_ports)
+        print "hostname :" + current_host_name
+        print "db nodes list"
+        print db_hosts
         #get shard_name
         for index,item in enumerate(db_hosts,start=0):
             if item ==current_host_name:
@@ -78,21 +81,23 @@ class MongoMaster(MongoBase):
     def status(self, env):
         print "checking status..."
         #Execute('service mongod status')
-        
+        shard_name = params.shard_prefix + "shard0"                       
+        pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
+        check_process_status(pid_file)
         #check_process_status(self.PID_CONFIG_FILE)
-        import socket
-        current_host_name=socket.getfqdn(socket.gethostname())
-        len_host=len(host)
-        len_port=len(params.db_ports)
+        #import socket
+        #current_host_name=socket.getfqdn(socket.gethostname())
+        #len_host=len(host)
+        #len_port=len(params.db_ports)
         #get shard_name
-        for index,item in enumerate(host,start=0):
-            if item ==current_host_name:
+        #for index,item in enumerate(host,start=0):
+        #    if item ==current_host_name:
                 #foreach db_ports
-                for index_p,p in enumerate(params.db_ports,start=0):                   
+        #        for index_p,p in enumerate(params.db_ports,start=0):                   
                    #get shard_name
-                   shard_name = params.shard_prefix + str((index-index_p)%len_host)                         
-                   pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
-                   check_process_status(self.PID_DB_FILE)              
+        #           shard_name = params.shard_prefix + str((index-index_p)%len_host)                         
+        #           pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
+        #           check_process_status(pid_file)              
 
 
 if __name__ == "__main__":
