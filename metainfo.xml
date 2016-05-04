@@ -9,8 +9,8 @@
       <version>3.2</version>
       <components>
         <component>
-          <name>MONGODB_DB</name>
-          <displayName>MongoDB MONGOD</displayName>
+          <name>MONGODB</name>
+          <displayName>MONGODB</displayName>
           <category>SLAVE</category>
 		  <cardinality>1+</cardinality>
           <commandScript>
@@ -20,8 +20,8 @@
           </commandScript>
         </component>
         <component>
-          <name>MONGODB_CONFIG</name>
-          <displayName>MongoDB CONFIG</displayName>
+          <name>MONGODC</name>
+          <displayName>MONGOD CONFIG</displayName>
           <category>SLAVE</category>
 		  <cardinality>1+</cardinality>
           <commandScript>
@@ -31,8 +31,8 @@
           </commandScript>
         </component>
 		<component>
-          <name>MONGODB_MONGOS</name>
-          <displayName>MongoDB MONGOS</displayName>
+          <name>MONGODS</name>
+          <displayName>MONGOS</displayName>
           <category>SLAVE</category>
 		  <cardinality>1+</cardinality>
           <commandScript>

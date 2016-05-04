@@ -25,7 +25,7 @@ class MongoMaster(MongoBase):
         import socket
         current_host_name=socket.getfqdn(socket.gethostname())
         config = Script.get_config()
-        db_hosts = config['clusterHostInfo']['mongodb_db_hosts']
+        db_hosts = config['clusterHostInfo']['mongodb_hosts']
         len_host=len(db_hosts)
         len_port=len(params.db_ports)
         print "hostname :" + current_host_name
@@ -49,8 +49,34 @@ class MongoMaster(MongoBase):
                        Execute(format('mkdir -p {db_path}'),logoutput=True)
                    log_file = params.log_path + '/' + shard_name + '.log'
                    pid_file = params.pid_db_path + '/' + shard_name + '.pid'
-                   Execute(format('mongod -f /etc/mongod.conf -shardsvr -replSet {shard_name} -port {p} -dbpath {db_path} -oplogSize 100 -logpath {log_file} -pidfilepath {pid_file}')
+                   Execute(format('mongod -f /etc/mongod.conf --shardsvr  -replSet {shard_name} -port {p} -dbpath {db_path} -oplogSize 100 -logpath {log_file} -pidfilepath {pid_file}')
                            ,logoutput=True)
+        sleep(5)
+        print 'sleep waiting for all mongod started'
+        #init Replica Set
+        for index,item in enumerate(db_hosts,start=0):         
+            shard_name= params.shard_prefix + str(index)
+            
+            members =''
+            current_index=0
+            current_shard=index
+            while(current_index<len_port):
+                current_host = db_hosts[current_shard]
+                current_port = params.db_ports[current_index]
+                members = members+ '{_id:'+format('{current_index},host:"{current_host}:{current_port}"') + '},'
+                current_index = current_index + 1
+                current_shard = (current_shard + 1)%len(db_hosts)
+            members=members[:-1]
+            if item == current_host_name:            
+                replica_param ='rs.initiate( {_id:'+format('"{shard_name}",version: 1,members:') + '[' + members + ']})'
+        
+        cmd = format('mongo --host {current_host_name} --port 27017 <<EOF \n{replica_param} \nEOF\n')
+            #Execute(cmd,logoutput=True)
+        File('/var/run/mongo_config.sh',
+             content=cmd,
+             mode=0755
+        )
+        Execute('/var/run/mongo_config.sh',logoutput=True)
 
     def stop(self, env):
         print "stop services.."
