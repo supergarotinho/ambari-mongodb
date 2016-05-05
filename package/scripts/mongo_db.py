@@ -82,20 +82,12 @@ class MongoMaster(MongoBase):
         print "stop services.."
         import params                
         
-        import socket
-        current_host_name=socket.getfqdn(socket.gethostname())
-        len_host=len(host)
-        len_port=len(params.db_ports)
-        #get shard_name
-        for index,item in enumerate(host,start=0):
-            if item ==current_host_name:
-                #foreach db_ports
-                for index_p,p in enumerate(params.db_ports,start=0):                   
-                   #get shard_name
-                   shard_name = params.shard_prefix + str((index-index_p)%len_host)                         
-                   pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
-                   cmd =format('cat {pid_db_file} | xargs kill -9 ')
-                   Execute(cmd,logoutput=True)                
+        for index_p,p in enumerate(params.db_ports,start=0):                   
+            #get shard_name
+            shard_name = params.shard_prefix + str(index_p)                         
+            pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
+            cmd =format('cat {pid_file} | xargs kill -9 ')
+            Execute(cmd,logoutput=True)             
 
     def restart(self, env):
         self.configure(env)
@@ -105,25 +97,14 @@ class MongoMaster(MongoBase):
         start(self,env)
 
     def status(self, env):
+        import params
         print "checking status..."
-        #Execute('service mongod status')
-        shard_name =  "shard0"                       
-        pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
-        check_process_status(pid_file)
-        #check_process_status(self.PID_CONFIG_FILE)
-        #import socket
-        #current_host_name=socket.getfqdn(socket.gethostname())
-        #len_host=len(host)
-        #len_port=len(params.db_ports)
-        #get shard_name
-        #for index,item in enumerate(host,start=0):
-        #    if item ==current_host_name:
-                #foreach db_ports
-        #        for index_p,p in enumerate(params.db_ports,start=0):                   
-                   #get shard_name
-        #           shard_name = params.shard_prefix + str((index-index_p)%len_host)                         
-        #           pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
-        #           check_process_status(pid_file)              
+        
+        for index_p,p in enumerate(params.db_ports,start=0):                   
+            #get shard_name
+            shard_name = params.shard_prefix + str(index_p)                         
+            pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
+            check_process_status(pid_file)              
 
 
 if __name__ == "__main__":
