@@ -93,8 +93,8 @@ class MongoMaster(MongoBase):
         self.configure(env)
         print "restart mongodb"
         #Execute('service mongod restart')
-        stop(self,env)
-        start(self,env)
+        self.stop(env)
+        self.start(env)
 
     def status(self, env):
         import params

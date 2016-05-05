@@ -32,8 +32,8 @@ class MongoMaster(MongoBase):
     def restart(self, env):
         self.configure(env)
         print "restart mongodb"
-        stop(self,env)
-        start(self,env)
+        self.stop(env)
+        self.start(env)
 
     def status(self, env):
         print "checking status..."

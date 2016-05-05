@@ -74,8 +74,8 @@ class MongoMaster(MongoBase):
     def restart(self, env):
         #no need restart
         print("restart")
-        stop(self,env)
-        start(self,env)
+        self.stop(env)
+        self.start(env)
 
     def status(self, env):
        #use built-in method to check status using pidfile
