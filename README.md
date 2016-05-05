@@ -1,11 +1,13 @@
 #### An Ambari Stack for MongoDB Cluster 
 Ambari stack for easily installing and managing MongoDB on HDP cluster,clusters include shard,replica,config,mongos
+
 ![Image](../master/screenshots/cluster.png?raw=true)
 
 ###Assumptions
 
 - Ambari is installed and running. If not, you can use sandbox VM Image provided by [Hortonworks website](http://hortonworks.com/products/hortonworks-sandbox/)
 - No previous installations of Mongo DB exist. If there any, you can either remove it or rename it.
+- have 3 nodes and more
 
 Follow given step to install and manage Mongo DB using Ambari.
 
