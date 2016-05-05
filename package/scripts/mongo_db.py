@@ -107,7 +107,7 @@ class MongoMaster(MongoBase):
     def status(self, env):
         print "checking status..."
         #Execute('service mongod status')
-        shard_name = params.shard_prefix + "shard0"                       
+        shard_name =  "shard0"                       
         pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
         check_process_status(pid_file)
         #check_process_status(self.PID_CONFIG_FILE)

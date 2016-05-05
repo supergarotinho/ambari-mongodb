@@ -5,7 +5,7 @@ from mongo_base import MongoBase
 
 class MongoMaster(MongoBase):
     mongo_packages = ['mongodb-org']
-    PID_FILE = '/var/run/mongos.pid'
+    PID_FILE = '/var/run/mongodb/mongos.pid'
 
     def install(self, env):
         print 'install mongodb'

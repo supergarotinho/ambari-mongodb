@@ -12,7 +12,7 @@
           <name>MONGODB</name>
           <displayName>MONGODB</displayName>
           <category>SLAVE</category>
-		  <cardinality>1+</cardinality>
+		  <cardinality>3+</cardinality>
           <commandScript>
             <script>scripts/mongo_db.py</script>
             <scriptType>PYTHON</scriptType>
@@ -23,7 +23,7 @@
           <name>MONGODC</name>
           <displayName>MONGOD CONFIG</displayName>
           <category>SLAVE</category>
-		  <cardinality>1+</cardinality>
+		  <cardinality>3+</cardinality>
           <commandScript>
             <script>scripts/mongo_config.py</script>
             <scriptType>PYTHON</scriptType>
@@ -43,7 +43,7 @@
         </component>
         <component>
           <name>MONGODB_CLIENT</name>
-          <displayName>MongoDB Clients</displayName>
+          <displayName>MongoDB Client</displayName>
           <category>CLIENT</category>
           <commandScript>
             <script>scripts/mongo_client.py</script>
