@@ -46,9 +46,9 @@ On bottom left -> Actions -> Add service -> check MongoDB -> Next -> Next -> Nex
 ![Image](../master/screenshots/mongosummary.png?raw=true)
  
 
-mongos port 30000
-mongo config port 20000
-mongo replica port 27017,27018,27019
+- mongos port 30000
+- mongo config port 20000
+- mongo replica port 27017,27018,27019
 
  
 - One benefit to wrapping the component in Ambari service is that you can now monitor/manage this service remotely via REST API
