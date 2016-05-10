@@ -27,10 +27,8 @@ class MongoBase(Script):
         print "Installing mongodb..."
         if self.mongo_packages is not None and len(self.mongo_packages):
             for pack in self.mongo_packages:
-                Package(pack)
-        db_path = params.db_path + "/shard"
+                Package(pack)      
         config_path = params.db_path + "/config"
-        Execute(format('mkdir -p {db_path}'))
         Execute(format('mkdir -p {config_path}'))
 
     def configureMongo(self, env):
@@ -45,12 +43,7 @@ class MongoBase(Script):
              content=Template("mongod-config.conf.j2"),
              mode=0644
             )
-        db_path = params.db_path + "/shard"
         config_path = params.db_path + "/config"
-        if os.path.exists(db_path):
-            print "File exists"
-        else:
-            Execute(format('mkdir -p {db_path}'))
         if os.path.exists(config_path):
             print "File exists"
         else:
