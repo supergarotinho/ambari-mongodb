@@ -24,8 +24,21 @@ class MongoMaster(MongoBase):
         
         import socket
         current_host_name=socket.getfqdn(socket.gethostname())
+        
         config = Script.get_config()
-        db_hosts = config['clusterHostInfo']['mongodb_hosts']
+        db_hosts = config['clusterHostInfo']['mongodb_hosts']       
+        shard_prefix = params.shard_prefix
+        
+        #get node_group 
+        if params.node_group =='':
+            shard_prefix = shard_prefix + '0'
+        else:
+            groups = params.node_group.split(';')
+            for index,item in enumerate(groups,start=0):                
+                if current_host_name in item:
+                   db_hosts = item.split(',')
+                   shard_prefix = shard_prefix + str(index)
+                   
         len_host=len(db_hosts)
         len_port=len(params.db_ports)
         print "hostname :" + current_host_name
@@ -39,7 +52,7 @@ class MongoMaster(MongoBase):
                    #rm mongo_*.sock
                    Execute(format('rm -rf /tmp/mongodb-{p}.sock'),logoutput=True)
                    #get shard_name
-                   shard_name = params.shard_prefix + str((index-index_p)%len_host)      
+                   shard_name = shard_prefix + str((index-index_p)%len_host)      
                    #get db_path                   
                    db_path = params.db_path + '/' + shard_name
                    
@@ -51,11 +64,12 @@ class MongoMaster(MongoBase):
                    pid_file = params.pid_db_path + '/' + shard_name + '.pid'
                    Execute(format('mongod -f /etc/mongod.conf --shardsvr  -replSet {shard_name} -port {p} -dbpath {db_path} -oplogSize 100 -logpath {log_file} -pidfilepath {pid_file}')
                            ,logoutput=True)
+        
         sleep(5)
         print 'sleep waiting for all mongod started'
         #init Replica Set
         for index,item in enumerate(db_hosts,start=0):         
-            shard_name= params.shard_prefix + str(index)
+            shard_name= shard_prefix + str(index)
             
             members =''
             current_index=0
@@ -82,9 +96,22 @@ class MongoMaster(MongoBase):
         print "stop services.."
         import params                
         
+        import socket
+        current_host_name=socket.getfqdn(socket.gethostname())          
+        shard_prefix = params.shard_prefix
+        
+        #get node_group 
+        if params.node_group =='':
+            shard_prefix = shard_prefix + '0'
+        else:
+            groups = params.node_group.split(';')
+            for index,item in enumerate(groups,start=0):                
+                if current_host_name in item:
+                   shard_prefix = shard_prefix + str(index)
+                   
         for index_p,p in enumerate(params.db_ports,start=0):                   
             #get shard_name
-            shard_name = params.shard_prefix + str(index_p)                         
+            shard_name = shard_prefix + str(index_p)                         
             pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
             cmd =format('cat {pid_file} | xargs kill -9 ')
             Execute(cmd,logoutput=True)             
@@ -100,9 +127,22 @@ class MongoMaster(MongoBase):
         import params
         print "checking status..."
         
+        import socket
+        current_host_name=socket.getfqdn(socket.gethostname())          
+        shard_prefix = params.shard_prefix
+        
+        #get node_group 
+        if params.node_group =='':
+            shard_prefix = shard_prefix + '0'
+        else:
+            groups = params.node_group.split(';')
+            for index,item in enumerate(groups,start=0):                
+                if current_host_name in item:
+                   shard_prefix = shard_prefix + str(index)
+                   
         for index_p,p in enumerate(params.db_ports,start=0):                   
             #get shard_name
-            shard_name = params.shard_prefix + str(index_p)                         
+            shard_name = shard_prefix + str(index_p)                         
             pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
             check_process_status(pid_file)              
 

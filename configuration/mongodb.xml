@@ -21,5 +21,17 @@
       <type>directory</type>
     </value-attributes>
   </property>
+  
+  <property require-input="false">
+    <name>node_group</name>
+    <value></value>
+    <description>node_group is conveniece  to scale out mongodb shard node.
+    for example ,pre-cluster contains node1,node2,node3.add new node list,as node4,node5,node6.
+    This value is node1,node2,node3;node4,node5,node6
+    </description>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
 
 </configuration>

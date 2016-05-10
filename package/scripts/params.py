@@ -12,3 +12,4 @@ db_ports=["27017","27018","27019"]
 log_path='/var/log/mongodb'
 shard_prefix='shard'
 pid_db_path = '/var/run/mongodb'
+node_group = default('configurations/mongodb/node_group', '')
