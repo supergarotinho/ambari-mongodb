@@ -2,10 +2,10 @@ import os
 from time import sleep
 from resource_management import *
 from mongo_base import MongoBase
+from resource_management.core.logger import Logger
 
 class MongoMaster(MongoBase):
     mongo_packages = ['mongodb-org']
-    
 
     def install(self, env):
         import params
@@ -52,7 +52,8 @@ class MongoMaster(MongoBase):
                    #rm mongo_*.sock
                    Execute(format('rm -rf /tmp/mongodb-{p}.sock'),logoutput=True)
                    #get shard_name
-                   shard_name = shard_prefix + str((index-index_p)%len_host)      
+                   shard_name = shard_prefix + str((index-index_p)%len_host)
+                   pid_file_name = params.shard_prefix + str((index-index_p)%len_host)                  
                    #get db_path                   
                    db_path = params.db_path + '/' + shard_name
                    
@@ -61,7 +62,7 @@ class MongoMaster(MongoBase):
                    else:
                        Execute(format('mkdir -p {db_path}'),logoutput=True)
                    log_file = params.log_path + '/' + shard_name + '.log'
-                   pid_file = params.pid_db_path + '/' + shard_name + '.pid'
+                   pid_file = params.pid_db_path + '/' + pid_file_name + '.pid'
                    Execute(format('mongod -f /etc/mongod.conf --shardsvr  -replSet {shard_name} -port {p} -dbpath {db_path} -oplogSize 100 -logpath {log_file} -pidfilepath {pid_file}')
                            ,logoutput=True)
         
@@ -95,57 +96,36 @@ class MongoMaster(MongoBase):
     def stop(self, env):
         print "stop services.."
         import params                
-        
-        import socket
-        current_host_name=socket.getfqdn(socket.gethostname())          
-        shard_prefix = params.shard_prefix
-        
-        #get node_group 
-        if params.node_group =='':
-            shard_prefix = shard_prefix + '0'
-        else:
-            groups = params.node_group.split(';')
-            for index,item in enumerate(groups,start=0):                
-                if current_host_name in item:
-                   shard_prefix = shard_prefix + str(index)
-                   
+                
         for index_p,p in enumerate(params.db_ports,start=0):                   
             #get shard_name
-            shard_name = shard_prefix + str(index_p)                         
+            shard_name = params.shard_prefix + str(index_p)                         
             pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
             cmd =format('cat {pid_file} | xargs kill -9 ')
-            Execute(cmd,logoutput=True)             
+            try:
+               Execute(cmd,logoutput=True)
+            except:
+               print 'can not find pid process,skip this'
+                           
 
     def restart(self, env):
         self.configure(env)
         print "restart mongodb"
         #Execute('service mongod restart')
+        #self.status(env)
         self.stop(env)
         self.start(env)
 
     def status(self, env):
-        import params
         print "checking status..."
         
-        import socket
-        current_host_name=socket.getfqdn(socket.gethostname())          
-        shard_prefix = params.shard_prefix
-        
-        #get node_group 
-        if params.node_group =='':
-            shard_prefix = shard_prefix + '0'
-        else:
-            groups = params.node_group.split(';')
-            for index,item in enumerate(groups,start=0):                
-                if current_host_name in item:
-                   shard_prefix = shard_prefix + str(index)
-                   
+        import params        
+            
         for index_p,p in enumerate(params.db_ports,start=0):                   
-            #get shard_name
-            shard_name = shard_prefix + str(index_p)                         
-            pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
-            check_process_status(pid_file)              
-
+            shard_name = params.shard_prefix + str(index_p)                         
+            pid_file = params.pid_db_path + '/' + shard_name + '.pid'
+            Logger.info("Pid file :{0} ".format(pid_file))
+            check_process_status(pid_file)            
 
 if __name__ == "__main__":
     MongoMaster().execute()

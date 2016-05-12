@@ -4,7 +4,6 @@ from resource_management import *
 from mongo_base import MongoBase
 
 class MongoMaster(MongoBase):
-    mongo_packages = ['mongodb-org']
     PID_CONFIG_FILE = '/var/run/mongodb/mongod-config.pid'
 
     def install(self, env):
@@ -19,15 +18,18 @@ class MongoMaster(MongoBase):
     def start(self, env):
         self.configure(env)
         print "start mongodb"
-        Execute('rm -rf /tmp/mongodb-20000.sock',logoutput=True)
-        Execute('mongod -f /etc/mongod-config.conf')
+        Execute('rm -rf /tmp/mongodb-20000.sock',logoutput=True,try_sleep=3,tries=5)
+        Execute('mongod -f /etc/mongod-config.conf',logoutput=True,try_sleep=3,tries=5)
                 
 
     def stop(self, env):
         print "stop services.."
         pid_config_file=self.PID_CONFIG_FILE        
         cmd =format('cat {pid_config_file} | xargs kill -9 ')
-        Execute(cmd,logoutput=True)              
+        try:
+            Execute(cmd,logoutput=True)
+        except:
+            print 'can not find pid process,skip this'              
 
     def restart(self, env):
         self.configure(env)

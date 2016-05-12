@@ -4,7 +4,6 @@ from resource_management import *
 from mongo_base import MongoBase
 
 class MongoMaster(MongoBase):
-    mongo_packages = ['mongodb-org']
     PID_FILE = '/var/run/mongodb/mongos.pid'
 
     def install(self, env):
@@ -70,7 +69,7 @@ class MongoMaster(MongoBase):
              mode=0755
         )
         sleep(5)
-        Execute('/var/run/mongos.sh',logoutput=True)
+        Execute('/var/run/mongos.sh',logoutput=True,try_sleep=3,tries=5)
 
 
     def stop(self, env):
@@ -78,7 +77,10 @@ class MongoMaster(MongoBase):
         print("stop")
         pid_file = self.PID_FILE
         cmd =format('cat {pid_file} | xargs kill -9 ')
-        Execute(cmd,logoutput=True)
+        try:
+            Execute(cmd,logoutput=True)
+        except:
+            print 'can not find pid process,skip this'
 
     def restart(self, env):
         #no need restart
