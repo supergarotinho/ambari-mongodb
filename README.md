@@ -1,5 +1,6 @@
 #### An Ambari Stack for MongoDB Cluster 
 Ambari stack for easily installing and managing MongoDB on HDP cluster,clusters include shard,replica,config,mongos
+http://www.bigdatalab.top/archives/180
 
 ![Image](../master/screenshots/cluster.png?raw=true)
 
@@ -23,11 +24,6 @@ cd /var/lib/ambari-server/resources/stacks/HDP/2.4/services
 git clone https://github.com/geniuszhe/ambari-mongodb-cluster.git
 ```
 
-####Restart Ambari
-#####on sandbox
-```sudo service ambari restart```
-
-#####on non-sandbox
 ```sudo service ambari-server restart```
 
 
@@ -91,6 +87,7 @@ curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo"
     
 ###References:
 https://github.com/abajwa-hw/ntpd-stack
+
 
 
 
