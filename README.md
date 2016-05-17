@@ -51,6 +51,8 @@ On bottom left -> Actions -> Add service -> check MongoDB -> Next -> Next -> Nex
 - mongo replica port 27017,27018,27019
 
 ####mongodb scale out
+expansion  the concept of a group.add more than three nodes,replica set  configured within the group.
+![Image](../master/screenshots/mongodb-scale-out.png?raw=true)
 config param node_group.new add hosts is new group.split by ;
 ![Image](../master/screenshots/01_modify_mongodb_config.png?raw=true)
 ![Image](../master/screenshots/02_add_new_hosts.png?raw=true)
@@ -62,7 +64,7 @@ config param node_group.new add hosts is new group.split by ;
 restart mongodb 
 ![Image](../master/screenshots/08_restart_mongodb_config.png?raw=true)
 ![Image](../master/screenshots/10_mongodb_summary.png?raw=true)
-show shard result
+show shard result <br>
 ![Image](../master/screenshots/09_mongo_mongos_show_shard_status_1.png?raw=true)
 ![Image](../master/screenshots/09_mongo_mongos_show_shard_status_2.png?raw=true)
 
