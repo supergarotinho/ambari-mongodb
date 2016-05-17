@@ -1,6 +1,10 @@
-#### An Ambari Stack for MongoDB Cluster 
-Ambari stack for easily installing and managing MongoDB on HDP cluster,clusters include shard,replica,config,mongos
+### An Ambari Stack for MongoDB Cluster 
+Ambari stack for easily installing and managing MongoDB on HDP cluster,clusters include shard,replica,config,mongos.
 http://www.bigdatalab.top/archives/180
+
+####Feature
+-auto install mongodb cluster ,include shard(replica set),config server,mongos server.
+-support scale out ,add new shard 
 
 ![Image](../master/screenshots/cluster.png?raw=true)
 
@@ -45,6 +49,19 @@ On bottom left -> Actions -> Add service -> check MongoDB -> Next -> Next -> Nex
 - mongos port 30000
 - mongo config port 20000
 - mongo replica port 27017,27018,27019
+
+####mongodb scale out
+![Image](../master/screenshots/01_modify_mongodb_config.png?raw=true)
+![Image](../master/screenshots/02_add_new_hosts.png?raw=true)
+![Image](../master/screenshots/03_install_options.png?raw=true)
+![Image](../master/screenshots/04_confirm_hosts.png?raw=true)
+![Image](../master/screenshots/05_add_salves_service.png?raw=true)
+![Image](../master/screenshots/06_review.png?raw=true)
+![Image](../master/screenshots/07_install_start_test.png?raw=true)
+![Image](../master/screenshots/08_restart_mongodb_config.png?raw=true)
+![Image](../master/screenshots/10_mongodb_summary?raw=true)
+![Image](../master/screenshots/09_mongo_mongos_show_shard_status_1.png?raw=true)
+![Image](../master/screenshots/09_mongo_mongos_show_shard_status_2.png?raw=true)
 
 ####Rest Manage
  
