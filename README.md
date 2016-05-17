@@ -3,8 +3,8 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster,clusters 
 http://www.bigdatalab.top/archives/180
 
 ####Feature
--auto install mongodb cluster ,include shard(replica set),config server,mongos server.
--support scale out ,add new shard 
+- auto install mongodb cluster ,include shard(replica set),config server,mongos server.
+- support scale out ,add new shard 
 
 ![Image](../master/screenshots/cluster.png?raw=true)
 
