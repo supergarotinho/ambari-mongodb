@@ -9,6 +9,7 @@ db_user = default('configurations/mongodb/db_user', 'anadmin')
 db_pass = default('configurations/mongodb/db_pass', '')
 mongo_host = default('/clusterHostInfo/mongodb_master_hosts', ['unknown'])[0]
 db_ports=["27017","27018","27019"]
+arbiter_port='27016'
 log_path='/var/log/mongodb'
 shard_prefix='shard'
 pid_db_path = '/var/run/mongodb'
