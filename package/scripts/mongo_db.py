@@ -110,63 +110,32 @@ class MongoMaster(MongoBase):
             
             groups = params.node_group.split(';')
             tmp_db_hosts = groups[0].split(',')
-            # add replica set for last node
-            if len(groups) > 1 :
-                new_hosts = groups[1]
-                new_db_hosts = new_hosts.split(',')
-                if current_host_name == new_db_hosts[0]:
-                    current_host = current_host_name
-                    current_port = params.db_ports[1]
-                    add_shard_param = format('rs.add("{current_host}:{current_port}") \n')
-                    shard_host_name = tmp_db_hosts[len(tmp_db_hosts)-1]
-                    cmd = format('mongo --host {shard_host_name} --port 27017 <<EOF \n{add_shard_param} \nEOF\n')
-                    File('/var/run/mongo_add_shard.sh',
-                         content=cmd,
-                         mode=0755
-                    )
-                    Execute('/var/run/mongo_add_shard.sh',logoutput=True)                    
+                             
             
-            
-            # add shard 
-            del_host_port_param = ''
-                   
-            for index_i,host in enumerate(tmp_db_hosts,start=1):
-                if current_host_name == host:                
-                    if len(tmp_db_hosts) - index_i == 0:
-                        print 'last host ' + current_host_name
-                        host_port_name0 = tmp_db_hosts[0] + ':' + params.db_ports[1]
-                        host_port_name1 = tmp_db_hosts[1] + ':' + params.db_ports[2]
-                        del_host_port_param = format('rs.remove("{host_port_name0}") \n')
-                        del_host_port_param = del_host_port_param + format('rs.remove("{host_port_name1}") \n')
-                    if len(tmp_db_hosts) - index_i == 1:
-                        print 'second last ' + current_host_name
-                        host_port_name = tmp_db_hosts[0] + ':' + params.db_ports[2]
-                        del_host_port_param = format('rs.remove("{host_port_name}") \n')
-                        
             for index,item in enumerate(db_hosts,start=0):         
                 shard_name= shard_prefix + str(index)
-                        
+            
                 members =''
-                add_shard_param = ''
                 current_index=0
                 current_shard=index
                 while(current_index<len_port):
                     current_host = db_hosts[current_shard]
                     current_port = params.db_ports[current_index]
                     members = members+ '{_id:'+format('{current_index},host:"{current_host}:{current_port}"') 
-                    add_shard_param = add_shard_param + format('rs.add("{current_host}:{current_port}") \n') 
                     if current_index == 0:
                         members = members +',priority:2'
                     members = members + '},'
                     current_index = current_index + 1
                     current_shard = (current_shard + 1)%len(db_hosts)
+                #add arbiter
+                if item == current_host_name :    
+                    current_port = params.arbiter_port              
+                    members= members + '{_id:'+format('{current_index},host:"{current_host_name}:{current_port}"') + ',arbiterOnly: true},'
                 members=members[:-1]
-                if item == current_host_name and item in groups[1]:            
+                if item == current_host_name and len(groups) > 1 and item in groups[1]:            
                     replica_param ='rs.initiate( {_id:'+format('"{shard_name}",version: 1,members:') + '[' + members + ']})'
-                if item == current_host_name and item in groups[0]:            
-                    replica_param = add_shard_param
-                    if del_host_port_param != '':
-                        replica_param =  del_host_port_param + replica_param
+                else:
+                    replica_param ='rs.reconfig( {_id:'+format('"{shard_name}",version: 1,members:') + '[' + members + ']})'
         
             cmd = format('mongo --host {current_host_name} --port 27017 <<EOF \n{replica_param} \nEOF\n')
             File('/var/run/mongo_config.sh',
