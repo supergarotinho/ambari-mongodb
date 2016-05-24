@@ -36,18 +36,13 @@ class MongoMaster(MongoBase):
         #Add Shards to the Cluster        
         shard_param =''
         
-        node_group = ''
-        if params.node_group =='':
-            print 'node_group is null ,use default hosts'        
-            node_group = ','.join(config['clusterHostInfo']['mongodb_hosts'])
-        else:
-            node_group =params.node_group
+        node_group = ','.join(config['clusterHostInfo']['mongodb_hosts'])
             
         print node_group   
         groups = node_group.split(';')
         for index_g,item_g in enumerate(groups,start=0):                
             db_hosts = item_g.split(',')
-            shard_prefix = params.shard_prefix + str(index_g) 
+            shard_prefix = params.shard_prefix  
             len_host=len(db_hosts)            
             for index,item in enumerate(db_hosts,start=0):
                 current_shard=index
