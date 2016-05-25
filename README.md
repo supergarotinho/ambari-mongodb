@@ -68,7 +68,7 @@ restart mongodb
 ![Image](../master/screenshots/08_restart_mongodb_config.png?raw=true)
 ![Image](../master/screenshots/10_mongodb_summary.png?raw=true)
 
-maybe you just add one hosts
+maybe you just add one host
 ![Image](../master/screenshots/A1_modify_config_add_new_host.png?raw=true)
 ![Image](../master/screenshots/A2_host_add_service.png?raw=true)
 ![Image](../master/screenshots/A3_host_add_service_select_mongodb.png?raw=true)
