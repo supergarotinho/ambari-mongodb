@@ -14,6 +14,9 @@ class MongoMaster(MongoBase):
         
 
     def start(self, env):
+        sleep(3)
+        #waiting for mongod start
+        
         import params
         self.configure(env)
         #print "start mongodb"
