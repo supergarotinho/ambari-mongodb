@@ -1,0 +1,86 @@
+{
+  "MONGODB": {
+    "service": [],
+    "MONGODB": [
+      {
+        "name": "mongodb_process",
+        "label": "mongodb Process",
+        "description": "This host-level alert is triggered if the Mongodb cannot be determined to be up.",
+        "interval": 1,
+        "scope": "HOST",
+        "source": {
+          "type": "PORT",
+          "uri": "27017",
+          "default_port": 27017,
+          "reporting": {
+            "ok": {
+              "text": "TCP OK - {0:.3f}s response on port {1}"
+            },
+            "warning": {
+              "text": "TCP OK - {0:.3f}s response on port {1}",
+              "value": 1.5
+            },
+            "critical": {
+              "text": "Connection failed: {0} to {1}:{2}",
+              "value": 5.0
+            }
+          }
+        }
+      }
+    ],
+    "MONGODC": [
+      {
+        "name": "mongo_config_process",
+        "label": "mongo config Process",
+        "description": "This host-level alert is triggered if the Mongodb config server cannot be determined to be up.",
+        "interval": 1,
+        "scope": "HOST",
+        "source": {
+          "type": "PORT",
+          "uri": "20000",
+          "default_port": 20000,
+          "reporting": {
+            "ok": {
+              "text": "TCP OK - {0:.3f}s response on port {1}"
+            },
+            "warning": {
+              "text": "TCP OK - {0:.3f}s response on port {1}",
+              "value": 1.5
+            },
+            "critical": {
+              "text": "Connection failed: {0} to {1}:{2}",
+              "value": 5.0
+            }
+          }
+        }
+      }
+    ],
+    "MONGODS": [
+      {
+        "name": "mongos_process",
+        "label": "mongos Process",
+        "description": "This host-level alert is triggered if the Mongodb mongos cannot be determined to be up.",
+        "interval": 1,
+        "scope": "HOST",
+        "source": {
+          "type": "PORT",
+          "uri": "{{mongodb/mongos_tcp_port}}",
+          "default_port": 30000,
+          "reporting": {
+            "ok": {
+              "text": "TCP OK - {0:.3f}s response on port {1}"
+            },
+            "warning": {
+              "text": "TCP OK - {0:.3f}s response on port {1}",
+              "value": 1.5
+            },
+            "critical": {
+              "text": "Connection failed: {0} to {1}:{2}",
+              "value": 5.0
+            }
+          }
+        }
+      }
+    ]
+  }
+}
