@@ -2,8 +2,8 @@
 <metainfo>
   <schemaVersion>2.0</schemaVersion>
   <services>
-    <service>
-      <name>MONGODB</name>
+    <service> 
+      <name>MongoDB</name>
       <displayName>MongoDB</displayName>
       <comment>The intermediate database in your lambda stack</comment>
       <version>3.2</version>
