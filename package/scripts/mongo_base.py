@@ -22,7 +22,7 @@ class MongoBase(Script):
             print "File not exists"
             File(self.repos_file_path,
                  content=Template("mongodb.repo"),
-                 mode=0644
+                mode=0644
                 )
         print "Installing mongodb..."
         if self.mongo_packages is not None and len(self.mongo_packages):
