@@ -14,3 +14,6 @@ log_path='/var/log/mongodb'
 shard_prefix='shard'
 pid_db_path = '/var/run/mongodb'
 node_group = default('configurations/mongodb/node_group', '')
+mongod_db_content = default('configurations/mongodb/mongod_db_content', '')
+mongod_config_content = default('configurations/mongodb/mongod_config_content', '')
+

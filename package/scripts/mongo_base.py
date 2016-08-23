@@ -33,16 +33,14 @@ class MongoBase(Script):
 
     def configureMongo(self, env):
         import params
-
         env.set_params(params)
-        File(self.db_file_path,
-             content=Template("mongod-db.conf.j2"),
-             mode=0644
-            )
-        File(self.config_file_path,
-             content=Template("mongod-config.conf.j2"),
-             mode=0644
-            )
+        #db.conf
+        mongod_db_content = InlineTemplate(params.mongod_db_content)   
+        File(self.db_file_path, content=mongod_db_content)
+        #config.conf
+        mongod_config_content = InlineTemplate(params.mongod_config_content)   
+        File(self.config_file_path, content=mongod_config_content)
+        
         config_path = params.db_path + "/config"
         if os.path.exists(config_path):
             print "File exists"

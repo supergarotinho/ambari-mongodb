@@ -33,5 +33,76 @@
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
   </property>
+  <property>
+    <name>mongod_db_content</name>
+    <value>systemLog:
+  destination: file
+  logAppend: true
+  #path: /var/log/mongodb/mongod.log
+# Where and how to store data.
+storage:
+  #dbPath: {{ db_path }}/shard
+  journal:
+    enabled: true
+#  engine:
+#  mmapv1:
+#  wiredTiger:
+# how the process runs
+processManagement:
+  fork: true  # fork and run in background
+  pidFilePath: /var/run/mongodb/mongod.pid  # location of pidfile
+# network interfaces
+net:
+  bindIp: {{ bind_ip }}  # Listen to local interface only, comment to listen on all interfaces.
+#sharding:
+#   clusterRole: configsvr
+#replication:
+#   replSetName: configReplSet
+#security:
+#operationProfiling:
+#replication:
+#sharding:
+## Enterprise-Only Options
+#auditLog:
+#snmp:
+    </value>
+    <description>This is the jinja template for mongod.conf file</description>
+  </property>
+  <property>
+    <name>mongod_config_content</name>
+    <value>systemLog:
+  destination: file
+  logAppend: true
+  path: /var/log/mongodb/mongod.log
+# Where and how to store data.
+storage:
+  dbPath: {{ db_path }}/config
+  journal:
+    enabled: true
+#  engine:
+#  mmapv1:
+#  wiredTiger:
+# how the process runs
+processManagement:
+  fork: true  # fork and run in background
+  pidFilePath: /var/run/mongodb/mongod-config.pid  # location of pidfile
 
+# network interfaces
+net:
+  port: 20000  # do not change
+  bindIp: {{ bind_ip }}  # Listen to local interface only, comment to listen on all interfaces.
+sharding:
+   clusterRole: configsvr
+#replication:
+#   replSetName: configReplSet
+#security:
+#operationProfiling:
+#replication:
+#sharding:
+## Enterprise-Only Options
+#auditLog:
+#snmp:
+    </value>
+    <description>This is the jinja template for mongod-config.conf file</description>
+  </property>
 </configuration>
