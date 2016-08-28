@@ -55,7 +55,7 @@ class MongoMaster(MongoBase):
             cluster_shards = node_group.split(';')
             for index_shards, shard_nodes in enumerate(cluster_shards, start=0):
                 shard_node_list = shard_nodes.split(',')
-                for index_nodes, node_name in enumerate(shard_nodes, start=0):
+                for index_nodes, node_name in enumerate(shard_node_list, start=0):
                     if node_name == current_host_name:
                         shard_name = shard_prefix + str(index_shards)
                         pid_file_name = shard_name + '_0' ## TODO: Prepare for multiple instances per node
@@ -92,7 +92,7 @@ class MongoMaster(MongoBase):
         # Verbose output
         self.printOut(["Shard Name: " + shard_name,
                "PID File Name: " + pid_file_name,
-               "DB Path: " + db_path])
+               "DB Path: " + final_db_path])
 
         # rm mongo_*.sock
         Execute(format('rm -rf /tmp/mongodb-{port}.sock'), logoutput=True)
