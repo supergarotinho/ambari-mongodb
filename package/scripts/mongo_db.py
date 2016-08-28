@@ -82,7 +82,8 @@ class MongoMaster(MongoBase):
 
             for index, item in enumerate(db_hosts, start=0):
                 if item == current_host_name:
-                    pid_file_name = shard_name + '_0'  ## TODO: Prepare for multiple instances per node
+                    ## TODO: Prepare for multiple instances per node
+                    pid_file_name = params.pid_db_path + '/' + shard_name + '_0' + '.pid'
                     # get db_path
                     ## TODO: prepare for multiple instances per node
                     final_db_path = db_path + '/' + current_host_name.split('.')[0] + '_0'
@@ -95,7 +96,8 @@ class MongoMaster(MongoBase):
                 for index_nodes, node_name in enumerate(shard_node_list, start=0):
                     if node_name == current_host_name:
                         shard_name = shard_prefix + str(index_shards)
-                        pid_file_name = shard_name + '_0'  ## TODO: Prepare for multiple instances per node
+                        ## TODO: Prepare for multiple instances per node
+                        pid_file_name = params.pid_db_path + '/' + shard_name + '_0' + '.pid'
                         # get db_path
                         final_db_path = db_path + '/' + current_host_name.split('.')[
                             0] + '_0'  ## TODO: prepare for multiple instances per node
@@ -122,14 +124,13 @@ class MongoMaster(MongoBase):
             Execute(format('mkdir -p {final_db_path}'), logoutput=True)
 
         log_file = params.log_path + '/' + shard_name + '.log'
-        pid_file = params.pid_db_path + '/' + pid_file_name + '.pid'
 
-        self.printOut(["Log File with path: " + shard_name,
+        self.printOut(["Log File with path: " + log_file,
                        "PID File with path: " + pid_file_name])
 
         Execute(format(
             'mongod -f /etc/mongod.conf --shardsvr  -replSet {shard_name} --bind_ip {current_host_name} '
-            ' -port {port} -dbpath {final_db_path} -oplogSize 100 -logpath {log_file} -pidfilepath {pid_file}')
+            ' -port {port} -dbpath {final_db_path} -oplogSize 100 -logpath {log_file} -pidfilepath {pid_file_name}')
                 , logoutput=True)
 
     def configureReplicaServers(self,shard_name,db_hosts):
@@ -192,14 +193,12 @@ class MongoMaster(MongoBase):
     def restart(self, env):
         self.configure(env)
         print "restart mongodb"
-        #Execute('service mongod restart')
-        #self.status(env)
         self.stop(env)
         self.start(env)
 
     def status(self, env):
         print "checking status..."
-
+        import params
         shard_name, pid_file_name, final_db_path, db_port = self.getProcessData()
         check_process_status(pid_file_name)
 
