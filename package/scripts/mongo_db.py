@@ -88,7 +88,7 @@ class MongoMaster(MongoBase):
                     # get db_path
                     ## TODO: prepare for multiple instances per node
                     final_db_path = db_path + '/' + current_host_name.split('.')[0] + '_0'
-                    return (shard_name, pid_file_name, final_db_path, log_file db_ports[0])
+                    return (shard_name, pid_file_name, final_db_path, log_file, db_ports[0])
                     ## TODO: Prepare for multiple instances per node - Check if the name appear twice in the node_group and get the port number and index
         else:
             cluster_shards = node_group.split(';')
