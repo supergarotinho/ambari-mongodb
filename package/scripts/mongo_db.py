@@ -39,8 +39,8 @@ class MongoMaster(MongoBase):
                        db_hosts])
 
         #Start mongod service
-        shard_name, pid_file_name, final_db_path, db_port = self.getProcessData()
-        self.startServer(shard_name, pid_file_name, final_db_path, db_port)
+        shard_name, pid_file_name, final_db_path, log_file, db_port = self.getProcessData()
+        self.startServer(shard_name, pid_file_name, final_db_path, log_file, db_port)
 
         self.printOut('Sleep waiting for all mongod starts....')
         sleep(20)
@@ -84,10 +84,11 @@ class MongoMaster(MongoBase):
                 if item == current_host_name:
                     ## TODO: Prepare for multiple instances per node
                     pid_file_name = params.pid_db_path + '/' + current_host_name.split('.')[0] + '_0' + '.pid'
+                    log_file = params.log_path + '/' + current_host_name.split('.')[0] + '_0' + '.log'
                     # get db_path
                     ## TODO: prepare for multiple instances per node
                     final_db_path = db_path + '/' + current_host_name.split('.')[0] + '_0'
-                    return (shard_name, pid_file_name, final_db_path, db_ports[0])
+                    return (shard_name, pid_file_name, final_db_path, log_file db_ports[0])
                     ## TODO: Prepare for multiple instances per node - Check if the name appear twice in the node_group and get the port number and index
         else:
             cluster_shards = node_group.split(';')
@@ -97,14 +98,15 @@ class MongoMaster(MongoBase):
                     if node_name == current_host_name:
                         shard_name = shard_prefix + str(index_shards)
                         ## TODO: Prepare for multiple instances per node
-                        pid_file_name = params.pid_db_path + '/' + shard_name + '_0' + '.pid'
+                        pid_file_name = params.pid_db_path + '/' + current_host_name.split('.')[0] + '_0' + '.pid'
+                        log_file = params.log_path + '/' + current_host_name.split('.')[0] + '_0' + '.log'
                         # get db_path
-                        final_db_path = db_path + '/' + current_host_name.split('.')[
-                            0] + '_0'  ## TODO: prepare for multiple instances per node
-                        return (shard_name, pid_file_name, final_db_path, db_ports[0])
+                        ## TODO: prepare for multiple instances per node
+                        final_db_path = db_path + '/' + current_host_name.split('.')[0] + '_0'
+                        return (shard_name, pid_file_name, final_db_path, log_file, db_ports[0])
                         ## TODO: Prepare for multiple instances per node - Check if the name appear twice in the node_group and get the port number and index
 
-    def startServer(self,shard_name,pid_file_name,final_db_path,port):
+    def startServer(self,shard_name,pid_file_name,final_db_path,log_file_name,port):
         import socket
         current_host_name=socket.getfqdn(socket.gethostname())
         import params
@@ -113,7 +115,8 @@ class MongoMaster(MongoBase):
         self.printOut(["Shard Name: " + shard_name,
                "PID File Name: " + pid_file_name,
                "DB Path: " + final_db_path,
-               "Port: " + port])
+               "Port: " + port,
+               "Log File Name: " + log_file_name])
 
         # rm mongo_*.sock
         Execute(format('rm -rf /tmp/mongodb-{port}.sock'), logoutput=True)
@@ -123,14 +126,10 @@ class MongoMaster(MongoBase):
         else:
             Execute(format('mkdir -p {final_db_path}'), logoutput=True)
 
-        log_file = params.log_path + '/' + shard_name + '.log'
-
-        self.printOut(["Log File with path: " + log_file,
-                       "PID File with path: " + pid_file_name])
-
         Execute(format(
             'mongod -f /etc/mongod.conf --shardsvr  -replSet {shard_name} --bind_ip {current_host_name} '
-            ' -port {port} -dbpath {final_db_path} -oplogSize 100 -logpath {log_file} -pidfilepath {pid_file_name}')
+            ' -port {port} -dbpath {final_db_path} -oplogSize 100 '
+            '-logpath {log_file_name} -pidfilepath {pid_file_name}')
                 , logoutput=True)
 
     def configureReplicaServers(self,shard_name,db_hosts):
@@ -160,7 +159,7 @@ class MongoMaster(MongoBase):
 
         replica_param = 'rs.initiate( {_id:' + format('"{shard_name}",version: 1,members:') + '[' + members + ']})'
 
-        shard_name, pid_file_name, final_db_path, db_port = self.getProcessData()
+        shard_name, pid_file_name, final_db_path, log_file, db_port = self.getProcessData()
         cmd = format('mongo --host {current_host_name} --port {db_port} <<EOF \n{replica_param} \nEOF\n')
         self.printOut(['Configure Replica command: ',
                        cmd])
@@ -173,7 +172,7 @@ class MongoMaster(MongoBase):
     def stop(self, env):
         print "stop services.."
 
-        shard_name, pid_file_name, final_db_path, db_port = self.getProcessData()
+        shard_name, pid_file_name, final_db_path, log_file, db_port = self.getProcessData()
         cmd =format('cat {pid_file_name} | xargs kill -9 ')
         try:
            Execute(cmd,logoutput=True)
