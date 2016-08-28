@@ -83,7 +83,7 @@ class MongoMaster(MongoBase):
             for index, item in enumerate(db_hosts, start=0):
                 if item == current_host_name:
                     ## TODO: Prepare for multiple instances per node
-                    pid_file_name = params.pid_db_path + '/' + shard_name + '_0' + '.pid'
+                    pid_file_name = params.pid_db_path + '/' + current_host_name.split('.')[0] + '_0' + '.pid'
                     # get db_path
                     ## TODO: prepare for multiple instances per node
                     final_db_path = db_path + '/' + current_host_name.split('.')[0] + '_0'
@@ -160,7 +160,8 @@ class MongoMaster(MongoBase):
 
         replica_param = 'rs.initiate( {_id:' + format('"{shard_name}",version: 1,members:') + '[' + members + ']})'
 
-        cmd = format('mongo --host {current_host_name} --port 27017 <<EOF \n{replica_param} \nEOF\n')
+        shard_name, pid_file_name, final_db_path, db_port = self.getProcessData()
+        cmd = format('mongo --host {current_host_name} --port {db_port} <<EOF \n{replica_param} \nEOF\n')
         self.printOut(['Configure Replica command: ',
                        cmd])
         File('/var/run/mongo_config.sh',
