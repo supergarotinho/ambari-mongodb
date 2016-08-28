@@ -36,8 +36,8 @@ class MongoMaster(MongoBase):
             hosts = hosts + ip + ":" + config_port + ","
         hosts = hosts[:-1]
         pid_file = self.PID_FILE
-        cmd = format('mongos -configdb {hosts} --bind_ip {current_host_name} -port {port} '
-                     '-logpath  /var/log/mongodb/mongos.log & echo $! > {pid_file} ')
+        cmd = format('mongos --configdb {hosts} --bind_ip {current_host_name} -port {port} '
+                     '--fork --logappend --logpath  /var/log/mongodb/mongos.log & echo $! > {pid_file} ')
 
         self.printOut(["Config nodes from ambari: " + ",".join(nodes),
                        "Hosts for mongos: " + hosts,

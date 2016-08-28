@@ -127,9 +127,9 @@ class MongoMaster(MongoBase):
             Execute(format('mkdir -p {final_db_path}'), logoutput=True)
 
         Execute(format(
-            'mongod -f /etc/mongod.conf --shardsvr  -replSet {shard_name} --bind_ip {current_host_name} '
-            ' -port {port} -dbpath {final_db_path} -oplogSize 100 '
-            '-logpath {log_file_name} -pidfilepath {pid_file_name}')
+            'mongod --shardsvr  --replSet {shard_name} --bind_ip {current_host_name} '
+            ' --port {port} --dbpath {final_db_path} --oplogSize 100 '
+            ' --fork --logappend --logpath {log_file_name} --pidfilepath {pid_file_name}')
                 , logoutput=True)
 
     def configureReplicaServers(self,shard_name,db_hosts):

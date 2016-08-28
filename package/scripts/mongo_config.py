@@ -29,7 +29,9 @@ class MongoMaster(MongoBase):
                        "Current Hostname: " + current_host_name,
                        "Config server port: " + config_port])
         Execute('rm -rf /tmp/mongodb-' + config_port + '.sock',logoutput=True,try_sleep=3,tries=5)
-        Execute('mongod -f /etc/mongod-config.conf --bind_ip '+current_host_name+' --port '+config_port,logoutput=True,try_sleep=3,tries=5)
+        Execute('mongod --configsvr --pidfilepath ' + self.PID_CONFIG_FILE +
+                ' --bind_ip '+current_host_name + ' --port '+config_port +
+                ' --fork --logappend --logpath /var/log/mongodb/mongod.log',logoutput=True,try_sleep=3,tries=5)
                 
 
     def stop(self, env):
