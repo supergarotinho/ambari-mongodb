@@ -30,7 +30,6 @@ class MongoMaster(MongoBase):
         
         db_hosts = config['clusterHostInfo']['mongodb_hosts']
         db_ports = params.db_ports
-        db_path = params.db_path
         node_group = params.node_group
 
         len_host=len(db_hosts)
@@ -40,29 +39,8 @@ class MongoMaster(MongoBase):
                        db_hosts])
 
         #Start mongod service
-        if node_group =='':
-            ## All of the instances will be replicas of the same shard
-            shard_name = shard_prefix + "0"
-
-            for index,item in enumerate(db_hosts,start=0):
-                if item ==current_host_name:
-                    pid_file_name = shard_name + '_0' ## TODO: Prepare for multiple instances per node
-                    #get db_path
-                    final_db_path = db_path + '/' + current_host_name.split('.')[0] + '_0' ## TODO: prepare for multiple instances per node
-                    self.startServer(self, shard_name, pid_file_name, final_db_path,db_ports[0])
-                    ## TODO: Prepare for multiple instances per node - Check if the name appear twice in the node_group and get the port number and index
-        else:
-            cluster_shards = node_group.split(';')
-            for index_shards, shard_nodes in enumerate(cluster_shards, start=0):
-                shard_node_list = shard_nodes.split(',')
-                for index_nodes, node_name in enumerate(shard_node_list, start=0):
-                    if node_name == current_host_name:
-                        shard_name = shard_prefix + str(index_shards)
-                        pid_file_name = shard_name + '_0' ## TODO: Prepare for multiple instances per node
-                        # get db_path
-                        final_db_path = db_path + '/' + current_host_name.split('.')[0] + '_0' ## TODO: prepare for multiple instances per node
-                        self.startServer(self, shard_name, pid_file_name, final_db_path, db_ports[0])
-                        ## TODO: Prepare for multiple instances per node - Check if the name appear twice in the node_group and get the port number and index
+        shard_name, pid_file_name, final_db_path, db_port = self.getProcessData()
+        self.startServer(shard_name, pid_file_name, final_db_path, db_port)
 
         self.printOut('Sleep waiting for all mongod starts....')
         sleep(20)
@@ -86,13 +64,52 @@ class MongoMaster(MongoBase):
                 if index == 0:
                     self.configureReplicaServers(shard_name, shard_node_list)
 
+    ## Returns: (shard_name, pid_file_name, final_db_path, db_port)
+    def getProcessData(self):
+        import socket
+        current_host_name=socket.getfqdn(socket.gethostname())
+        import params
+        config = Script.get_config()
+        db_hosts = config['clusterHostInfo']['mongodb_hosts']
+        shard_prefix = params.shard_prefix
+        db_ports = params.db_ports
+        node_group = params.node_group
+        db_path = params.db_path
+
+        if node_group == '':
+            ## All of the instances will be replicas of the same shard
+            shard_name = shard_prefix + "0"
+
+            for index, item in enumerate(db_hosts, start=0):
+                if item == current_host_name:
+                    pid_file_name = shard_name + '_0'  ## TODO: Prepare for multiple instances per node
+                    # get db_path
+                    ## TODO: prepare for multiple instances per node
+                    final_db_path = db_path + '/' + current_host_name.split('.')[0] + '_0'
+                    return (shard_name, pid_file_name, final_db_path, db_ports[0])
+                    ## TODO: Prepare for multiple instances per node - Check if the name appear twice in the node_group and get the port number and index
+        else:
+            cluster_shards = node_group.split(';')
+            for index_shards, shard_nodes in enumerate(cluster_shards, start=0):
+                shard_node_list = shard_nodes.split(',')
+                for index_nodes, node_name in enumerate(shard_node_list, start=0):
+                    if node_name == current_host_name:
+                        shard_name = shard_prefix + str(index_shards)
+                        pid_file_name = shard_name + '_0'  ## TODO: Prepare for multiple instances per node
+                        # get db_path
+                        final_db_path = db_path + '/' + current_host_name.split('.')[
+                            0] + '_0'  ## TODO: prepare for multiple instances per node
+                        return (shard_name, pid_file_name, final_db_path, db_ports[0])
+                        ## TODO: Prepare for multiple instances per node - Check if the name appear twice in the node_group and get the port number and index
+
     def startServer(self,shard_name,pid_file_name,final_db_path,port):
         import params
 
         # Verbose output
         self.printOut(["Shard Name: " + shard_name,
                "PID File Name: " + pid_file_name,
-               "DB Path: " + final_db_path])
+               "DB Path: " + final_db_path,
+               "Port: " + port])
 
         # rm mongo_*.sock
         Execute(format('rm -rf /tmp/mongodb-{port}.sock'), logoutput=True)
