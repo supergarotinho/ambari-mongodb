@@ -64,7 +64,7 @@ class MongoMaster(MongoBase):
                 if index == 0:
                     self.configureReplicaServers(shard_name, shard_node_list)
 
-    ## Returns: (shard_name, pid_file_name, final_db_path, db_port)
+    ## Returns: (shard_name, pid_file_name, final_db_path, log_file, db_port)
     def getProcessData(self):
         import socket
         current_host_name=socket.getfqdn(socket.gethostname())
@@ -187,8 +187,7 @@ class MongoMaster(MongoBase):
 
     def status(self, env):
         print "checking status..."
-        import params
-        shard_name, pid_file_name, final_db_path, log_fine, db_port = self.getProcessData()
+        shard_name, pid_file_name, final_db_path, log_file, db_port = self.getProcessData()
         check_process_status(pid_file_name)
 
 if __name__ == "__main__":

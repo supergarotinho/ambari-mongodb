@@ -3,7 +3,6 @@ from resource_management import *
 bind_ip = default('configurations/mongodb/bind_ip', '0.0.0.0')
 tcp_port = default('configurations/mongodb/tcp_port', '27017')
 config_server_port = default('configurations/mongodb/config_server_port', '27019')
-mongos_tcp_port = default('configurations/mongodb/mongos_tcp_port', '30000')
 db_path = default('configurations/mongodb/db_path', '/var/lib/mongo')
 db_name = default('configurations/mongodb/db_name', '')
 db_user = default('configurations/mongodb/db_user', 'anadmin')
@@ -17,4 +16,4 @@ pid_db_path = '/var/run/mongodb'
 node_group = default('configurations/mongodb/node_group', '')
 mongod_db_content = default('configurations/mongodb/mongod_db_content', '')
 mongod_config_content = default('configurations/mongodb/mongod_config_content', '')
-
+mongos_tcp_port = default('configurations/mongodb/mongos_tcp_port', '30000')

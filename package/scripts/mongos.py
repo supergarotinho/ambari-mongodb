@@ -17,12 +17,15 @@ class MongoMaster(MongoBase):
         sleep(3)
         #waiting for mongod start
         
+        import socket
+        current_host_name = socket.getfqdn(socket.gethostname())
+
         import params
         self.configure(env)
 
         self.printOut('Starting mongo...')
 
-        port = params.mongos_tcp_port
+        port = params.tcp_port
         config_port = params.config_server_port
 
         config = Script.get_config()
@@ -33,15 +36,17 @@ class MongoMaster(MongoBase):
             hosts = hosts + ip + ":" + config_port + ","
         hosts = hosts[:-1]
         pid_file = self.PID_FILE
-        cmd = format('mongos -configdb {hosts} -port {port} -logpath  /var/log/mongodb/mongos.log & echo $! > {pid_file} ')
+        cmd = format('mongos -configdb {hosts} --bind_ip {current_host_name} -port {port} '
+                     '-logpath  /var/log/mongodb/mongos.log & echo $! > {pid_file} ')
 
         self.printOut(["Config nodes from ambari: " + ",".join(nodes),
                        "Hosts for mongos: " + hosts,
                        "Mongos port: ",
-                       "PID File: " + pid_file
+                       "PID File: " + pid_file,
+                       "Current hostname: " + current_host_name
                        ])
 
-        Execute('rm -rf /tmp/mongodb-' + port + '.sock',logoutput=True)
+        Execute('rm -rf /tmp/mongodb-' + str(port) + '.sock',logoutput=True)
         Execute(cmd,logoutput=True)
         len_port=len(params.db_ports)
                 
