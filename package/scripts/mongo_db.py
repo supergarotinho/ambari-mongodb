@@ -196,13 +196,9 @@ class MongoMaster(MongoBase):
 
     def status(self, env):
         print "checking status..."
-        
-        import params                    
-        db_ports = params.db_ports     
-        for index_p,p in enumerate(db_ports,start=0):                   
-            shard_name = params.shard_prefix + str(index_p)                         
-            pid_file = params.pid_db_path + '/' + shard_name + '.pid'
-            check_process_status(pid_file)            
+
+        shard_name, pid_file_name, final_db_path, db_port = self.getProcessData()
+        check_process_status(pid_file_name)
 
 if __name__ == "__main__":
     MongoMaster().execute()
