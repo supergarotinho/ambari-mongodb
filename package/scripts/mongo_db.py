@@ -103,6 +103,8 @@ class MongoMaster(MongoBase):
                         ## TODO: Prepare for multiple instances per node - Check if the name appear twice in the node_group and get the port number and index
 
     def startServer(self,shard_name,pid_file_name,final_db_path,port):
+        import socket
+        current_host_name=socket.getfqdn(socket.gethostname())
         import params
 
         # Verbose output
@@ -126,7 +128,8 @@ class MongoMaster(MongoBase):
                        "PID File with path: " + pid_file_name])
 
         Execute(format(
-            'mongod -f /etc/mongod.conf --shardsvr  -replSet {shard_name} -port {port} -dbpath {final_db_path} -oplogSize 100 -logpath {log_file} -pidfilepath {pid_file}')
+            'mongod -f /etc/mongod.conf --shardsvr  -replSet {shard_name} --bind_ip {current_host_name} '
+            ' -port {port} -dbpath {final_db_path} -oplogSize 100 -logpath {log_file} -pidfilepath {pid_file}')
                 , logoutput=True)
 
     def configureReplicaServers(self,shard_name,db_hosts):

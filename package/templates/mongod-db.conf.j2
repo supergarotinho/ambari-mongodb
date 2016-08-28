@@ -7,7 +7,7 @@
 systemLog:
   destination: file
   logAppend: true
-  #path: /var/log/mongodb/mongod.log
+  #path: /var/log/mongodb/mongod.log ---- DO NOT SET THIS
 
 # Where and how to store data.
 storage:
@@ -21,28 +21,4 @@ storage:
 # how the process runs
 processManagement:
   fork: true  # fork and run in background
-  pidFilePath: /var/run/mongodb/mongod.pid  # location of pidfile
-
-# network interfaces
-net:
-  #port: 27017
-  bindIp: {{ bind_ip }}  # Listen to local interface only, comment to listen on all interfaces.
-
-#sharding:
-#   clusterRole: configsvr
-#replication:
-#   replSetName: configReplSet
-
-#security:
-
-#operationProfiling:
-
-#replication:
-
-#sharding:
-
-## Enterprise-Only Options
-
-#auditLog:
-
-#snmp:
+##  pidFilePath: /var/run/mongodb/mongod.pid  - DO NOT SET THIS
