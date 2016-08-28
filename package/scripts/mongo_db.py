@@ -116,6 +116,7 @@ class MongoMaster(MongoBase):
         ## Getting important params and configuration
         import socket
         current_host_name = socket.getfqdn(socket.gethostname())
+        import params
         db_ports = params.db_ports
         len_host = len(db_hosts)
 
