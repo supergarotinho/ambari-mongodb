@@ -9,6 +9,17 @@ class MongoBase(Script):
     config_file_path='/etc/mongod-config.conf'
     mongo_packages = None
 
+    def printOut(content,sep_lines=True)
+        sep_line =  "------------------------------------------------------------------------"
+        if sep_lines:
+            print sep_line
+        if isinstance("teste", basestring):
+            print content
+        else:
+            for s in content: print s
+        if sep_lines:
+            print sep_line
+
     def installMongo(self, env):
         import params
 
@@ -17,9 +28,9 @@ class MongoBase(Script):
         self.install_packages(env)
 
         if os.path.exists(self.repos_file_path):
-            print "File exists"
+            self.printOut("File exists")
         else:
-            print "File not exists"
+            self.printOut("File not exists")
             File(self.repos_file_path,
                  content=Template("mongodb.repo"),
                 mode=0644
@@ -35,15 +46,17 @@ class MongoBase(Script):
         import params
         env.set_params(params)
         #db.conf
+        self.printOut("Configuring the file: "+self.db_file_path)
         mongod_db_content = InlineTemplate(params.mongod_db_content)   
         File(self.db_file_path, content=mongod_db_content)
         #config.conf
-        mongod_config_content = InlineTemplate(params.mongod_config_content)   
+        self.printOut("Configuring the file: "+self.config_file_path)
+        mongod_config_content = InlineTemplate(params.mongod_config_content)
         File(self.config_file_path, content=mongod_config_content)
         
         config_path = params.db_path + "/config"
         if os.path.exists(config_path):
-            print "File exists"
+            self.printOut("Path exists: " + config_path)
         else:
             Execute(format('mkdir -p {config_path}'))
 

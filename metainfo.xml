@@ -12,7 +12,7 @@
           <name>MONGODB</name>
           <displayName>MONGODB</displayName>
           <category>SLAVE</category>
-		  <cardinality>3+</cardinality>
+		  <cardinality>2+</cardinality>
           <commandScript>
             <script>scripts/mongo_db.py</script>
             <scriptType>PYTHON</scriptType>

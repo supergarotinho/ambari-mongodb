@@ -8,7 +8,7 @@ class MongoMaster(MongoBase):
 
     def install(self, env):
         #no need
-        print 'install mongodb'
+        self.printOut('install mongodb')
 
     def configure(self, env):
         import params
@@ -17,28 +17,38 @@ class MongoMaster(MongoBase):
 
     def start(self, env):
         self.configure(env)
-        print "start mongodb"
-        Execute('rm -rf /tmp/mongodb-20000.sock',logoutput=True,try_sleep=3,tries=5)
-        Execute('mongod -f /etc/mongod-config.conf',logoutput=True,try_sleep=3,tries=5)
+
+        import socket
+        current_host_name = socket.getfqdn(socket.gethostname())
+
+        import params
+        env.set_params(params)
+        config_port = params.config_server_port
+
+        self.printOut(["Start mongodb Config Server",
+                       "Current Hostname: " + current_host_name,
+                       "Config server port: " + config_port])
+        Execute('rm -rf /tmp/mongodb-' + config_port + '.sock',logoutput=True,try_sleep=3,tries=5)
+        Execute('mongod -f /etc/mongod-config.conf --bind_ip '+current_host_name+' --port '+config_port,logoutput=True,try_sleep=3,tries=5)
                 
 
     def stop(self, env):
-        print "stop services.."
+        self.printOut("Stop Services...")
         pid_config_file=self.PID_CONFIG_FILE        
         cmd =format('cat {pid_config_file} | xargs kill -9 ')
         try:
             Execute(cmd,logoutput=True)
         except:
-            print 'can not find pid process,skip this'              
+            self.printOut('can not find pid process,skip this')
 
     def restart(self, env):
         self.configure(env)
-        print "restart mongodb"
+        self.printOut("restart mongodb")
         self.stop(env)
         self.start(env)
 
     def status(self, env):
-        print "checking status..."
+        self.printOut("checking status...")
         check_process_status(self.PID_CONFIG_FILE)
 
 

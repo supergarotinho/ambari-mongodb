@@ -24,9 +24,9 @@ processManagement:
   pidFilePath: /var/run/mongodb/mongod-config.pid  # location of pidfile
 
 # network interfaces
-net:
-  port: 20000
-  bindIp: {{ bind_ip }}  # Listen to local interface only, comment to listen on all interfaces.
+#net:
+#  port: 20000
+#  bindIp: {{ bind_ip }}
 
 sharding:
    clusterRole: configsvr
