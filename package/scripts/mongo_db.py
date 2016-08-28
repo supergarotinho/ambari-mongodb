@@ -90,18 +90,18 @@ class MongoMaster(MongoBase):
         import params
 
         # Verbose output
-        print ["Shard Name: " + shard_name,
+        self.printOut(["Shard Name: " + shard_name,
                "PID File Name: " + pid_file_name,
-               "DB Path: " + db_path]
+               "DB Path: " + db_path])
 
-        self.printOut(
-            # rm mongo_*.sock
-            Execute(format('rm -rf /tmp/mongodb-{port}.sock'), logoutput=True)
+        # rm mongo_*.sock
+        Execute(format('rm -rf /tmp/mongodb-{port}.sock'), logoutput=True)
 
         if os.path.exists(final_db_path):
             self.printOut("Path exists:" + final_db_path)
         else:
             Execute(format('mkdir -p {final_db_path}'), logoutput=True)
+
         log_file = params.log_path + '/' + shard_name + '.log'
         pid_file = params.pid_db_path + '/' + pid_file_name + '.pid'
 
