@@ -172,24 +172,13 @@ class MongoMaster(MongoBase):
 
     def stop(self, env):
         print "stop services.."
-        import params                
-        db_ports = params.db_ports       
-        for index_p,p in enumerate(db_ports,start=0):                   
-            shard_name = params.shard_prefix + str(index_p)                         
-            pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
-            cmd =format('cat {pid_file} | xargs kill -9 ')
-            try:
-               Execute(cmd,logoutput=True)
-            except:
-               print 'can not find pid process,skip this'
-        #stop arbiter       
-        shard_name = params.shard_prefix + '_arbiter'                         
-        pid_file = params.pid_db_path + '/' + shard_name + '.pid'                  
-        cmd =format('cat {pid_file} | xargs kill -9 ')
+
+        shard_name, pid_file_name, final_db_path, db_port = self.getProcessData()
+        cmd =format('cat {pid_file_name} | xargs kill -9 ')
         try:
-            Execute(cmd,logoutput=True)
+           Execute(cmd,logoutput=True)
         except:
-            print 'can not find pid process,skip this'
+           print 'Can not find pid process,skip this'
 
     def restart(self, env):
         self.configure(env)
