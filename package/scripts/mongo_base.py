@@ -9,7 +9,7 @@ class MongoBase(Script):
     config_file_path='/etc/mongod-config.conf'
     mongo_packages = None
 
-    def printOut(content,sep_lines=True)
+    def printOut(content,sep_lines=True):
         sep_line =  "------------------------------------------------------------------------"
         if sep_lines:
             print sep_line
