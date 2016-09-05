@@ -2,6 +2,7 @@ import os
 from time import sleep
 from resource_management import *
 from mongo_base import MongoBase
+from status import check_service_status
 
 class MongoMaster(MongoBase):
     PID_FILE = '/var/run/mongodb/mongos.pid'
