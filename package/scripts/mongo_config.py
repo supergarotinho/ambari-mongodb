@@ -4,7 +4,7 @@ from resource_management import *
 from mongo_base import MongoBase
 from status import check_service_status
 
-class MongoMaster(MongoBase):
+class MongoConfigServer(MongoBase):
     PID_CONFIG_FILE = '/var/run/mongodb/mongod-config.pid'
 
     def install(self, env):
@@ -56,4 +56,4 @@ class MongoMaster(MongoBase):
 
 
 if __name__ == "__main__":
-    MongoMaster().execute()
+    MongoConfigServer().execute()

@@ -5,7 +5,7 @@ from mongo_base import MongoBase
 from status import check_service_status
 from resource_management.core.logger import Logger
 
-class MongoMaster(MongoBase):
+class MongoDBServer(MongoBase):
     mongo_packages = ['mongodb-org']
 
     def install(self, env):
@@ -128,7 +128,7 @@ class MongoMaster(MongoBase):
             Execute(format('mkdir -p {final_db_path}'), logoutput=True)
 
         Execute(format(
-            'mongod --shardsvr  --replSet {shard_name} --bind_ip {current_host_name} '
+            'mongod --shardsvr --replSet {shard_name} --bind_ip {current_host_name} '
             ' --port {port} --dbpath {final_db_path} --oplogSize 100 '
             ' --fork --logappend --logpath {log_file_name} --pidfilepath {pid_file_name}')
                 , logoutput=True)
@@ -192,4 +192,4 @@ class MongoMaster(MongoBase):
         check_process_status(pid_file_name)
 
 if __name__ == "__main__":
-    MongoMaster().execute()
+    MongoDBServer().execute()

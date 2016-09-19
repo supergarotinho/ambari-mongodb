@@ -4,7 +4,7 @@ from resource_management import *
 from mongo_base import MongoBase
 from status import check_service_status
 
-class MongoMaster(MongoBase):
+class MongoQueryRouter(MongoBase):
     PID_FILE = '/var/run/mongodb/mongos.pid'
 
     def install(self, env):
@@ -37,7 +37,7 @@ class MongoMaster(MongoBase):
             hosts = hosts + ip + ":" + config_port + ","
         hosts = hosts[:-1]
         pid_file = self.PID_FILE
-        cmd = format('mongos --configdb {hosts} --bind_ip {current_host_name} -port {port} '
+        cmd = format('mongos --configdb {hosts} --bind_ip {current_host_name} --port {port} '
                      '--fork --logappend --logpath  /var/log/mongodb/mongos.log & echo $! > {pid_file} ')
 
         self.printOut(["Config nodes from ambari: " + ",".join(nodes),
@@ -109,4 +109,4 @@ class MongoMaster(MongoBase):
        check_process_status(self.PID_FILE)  
 
 if __name__ == "__main__":
-    MongoMaster().execute()
+    MongoQueryRouter().execute()

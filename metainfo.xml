@@ -10,9 +10,9 @@
       <components>
         <component>
           <name>MONGODB</name>
-          <displayName>MONGODB</displayName>
+          <displayName>Mongo DB Server</displayName>
           <category>SLAVE</category>
-		  <cardinality>2+</cardinality>
+		  <cardinality>1+</cardinality>
           <commandScript>
             <script>scripts/mongo_db.py</script>
             <scriptType>PYTHON</scriptType>
@@ -21,9 +21,9 @@
         </component>
         <component>
           <name>MONGODC</name>
-          <displayName>MONGOD CONFIG</displayName>
+          <displayName>Mongo Config Server</displayName>
           <category>SLAVE</category>
-		  <cardinality>3+</cardinality>
+		  <cardinality>0-3</cardinality>
           <commandScript>
             <script>scripts/mongo_config.py</script>
             <scriptType>PYTHON</scriptType>
@@ -31,10 +31,10 @@
           </commandScript>
         </component>
 		<component>
-          <name>MONGODS</name>
-          <displayName>MONGOS</displayName>
+          <name>MONGOS</name>
+          <displayName>Mongo Query Router</displayName>
           <category>SLAVE</category>
-		  <cardinality>1+</cardinality>
+		  <cardinality>0+</cardinality>
           <commandScript>
             <script>scripts/mongos.py</script>
             <scriptType>PYTHON</scriptType>
