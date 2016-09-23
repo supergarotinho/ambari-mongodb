@@ -22,6 +22,8 @@ class MongoConfigServer(MongoBase):
         import socket
         current_host_name = socket.getfqdn(socket.gethostname())
 
+        Logger.initialize_logger()
+
         import params
         env.set_params(params)
         config_port = params.config_server_port
