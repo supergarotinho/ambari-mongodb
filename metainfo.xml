@@ -18,6 +18,13 @@
             <scriptType>PYTHON</scriptType>
             <timeout>600</timeout>
           </commandScript>
+          <configFiles>
+            <configFile>
+              <type>xml</type>
+              <fileName>mongod.xml</fileName>
+              <dictionaryName>mongod</dictionaryName>
+            </configFile>
+          </configFiles>
         </component>
         <component>
           <name>MONGODC</name>
@@ -29,6 +36,13 @@
             <scriptType>PYTHON</scriptType>
             <timeout>600</timeout>
           </commandScript>
+          <configFiles>
+            <configFile>
+              <type>xml</type>
+              <fileName>mongo-conf.xml</fileName>
+              <dictionaryName>mongo-config</dictionaryName>
+            </configFile>
+          </configFiles>
         </component>
 		<component>
           <name>MONGOS</name>
@@ -40,6 +54,13 @@
             <scriptType>PYTHON</scriptType>
             <timeout>600</timeout>
           </commandScript>
+          <configFiles>
+            <configFile>
+              <type>xml</type>
+              <fileName>mongos.xml</fileName>
+              <dictionaryName>mongos</dictionaryName>
+            </configFile>
+          </configFiles>
         </component>
         <component>
           <name>MONGODB_CLIENT</name>

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration supports_adding_forbidden="true">
+  <property require-input="false">
+    <name>conf_file</name>
+    <display-name>Config File Template</display-name>
+    <value>/var/lib/mongo</value>
+    <description>Config File Template to be used with for mongodb config instances</description>
+    <value-attributes>
+      <type>multiLine</type>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+
+  <property require-input="false">
+    <name>cluster_definition</name>
+    <value></value>
+    <description>This property is used to set up the mongodb config server replicaset instances.
+        It also can be used to set up more than one instance in the same server.
+        For example, the value: "node1,node2,node2" will set up a a replica set with two instances in the node2.
+        You can't define arbiters here! There is not possible to a mongodb config instance to work as an arbiter.
+        You can't define more the one replicaset (more than one shard) for mongodb config instances.
+        If this value is empty, a replicaset will be created with one instance for each mongoconf server in ambari mongodb service install.
+    </description>
+    <display-name>Define the mongodb config server replicaset architecture</display-name>
+    <value-attributes>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
+
+  <property require-input="true">
+    <name>ports</name>
+    <value>27019</value>
+    <description>This port list is separated by commas.
+        You can use a sequence of ports like: 27017-27020.
+        Or complex setting like: 27017,27019,27025-27027.
+        The resulting list of the example will be folling ports: 27017,27019,27025,27026,27027
+    </description>
+    <display-name>Avaliable ports for mongod instances on each server</display-name>
+    <value-attributes>
+      <empty-value-valid>false</empty-value-valid>
+    </value-attributes>
+  </property>
+
+  <property require-input="true">
+    <name>shard_prefix</name>
+    <value>configReplSet</value>
+    <description>The prefix that will be used to name mongodb config replicaset.</description>
+    <display-name>Mongodb config replicaset name</display-name>
+    <value-attributes>
+      <empty-value-valid>false</empty-value-valid>
+    </value-attributes>
+  </property>
+
+
+</configuration>

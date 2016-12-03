@@ -6,3 +6,5 @@ archive.zip
 *~
 .idea
 *.iml
+
+stack_advisor.py

@@ -1,195 +1,141 @@
+import commands
 import os
-from time import sleep
+import logging
+import params
 from resource_management import *
-from mongo_base import MongoBase
-from status import check_service_status
-from resource_management.core.logger import Logger
+from collections import *
+from mongo_base import *
 
 class MongoDBServer(MongoBase):
-    mongo_packages = ['mongodb-org']
+    def __init__(self):
+        # TODO:: Trocar para a chamada correta
+        self.hosts_in_ambari = "mandachuva.falometro.com.br,batatinha01.falometro.com.br,batatinha02.falometro.com.br".split(',')
+        self.mongodb_config_file = '/etc/mongod.conf'
 
-    def install(self, env):
-        import params
-        env.set_params(params)
-        self.installMongo(env)
+    def configureMongo(self, env):
+        """
+            Create the config file based on the user configuration
+        """
+        Logger.info("Configuring the file: " + self.mongodb_config_file)
+        config_content = InlineTemplate(params.mongodb_config_content)
+        File(self.mongodb_config_file, content=config_content)
 
-    def configure(self, env):
-        import params
-        env.set_params(params)
-        self.configureMongo(env)
+    def getPorts(self):
+        """
+        :rtype list[str]
+        :return: The port list for this instance type
+        """
+        return self.parsePortsConfig(params.mongod_ports)
 
-    def start(self, env):
-        import params
-        self.configure(env)
-        self.printOut("start mongodb")
+    def getClusterDefinition(self):
+        """
+        :rtype str
+        :return: The cluster architecture configuration string
+        """
+        return params.mongod_cluster_definition
 
-        import socket
-        current_host_name=socket.getfqdn(socket.gethostname())
-        
-        config = Script.get_config()
-        shard_prefix = params.shard_prefix
-        
-        db_hosts = config['clusterHostInfo']['mongodb_hosts']
-        db_ports = params.db_ports
-        node_group = params.node_group
+    def getShardPrefix(self):
+        """
+        :rtype str
+        :return: The shard prefix configuration for this instance type
+        """
+        return params.mongod_shard_prefix
 
-        len_host=len(db_hosts)
-        len_port=len(db_ports)
-        self.printOut(["Current Hostname :" + current_host_name,
-                       "DB Nodes List: ",
-                       db_hosts])
+    def getHostsInAmbari(self):
+        """
+        Returns the ambari hosts for this instance
 
-        #Start mongod service
-        shard_name, pid_file_name, final_db_path, log_file, db_port = self.getProcessData()
-        self.startServer(shard_name, pid_file_name, final_db_path, log_file, db_port)
+        :rtype  list[str]
+        :return: Hosts list in ambari for this instance
+        """
+        # TODO: Trocar para a chamada correta
+        """
+         config = Script.get_config()
+         hosts_in_ambari = config['clusterHostInfo']['mongodb_hosts']   ## Service hosts list
+        """
+        return self.hosts_in_ambari
 
-        self.printOut('Sleep waiting for all mongod starts....')
-        sleep(20)
+    def getStartServerCommand(self,node):
+        """
+        :type node: InstanceConfig
+        :rtype str
+        :return: The command to start the given node for the given instance type
+        """
+        Logger.info("Starting a config server instance in this machine...")
+        shard_name = node.shard_name
+        pid_file_name = node.pid_file_name
+        final_db_path = node.final_db_path
+        port = node.db_port
+        log_file_name = node.log_file
+        host_name = node.host_name
 
-        if node_group =='':
-            ## All of the hosts will be replicas of the same shard
-            index = db_hosts.index(current_host_name)
-            shard_name = shard_prefix + "0"
+        return format('sudo -u mongodb mongod --replSet {shard_name} --bind_ip {host_name} '
+                      ' --port {port} --dbpath {final_db_path} --oplogSize 100 '
+                      ' --fork --logappend --logpath {log_file_name} --pidfilepath {pid_file_name}')
 
-            if index == 0:
-                self.configureReplicaServers(shard_name,db_hosts)
+    def startShardConfig(self, primary_node, nodes_to_add):
+        """
+        :type primary_node: InstanceStatus
+        :type nodes_to_add: list[InstanceStatus]
+        :rtype bool
+        :param primary_node:
+        :param nodes_to_add:
+        :return: True if operation succeed, False otherwise
+        """
+        Logger.info('Starting the configuration for shard: ' + primary_node.shard_name)
+        server = primary_node.host_name + ':' + primary_node.db_port
+        command_string = 'mongo ' + server + ' --eval \'rs.initiate({' + '_id: "' + primary_node.shard_name + \
+                         '",configsvr: false,members: [' + '{ _id: 0, host: "' + server + '" }]})\''
 
+        success_message = 'The replicaset was create with success!'
+        error_message = 'The replicaset could not be created!'
+        result = self.executeMongoCommand(command_string, success_message, error_message)
+
+        if result:
+            for node in nodes_to_add:
+                self.addNodeToShard(primary_node, node)
+
+        return result
+
+    def addShardToMongos(self,shard_name,shard_hosts):
+        """
+         1. Check if there are mongos instances in ambari server
+         2. Add this shard if all :
+            * It is not already added
+            * One of the mongos instances are on
+
+        :type shard_name: str
+        :type shard_hosts: list[InstanceStatus]
+        :rtype bool
+        :return: True if the shard is now in the mongos shard list
+        """
+        Logger.info("Adding the following shard to mongos: " + shard_name)
+        shard_string = shard_name + '/' + reduce(lambda x,y: x + "," + y,
+                                                 map(lambda server: server.host_name + ":" + server.db_port,shard_hosts))
+        Logger.info("The final shard string: " + shard_string)
+
+        mongos_list,shard_list = self.getMongosList()
+
+        result = False
+
+        if shard_name in shard_list:
+            result = True
         else:
-            cluster_shards = node_group.split(';')
-            for index_shards, shard_nodes in enumerate(cluster_shards, start=0):
-                ## All of the hosts will be replicas of the same shard
-                shard_node_list = shard_nodes.split(',')
-                index = shard_node_list.index(current_host_name)
-                shard_name = shard_prefix + str(index_shards)
+            online_mongos = filter(lambda node: node.is_started == True, mongos_list)
+            if len(online_mongos) > 0:
+                for node in online_mongos:
+                    server = node.host_name + ':' + node.db_port
+                    Logger.info("Try to add the shard in mongo: " + server)
+                    command_string = 'mongo ' + server + ' --eval \'sh.addShard("' + shard_string + '")\''
+                    success_message = 'The shard was added with success!'
+                    error_message = 'The shard could not be added!'
+                    result = self.executeMongoCommand(command_string, success_message, error_message)
 
-                if index == 0:
-                    self.configureReplicaServers(shard_name, shard_node_list)
+                    if result:
+                        break
 
-    ## Returns: (shard_name, pid_file_name, final_db_path, log_file, db_port)
-    def getProcessData(self):
-        import socket
-        current_host_name=socket.getfqdn(socket.gethostname())
-        import params
-        config = Script.get_config()
-        db_hosts = config['clusterHostInfo']['mongodb_hosts']
-        shard_prefix = params.shard_prefix
-        db_ports = params.db_ports
-        node_group = params.node_group
-        db_path = params.db_path
+        return result
 
-        if node_group == '':
-            ## All of the instances will be replicas of the same shard
-            shard_name = shard_prefix + "0"
-
-            for index, item in enumerate(db_hosts, start=0):
-                if item == current_host_name:
-                    ## TODO: Prepare for multiple instances per node
-                    pid_file_name = params.pid_db_path + '/' + current_host_name.split('.')[0] + '_0' + '.pid'
-                    log_file = params.log_path + '/' + current_host_name.split('.')[0] + '_0' + '.log'
-                    # get db_path
-                    ## TODO: prepare for multiple instances per node
-                    final_db_path = db_path + '/' + current_host_name.split('.')[0] + '_0'
-                    return (shard_name, pid_file_name, final_db_path, log_file, db_ports[0])
-                    ## TODO: Prepare for multiple instances per node - Check if the name appear twice in the node_group and get the port number and index
-        else:
-            cluster_shards = node_group.split(';')
-            for index_shards, shard_nodes in enumerate(cluster_shards, start=0):
-                shard_node_list = shard_nodes.split(',')
-                for index_nodes, node_name in enumerate(shard_node_list, start=0):
-                    if node_name == current_host_name:
-                        shard_name = shard_prefix + str(index_shards)
-                        ## TODO: Prepare for multiple instances per node
-                        pid_file_name = params.pid_db_path + '/' + current_host_name.split('.')[0] + '_0' + '.pid'
-                        log_file = params.log_path + '/' + current_host_name.split('.')[0] + '_0' + '.log'
-                        # get db_path
-                        ## TODO: prepare for multiple instances per node
-                        final_db_path = db_path + '/' + current_host_name.split('.')[0] + '_0'
-                        return (shard_name, pid_file_name, final_db_path, log_file, db_ports[0])
-                        ## TODO: Prepare for multiple instances per node - Check if the name appear twice in the node_group and get the port number and index
-
-    def startServer(self,shard_name,pid_file_name,final_db_path,log_file_name,port):
-        import socket
-        current_host_name=socket.getfqdn(socket.gethostname())
-        import params
-
-        # Verbose output
-        self.printOut(["Shard Name: " + shard_name,
-               "PID File Name: " + pid_file_name,
-               "DB Path: " + final_db_path,
-               "Port: " + port,
-               "Log File Name: " + log_file_name])
-
-        # rm mongo_*.sock
-        Execute(format('rm -rf /tmp/mongodb-{port}.sock'), logoutput=True)
-
-        if os.path.exists(final_db_path):
-            self.printOut("Path exists:" + final_db_path)
-        else:
-            Execute(format('mkdir -p {final_db_path}'), logoutput=True)
-
-        Execute(format(
-            'mongod --shardsvr --replSet {shard_name} --bind_ip {current_host_name} '
-            ' --port {port} --dbpath {final_db_path} --oplogSize 100 '
-            ' --fork --logappend --logpath {log_file_name} --pidfilepath {pid_file_name}')
-                , logoutput=True)
-
-    def configureReplicaServers(self,shard_name,db_hosts):
-        ## Getting important params and configuration
-        import socket
-        current_host_name = socket.getfqdn(socket.gethostname())
-        import params
-        db_ports = params.db_ports
-        len_host = len(db_hosts)
-
-        members = ''
-        current_index = 0
-        while (current_index < len_host):
-            current_host = db_hosts[current_index]
-            current_port = db_ports[0] ## TODO: It not yet prepared for more than one server name in the list
-            members = members + '{_id:' + format('{current_index},host:"{current_host}:{current_port}"')
-            if current_index == 0:
-                members = members + ',priority:2'
-            members = members + '},'
-            current_index = current_index + 1
-
-        # add arbiter
-        #current_port = params.arbiter_port
-        #members = members + '{_id:' + format(
-        #    '{current_index},host:"{current_host_name}:{current_port}"') + ',arbiterOnly: true},'
-        members = members[:-1]
-
-        replica_param = 'rs.initiate( {_id:' + format('"{shard_name}",version: 1,members:') + '[' + members + ']})'
-
-        shard_name, pid_file_name, final_db_path, log_file, db_port = self.getProcessData()
-        cmd = format('mongo --host {current_host_name} --port {db_port} <<EOF \n{replica_param} \nEOF\n')
-        self.printOut(['Configure Replica command: ',
-                       cmd])
-        File('/var/run/mongo_config.sh',
-             content=cmd,
-             mode=0755
-             )
-        Execute('/var/run/mongo_config.sh', logoutput=True)
-
-    def stop(self, env):
-        print "stop services.."
-
-        shard_name, pid_file_name, final_db_path, log_file, db_port = self.getProcessData()
-        cmd =format('cat {pid_file_name} | xargs kill -9 ')
-        try:
-           Execute(cmd,logoutput=True)
-        except:
-           print 'Can not find pid process,skip this'
-
-    def restart(self, env):
-        self.configure(env)
-        print "restart mongodb"
-        self.stop(env)
-        self.start(env)
-
-    def status(self, env):
-        print "checking status..."
-        shard_name, pid_file_name, final_db_path, log_file, db_port = self.getProcessData()
-        check_process_status(pid_file_name)
 
 if __name__ == "__main__":
     MongoDBServer().execute()
