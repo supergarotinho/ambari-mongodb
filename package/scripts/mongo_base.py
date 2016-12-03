@@ -205,12 +205,9 @@ class MongoBase(Script):
         :rtype  list[str]
         :return: Hosts list in ambari for mongos instance
         """
-        # TODO: Mudar para a chamada correta
-        """
         config = Script.get_config()
-        hosts_in_ambari = config['clusterHostInfo']['mongodb_hosts']  ## Service hosts list
-        """
-        return "mandachuva.falometro.com.br,batatinha01.falometro.com.br".split(",")
+        hosts_in_ambari = config['clusterHostInfo']['mongos_hosts']  ## Service hosts list
+        return hosts_in_ambari
 
     def getMongosStatus(self,mongos_server):
         """
@@ -334,7 +331,7 @@ class MongoBase(Script):
         # Verify if it is an standalone start
         if (cluster_config == '') & (len(hosts_in_ambari) == 1):
             ## TODO: Implement standalone set up
-            Logger.info('Standalone not Implemented yet')
+            Logger.info('Standalone does not implemented yet')
         else:
             # Prepare for cases with just one shard
             if cluster_config == '':

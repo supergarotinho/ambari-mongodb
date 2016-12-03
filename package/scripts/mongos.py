@@ -9,8 +9,7 @@ from mongo_config import *
 
 class MongosServer(MongoBase):
     def __init__(self):
-        # TODO:: Trocar para a chamada correta
-        self.hosts_in_ambari = "mandachuva.falometro.com.br,batatinha01.falometro.com.br,batatinha02.falometro.com.br".split(',')
+        # self.hosts_in_ambari = "mandachuva.falometro.com.br,batatinha01.falometro.com.br,batatinha02.falometro.com.br".split(',')
         self.mongodb_config_file = '/etc/mongos.conf'
 
     def configureMongo(self, env):
@@ -49,12 +48,9 @@ class MongosServer(MongoBase):
         :rtype  list[str]
         :return: Hosts list in ambari for this instance
         """
-        # TODO: Trocar para a chamada correta
-        """
-         config = Script.get_config()
-         hosts_in_ambari = config['clusterHostInfo']['mongodb_hosts']   ## Service hosts list
-        """
-        return self.hosts_in_ambari
+        config = Script.get_config()
+        hosts_in_ambari = config['clusterHostInfo']['mongodb_hosts']   ## Service hosts list
+        return hosts_in_ambari
 
     def getConfigServerList(self):
         """
@@ -63,13 +59,11 @@ class MongosServer(MongoBase):
         :return: List of config servers in form of "host:port"
         """
         db_conf_ports = self.parsePortsConfig(params.mongoconf_ports)
-        # TODO: Trocar isso antes de implantar
-        """
-         config = Script.get_config()
-         ambari_mongoconfig_hosts = config['clusterHostInfo']['mongodc_hosts']   ## Service hosts list
-        """
-        ambari_mongoconfig_hosts = "mandachuva.falometro.com.br,batatinha01.falometro.com.br,batatinha02.falometro.com.br".split(
-            ',')
+        config = Script.get_config()
+        ambari_mongoconfig_hosts = config['clusterHostInfo']['mongodc_hosts']   ## Service hosts list
+
+        #ambari_mongoconfig_hosts = "mandachuva.falometro.com.br,batatinha01.falometro.com.br,batatinha02.falometro.com.br".split(
+         #   ',')
 
         if len(params.mongoconf_cluster_definition.lstrip().rstrip()) > 0:
             mongod_cluster = params.mongoconf_cluster_definition.split(",")

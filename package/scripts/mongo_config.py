@@ -8,8 +8,7 @@ from mongo_base import *
 
 class MongoConfigServer(MongoBase):
     def __init__(self):
-        # TODO:: Trocar para a chamada correta
-        self.hosts_in_ambari = "mandachuva.falometro.com.br,batatinha01.falometro.com.br,batatinha02.falometro.com.br".split(',')
+        # self.hosts_in_ambari = "mandachuva.falometro.com.br,batatinha01.falometro.com.br,batatinha02.falometro.com.br".split(',')
         self.mongodb_config_file = '/etc/mongoconfig.conf'
 
     def configureMongo(self, env):
@@ -48,12 +47,9 @@ class MongoConfigServer(MongoBase):
         :rtype  list[str]
         :return: Hosts list in ambari for this instance
         """
-        # TODO: Trocar para a chamada correta
-        """
-         config = Script.get_config()
-         hosts_in_ambari = config['clusterHostInfo']['mongodc_hosts']   ## Service hosts list
-        """
-        return self.hosts_in_ambari
+        config = Script.get_config()
+        hosts_in_ambari = config['clusterHostInfo']['mongodc_hosts']   ## Service hosts list
+        return hosts_in_ambari
 
     def getStartServerCommand(self,node):
         """
