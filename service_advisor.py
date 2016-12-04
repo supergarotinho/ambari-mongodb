@@ -48,6 +48,7 @@ convention listed above.
 For examples see: common-services/HAWQ/2.0.0/service_advisor.py
 and common-services/PXF/3.0.0/service_advisor.py
 """
+from resource_management.core.logger import Logger
 from stack_advisor import DefaultStackAdvisor
 from collections import namedtuple
 
@@ -96,6 +97,16 @@ class MongoDBServiceAdvisor(DefaultStackAdvisor):
     """
 
     def getServiceComponentLayoutValidations(self, services, hosts):
+        Logger.info("Passei pelo layout validation!!!!")
+        Logger.info("Passei pelo layout validation!!!!")
+        Logger.info("Passei pelo layout validation!!!!")
+        Logger.info("Passei pelo layout validation!!!!")
+        Logger.info("Passei pelo layout validation!!!!")
+        Logger.info("Passei pelo layout validation!!!!")
+        Logger.info("Passei pelo layout validation!!!!")
+        Logger.info("Passei pelo layout validation!!!!")
+        Logger.info("Passei pelo layout validation!!!!")
+
         componentsListList = [service["components"] for service in services["services"]]
         componentsList = [item["StackServiceComponents"] for sublist in componentsListList for item in sublist]
 
@@ -419,6 +430,17 @@ class MongoDBServiceAdvisor(DefaultStackAdvisor):
     """
 
     def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
+        Logger.info("Passei pelo configuration validation!!!!")
+        Logger.info("Passei pelo configuration validation!!!!")
+        Logger.info("Passei pelo configuration validation!!!!")
+        Logger.info("Passei pelo configuration validation!!!!")
+        Logger.info("Passei pelo configuration validation!!!!")
+        Logger.info("Passei pelo configuration validation!!!!")
+        Logger.info("Passei pelo configuration validation!!!!")
+        Logger.info("Passei pelo configuration validation!!!!")
+        Logger.info("Passei pelo configuration validation!!!!")
+        Logger.info("Passei pelo configuration validation!!!!")
+
         siteName = "mongodb"
         method = self.validadeMongoDBConfigurations
         items = self.validateConfigurationsForSite(configurations, recommendedDefaults, services, hosts, siteName,
