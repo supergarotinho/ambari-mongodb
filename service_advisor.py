@@ -32,7 +32,7 @@ import imp
 import traceback
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PARENT_DIR = os.path.join(SCRIPT_DIR, '../../stacks/')
+PARENT_DIR = os.path.join(SCRIPT_DIR, '../../../')
 PARENT_FILE = os.path.join(PARENT_DIR, 'service_advisor.py')
 try:
     with open(PARENT_FILE, 'rb') as fp:
