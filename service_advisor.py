@@ -32,7 +32,7 @@ import imp
 import traceback
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PARENT_DIR = os.path.join(SCRIPT_DIR, '../<old_version>')
+PARENT_DIR = os.path.join(SCRIPT_DIR, '../../stacks/')
 PARENT_FILE = os.path.join(PARENT_DIR, 'service_advisor.py')
 try:
     with open(PARENT_FILE, 'rb') as fp:
@@ -47,13 +47,12 @@ convention listed above.
 For examples see: common-services/HAWQ/2.0.0/service_advisor.py
 and common-services/PXF/3.0.0/service_advisor.py
 """
-from service_advisor import ServiceAdvisor
+#from service_advisor import ServiceAdvisor
 from collections import namedtuple
 
 ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
 
-
-class MongoDBServiceAdvisor(ServiceAdvisor):
+class MongoDB32ServiceAdvisor(service_advisor.ServiceAdvisor):
     """
 
     """
