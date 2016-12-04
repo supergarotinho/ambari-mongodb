@@ -47,13 +47,13 @@ convention listed above.
 For examples see: common-services/HAWQ/2.0.0/service_advisor.py
 and common-services/PXF/3.0.0/service_advisor.py
 """
-from stack_advisor import StackAdvisor
+from service_advisor import ServiceAdvisor
 from collections import namedtuple
 
 ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
 
 
-class MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
+class MongoDBServiceAdvisor(ServiceAdvisor):
     """
 
     """
