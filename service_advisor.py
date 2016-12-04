@@ -53,7 +53,7 @@ from collections import namedtuple
 ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
 
 
-class MongoDB100ServiceAdvisor(service_advisor.ServiceAdvisor):
+class MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
     """
 
     """
