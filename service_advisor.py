@@ -26,7 +26,7 @@ Unlike the StackAdvisor, the ServiceAdvisor does NOT provide any inheritance.
 If you want to use inheritance to augment a previous version of a service's
 advisor you can use the following code to dynamically load the previous advisor.
 Some changes will be need to provide the correct path and class names.
-
+"""
 import os
 import imp
 import traceback
@@ -41,6 +41,7 @@ except Exception as e:
     traceback.print_exc()
     print "Failed to load parent"
 
+"""
   class <NewServiceAdvisorClassName>(service_advisor.<OldServiceAdvisorClassName>)
 where the NewServiceAdvisorClassName and OldServiceAdvisorClassName follow the naming
 convention listed above.
