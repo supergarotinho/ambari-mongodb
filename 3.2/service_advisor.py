@@ -32,8 +32,9 @@ import imp
 import traceback
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PARENT_DIR = os.path.join(SCRIPT_DIR, '../../../../')
+PARENT_DIR = os.path.join(SCRIPT_DIR, '../../../../../stacks/')
 PARENT_FILE = os.path.join(PARENT_DIR, 'service_advisor.py')
+
 try:
     with open(PARENT_FILE, 'rb') as fp:
         service_advisor = imp.load_module('service_advisor', fp, PARENT_FILE, ('.py', 'rb', imp.PY_SOURCE))
@@ -41,20 +42,12 @@ except Exception as e:
     traceback.print_exc()
     print "Failed to load parent"
 
-"""
-  class <NewServiceAdvisorClassName>(service_advisor.<OldServiceAdvisorClassName>)
-where the NewServiceAdvisorClassName and OldServiceAdvisorClassName follow the naming
-convention listed above.
-For examples see: common-services/HAWQ/2.0.0/service_advisor.py
-and common-services/PXF/3.0.0/service_advisor.py
-"""
 from resource_management.core.logger import Logger
-from stack_advisor import DefaultStackAdvisor
+#from stack_advisor import DefaultStackAdvisor
 from collections import namedtuple
 
-ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
 
-class MongoDB32ServiceAdvisor(DefaultStackAdvisor):
+class MongoDB32ServiceAdvisor(service_advisor.ServiceAdvisor):
     """
 
     """
@@ -465,3 +458,5 @@ class MongoDB32ServiceAdvisor(DefaultStackAdvisor):
         items.extend(resultItems)
 
         return items
+
+ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
