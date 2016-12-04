@@ -48,12 +48,12 @@ convention listed above.
 For examples see: common-services/HAWQ/2.0.0/service_advisor.py
 and common-services/PXF/3.0.0/service_advisor.py
 """
-#from service_advisor import ServiceAdvisor
+from stack_advisor import DefaultStackAdvisor
 from collections import namedtuple
 
 ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
 
-class MongoDB32ServiceAdvisor(service_advisor.ServiceAdvisor):
+class MongoDBServiceAdvisor(DefaultStackAdvisor):
     """
 
     """
