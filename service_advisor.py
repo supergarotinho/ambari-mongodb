@@ -1,5 +1,6 @@
 #!/usr/bin/env ambari-python-wrap
 import re
+
 """
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -25,27 +26,34 @@ Unlike the StackAdvisor, the ServiceAdvisor does NOT provide any inheritance.
 If you want to use inheritance to augment a previous version of a service's
 advisor you can use the following code to dynamically load the previous advisor.
 Some changes will be need to provide the correct path and class names.
-  SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-  PARENT_DIR = os.path.join(SCRIPT_DIR, '../<old_version>')
-  PARENT_FILE = os.path.join(PARENT_DIR, 'service_advisor.py')
-  try:
+"""
+import os
+import imp
+import traceback
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.join(SCRIPT_DIR, '../<old_version>')
+PARENT_FILE = os.path.join(PARENT_DIR, 'service_advisor.py')
+try:
     with open(PARENT_FILE, 'rb') as fp:
-      service_advisor = imp.load_module('service_advisor', fp, PARENT_FILE, ('.py', 'rb', imp.PY_SOURCE))
-  except Exception as e:
+        service_advisor = imp.load_module('service_advisor', fp, PARENT_FILE, ('.py', 'rb', imp.PY_SOURCE))
+except Exception as e:
     traceback.print_exc()
     print "Failed to load parent"
+"""
   class <NewServiceAdvisorClassName>(service_advisor.<OldServiceAdvisorClassName>)
 where the NewServiceAdvisorClassName and OldServiceAdvisorClassName follow the naming
 convention listed above.
 For examples see: common-services/HAWQ/2.0.0/service_advisor.py
 and common-services/PXF/3.0.0/service_advisor.py
 """
-from stack_advisor import DefaultStackAdvisor
+# from stack_advisor import DefaultStackAdvisor
 from collections import namedtuple
 
-ShardNumbers = namedtuple('ShardNumbers','numberOfInstances numberOfArbiters')
+ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
 
-class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
+
+class MongoDB100ServiceAdvisor(service_advisor.ServiceAdvisor):
     """
 
     """
@@ -99,11 +107,13 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
 
         if (len(mongosHosts) > 0) or (len(mongoConfHosts) == 0):
             message = "For a sharding cluster, it must have Mongo Config Instances"
-            items.append({"type": 'host-component', "level": 'ERROR', "message": message, "component-name": self.MONGODC_COMPONENT_NAME})
+            items.append({"type": 'host-component', "level": 'ERROR', "message": message,
+                          "component-name": self.MONGODC_COMPONENT_NAME})
 
         if (len(mongoConfHosts) > 0) or (len(mongosHosts) == 0):
             message = "For a sharding cluster, it must have one or more Mongos Query Router services"
-            items.append({"type": 'host-component', "level": 'ERROR', "message": message, "component-name": self.MONGOS_COMPONENT_NAME})
+            items.append({"type": 'host-component', "level": 'ERROR', "message": message,
+                          "component-name": self.MONGOS_COMPONENT_NAME})
 
         return items
 
@@ -113,7 +123,7 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
             validationItems.append({"config-name": prop_name,
                                     "item": self.getWarnItem(
                                         "It is not advisable to have " + display_name + " at " + root_dir + ". Consider "
-                                        "creating a sub directory for it")})
+                                                                                                            "creating a sub directory for it")})
 
     def checkForMultipleDirs(self, properties, validationItems, prop_name, display_name):
         # check for delimiters space, comma, colon and semi-colon
@@ -122,7 +132,7 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
                                     "item": self.getErrorItem(
                                         "Multiple directories for " + display_name + " are not allowed.")})
 
-    def parsePortsConfig(self,ports_string):
+    def parsePortsConfig(self, ports_string):
         """
         Parse the user ports configuration
 
@@ -142,7 +152,7 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
                 ports.append(spec)
         return ports
 
-    def validatePortConfig(self,properties,validationItems,prop_name):
+    def validatePortConfig(self, properties, validationItems, prop_name):
         """
             Check if the specified in the correct format
         """
@@ -177,7 +187,7 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
                                                     "item": self.getErrorItem(
                                                         "The node " + node_name + " in the shard " + shard +
                                                         " does not have the " + component_display_name + " component "
-                                                        "Installed on Ambari. The Ambari nodes are: " +
+                                                                                                         "Installed on Ambari. The Ambari nodes are: " +
                                                         str.join(",", ambari_hosts))})
 
                         # This will be used to check if some node does not have instances
@@ -191,12 +201,11 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
                         validationItems.append({"config-name": prop_name,
                                                 "item": self.getWarnItem(
                                                     "The node " + node + " in ambari does not have any instances "
-                                                    "of " + component_display_name + " configured. You must remove the "
-                                                    "node in ambari install or add  some instances for it in the "
-                                                    "cluster configuration")})
+                                                                         "of " + component_display_name + " configured. You must remove the "
+                                                                                                          "node in ambari install or add  some instances for it in the "
+                                                                                                          "cluster configuration")})
 
-
-    def getMinimumNumberOfPorts(self,cluster_definition):
+    def getMinimumNumberOfPorts(self, cluster_definition):
         """
         Returns the minimum number of ports needed for a Node given the cluster definition
 
@@ -238,7 +247,8 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
 
         return validationItems
 
-    def validateMinNumberOfPorts(self, properties, validationItems, prop_name, cluster_definition,component_display_name):
+    def validateMinNumberOfPorts(self, properties, validationItems, prop_name, cluster_definition,
+                                 component_display_name):
         min_ports = self.getMinimumNumberOfPorts(cluster_definition)
         supplied_ports = len((self.parsePortsConfig(properties[prop_name])))
         if min_ports < supplied_ports:
@@ -249,7 +259,7 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
                                         + str(supplied_ports) + " ports. But there is an instance that requires "
                                         + str(min_ports) + " ports.")})
 
-    def getClusterNumbers(self,cluster_definition):
+    def getClusterNumbers(self, cluster_definition):
         """
 
         :param cluster_definition:  The config string for the cluster
@@ -265,10 +275,9 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
                 shard_nodes = shard.split(",")
                 numberOfInstances = len(shard_nodes)
                 numberOfArbiters = len(filter(lambda node: node.find("/arbiter") > -1, shard_nodes))
-                shards.append(ShardNumbers(numberOfInstances,numberOfArbiters))
+                shards.append(ShardNumbers(numberOfInstances, numberOfArbiters))
 
         return shards
-
 
     def validadeMongoDInstancesConfigurations(self, properties, recommendedDefaults, configurations, services, hosts):
         mongod_configs = properties
@@ -280,19 +289,19 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
         mongodHosts = self.getHosts(componentsList, self.MONGOD_COMPONENT_NAME)
 
         # 1. Check if all nodes in the cluster_configuration has the component installed on ambari
-        self.checkForInexistentNodes(properties,validationItems,self.CLUSTER_DEFINITION_CONF_NAME,mongodHosts,
+        self.checkForInexistentNodes(properties, validationItems, self.CLUSTER_DEFINITION_CONF_NAME, mongodHosts,
                                      "Mongo DB Server")
 
         # 2. Check the port configurations
-        self.validatePortConfig(properties,validationItems,self.PORTS_CONF_NAME)
+        self.validatePortConfig(properties, validationItems, self.PORTS_CONF_NAME)
 
         # 3. Check if we have met the minimum number of needed ports
-        self.validateMinNumberOfPorts(properties,validationItems,self.PORTS_CONF_NAME,
-                                      mongod_configs[self.CLUSTER_DEFINITION_CONF_NAME],"Mongo DB Server")
+        self.validateMinNumberOfPorts(properties, validationItems, self.PORTS_CONF_NAME,
+                                      mongod_configs[self.CLUSTER_DEFINITION_CONF_NAME], "Mongo DB Server")
 
         # 4. Check if we have more than one arbiter per shard
         shardsNumbers = self.getClusterNumbers(mongod_configs[self.CLUSTER_DEFINITION_CONF_NAME])
-        if len(filter(lambda shard: shard.numberOfArbiters > 1,shardsNumbers)) > 0:
+        if len(filter(lambda shard: shard.numberOfArbiters > 1, shardsNumbers)) > 0:
             validationItems.append({"config-name": self.CLUSTER_DEFINITION_CONF_NAME,
                                     "item": self.getWarnItem(
                                         "It is not advisable to have more than one arbiter per shard. Consider "
@@ -310,7 +319,8 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
 
         return validationItems
 
-    def validadeMongoConfigInstancesConfigurations(self, properties, recommendedDefaults, configurations, services, hosts):
+    def validadeMongoConfigInstancesConfigurations(self, properties, recommendedDefaults, configurations, services,
+                                                   hosts):
         mongoconf_configs = properties
         validationItems = []
 
@@ -321,15 +331,15 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
 
         # 1. Check if all nodes in the cluster_configuration has the component installed on ambari
         # 1.1 It also check if some node in ambari does not have any instances
-        self.checkForInexistentNodes(properties,validationItems,self.CLUSTER_DEFINITION_CONF_NAME,mongoConfHosts,
+        self.checkForInexistentNodes(properties, validationItems, self.CLUSTER_DEFINITION_CONF_NAME, mongoConfHosts,
                                      "Mongo Config Server")
 
         # 2. Check the port configurations
-        self.validatePortConfig(properties,validationItems,self.PORTS_CONF_NAME)
+        self.validatePortConfig(properties, validationItems, self.PORTS_CONF_NAME)
 
         # 3. Check if we have met the minimum number of needed ports
-        self.validateMinNumberOfPorts(properties,validationItems,self.PORTS_CONF_NAME,
-                                      mongoconf_configs[self.CLUSTER_DEFINITION_CONF_NAME],"Mongo Config Server")
+        self.validateMinNumberOfPorts(properties, validationItems, self.PORTS_CONF_NAME,
+                                      mongoconf_configs[self.CLUSTER_DEFINITION_CONF_NAME], "Mongo Config Server")
 
         # 4. Check if we have just one shard
         shardsNumbers = self.getClusterNumbers(mongoconf_configs[self.CLUSTER_DEFINITION_CONF_NAME])
@@ -337,7 +347,7 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
             validationItems.append({"config-name": self.CLUSTER_DEFINITION_CONF_NAME,
                                     "item": self.getErrorItem(
                                         "You can't have more than one shard for mongo db config instances. You have "
-                                        "configured " + str(len(shardsNumbers)) + " shards for it." )})
+                                        "configured " + str(len(shardsNumbers)) + " shards for it.")})
 
         # 5. Check if we have exactly 3 mongo config instances
         if len(shardsNumbers) == 1:
@@ -352,13 +362,13 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
                                         "item": self.getErrorItem(
                                             "You must have 3 Mongo Config Instances. As you have only " +
                                             str(len(mongoConfHosts)) + " nodes available for Mongo Config Instances. "
-                                            "You have two options. 1-Change the cluster definition property in "
-                                            "mongo-conf configuration specifying more instances per node in order to "
-                                            "archieve 3 mongo config instances. 2-Add more nodes with mongo config in "
-                                            "ambari.")})
+                                                                       "You have two options. 1-Change the cluster definition property in "
+                                                                       "mongo-conf configuration specifying more instances per node in order to "
+                                                                       "archieve 3 mongo config instances. 2-Add more nodes with mongo config in "
+                                                                       "ambari.")})
 
         # 6. Check if we have any arbiters (mongoconf does not support arbiters)
-        if len(filter(lambda shard: shard.numberOfArbiters > 0,shardsNumbers)) > 0:
+        if len(filter(lambda shard: shard.numberOfArbiters > 0, shardsNumbers)) > 0:
             validationItems.append({"config-name": self.CLUSTER_DEFINITION_CONF_NAME,
                                     "item": self.getErrorItem(
                                         "You can't have any arbiters in mongo config replicaset.")})
@@ -376,15 +386,15 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
 
         # 1. Check if all nodes in the cluster_configuration has the component installed on ambari
         # 1.1 It also check if some node in ambari does not have any instances
-        self.checkForInexistentNodes(properties,validationItems,self.CLUSTER_DEFINITION_CONF_NAME,mongoConfHosts,
+        self.checkForInexistentNodes(properties, validationItems, self.CLUSTER_DEFINITION_CONF_NAME, mongoConfHosts,
                                      "Mongo Query Router")
 
         # 2. Check the port configurations
-        self.validatePortConfig(properties,validationItems,self.PORTS_CONF_NAME)
+        self.validatePortConfig(properties, validationItems, self.PORTS_CONF_NAME)
 
         # 3. Check if we have met the minimum number of needed ports
-        self.validateMinNumberOfPorts(properties,validationItems,self.PORTS_CONF_NAME,
-                                      mongos_configs[self.CLUSTER_DEFINITION_CONF_NAME],"Mongo Query Router")
+        self.validateMinNumberOfPorts(properties, validationItems, self.PORTS_CONF_NAME,
+                                      mongos_configs[self.CLUSTER_DEFINITION_CONF_NAME], "Mongo Query Router")
 
         # 4. Check if we have just one shard
         shardsNumbers = self.getClusterNumbers(mongos_configs[self.CLUSTER_DEFINITION_CONF_NAME])
@@ -392,10 +402,10 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
             validationItems.append({"config-name": self.CLUSTER_DEFINITION_CONF_NAME,
                                     "item": self.getErrorItem(
                                         "You can't have more than one shard for Mongo Query Router instances. You have "
-                                        "configured " + str(len(shardsNumbers)) + " shards for it." )})
+                                        "configured " + str(len(shardsNumbers)) + " shards for it.")})
 
         # 5. Check if we have any arbiters (mongoconf does not support arbiters)
-        if len(filter(lambda shard: shard.numberOfArbiters > 0,shardsNumbers)) > 0:
+        if len(filter(lambda shard: shard.numberOfArbiters > 0, shardsNumbers)) > 0:
             validationItems.append({"config-name": self.CLUSTER_DEFINITION_CONF_NAME,
                                     "item": self.getErrorItem(
                                         "You can't have any arbiters in Mongo Query Router configuration.")})
@@ -407,6 +417,7 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
     This should be similar to any of the validateXXXXConfigurations functions in the stack_advisor.py
     such as validateHDFSConfigurations.
     """
+
     def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
         siteName = "mongodb"
         method = self.validadeMongoDBConfigurations
@@ -432,7 +443,3 @@ class MongoDB100ServiceAdvisor(DefaultStackAdvisor):
         items.extend(resultItems)
 
         return items
-
-
-
-

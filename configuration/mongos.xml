@@ -5,7 +5,7 @@
   <property require-input="false">
     <name>conf_file</name>
     <display-name>Config File Template</display-name>
-    <value>/var/lib/mongo</value>
+    <value></value>
     <description>Config File Template to be used with for mongos config instances</description>
     <value-attributes>
       <type>multiLine</type>
