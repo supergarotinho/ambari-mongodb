@@ -60,7 +60,8 @@ class MongoDB32ServiceAdvisor(DefaultStackAdvisor):
     PORTS_CONF_NAME = 'ports'
 
     def __init__(self, *args, **kwargs):
-        Logger.initialize_logger("MongoDBServiceAdvisor")
+        Logger.initialize_logger()
+        Logger.info("MongoDB32ServiceAdvisor has been created!")
         self.as_super = super(MongoDB32ServiceAdvisor, self)
         self.as_super.__init__(*args, **kwargs)
 
