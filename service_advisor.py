@@ -48,7 +48,7 @@ from collections import namedtuple
 
 ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
 
-class MongoDB32ServiceAdvisor(DefaultStackAdvisor):
+class MongoDB32ServiceAdvisor(HDP23StackAdvisor):
     """
 
     """
@@ -61,8 +61,8 @@ class MongoDB32ServiceAdvisor(DefaultStackAdvisor):
 
     def __init__(self, *args, **kwargs):
         Logger.initialize_logger()
-        Logger.info("MongoDB32ServiceAdvisor has been created!")
-        self.as_super = super(MongoDB32ServiceAdvisor, self)
+        Logger.info("MongoDBServiceAdvisor has been created!")
+        self.as_super = super(MongoDBServiceAdvisor, self)
         self.as_super.__init__(*args, **kwargs)
 
     """
