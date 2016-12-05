@@ -99,7 +99,7 @@ class MongosServer(MongoBase):
 
         mongo_config_servers = self.getConfigServerList()
 
-        config_db_str = params.mongoconf_shard_prefix + '0/' + reduce(lambda x,y: x + ',' + y,mongo_config_servers)
+        config_db_str = params.mongoconf_shard_prefix + '0/' + reduce(lambda x, y: x + ',' + y, mongo_config_servers)
 
         return format('sudo -u mongodb mongos --fork --bind_ip {host_name} '
                       ' --port {port} --configdb {config_db_str} '
@@ -168,8 +168,8 @@ class MongosServer(MongoBase):
 
         for server in  config_server_list:
             server_data = server.split(":")
-            node_instance = InstanceConfig(params.mongoconf_shard_prefix + '0','','','',
-                                  server_data[1],server_data[0],False)
+            node_instance = InstanceConfig(params.mongoconf_shard_prefix + '0', '', '', '',
+                                           server_data[1], server_data[0], False)
             config_server_instances.append(node_instance)
 
         config_cluster_shard_list = [(params.mongoconf_shard_prefix + '0',

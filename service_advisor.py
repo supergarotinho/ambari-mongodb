@@ -42,20 +42,27 @@ except Exception as e:
     traceback.print_exc()
     print "Failed to load parent"
 
+from stack_advisor import DefaultStackAdvisor
 from resource_management.core.logger import Logger
-#from stack_advisor import DefaultStackAdvisor
 from collections import namedtuple
 
+ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
 
-class MongoDB32ServiceAdvisor(service_advisor.ServiceAdvisor):
+class MongoDB32ServiceAdvisor(DefaultStackAdvisor):
     """
 
     """
+
     MONGOS_COMPONENT_NAME = 'MONGOS'
     MONGODC_COMPONENT_NAME = 'MONGODC'
     MONGOD_COMPONENT_NAME = 'MONGODB'
     CLUSTER_DEFINITION_CONF_NAME = 'cluster_definition'
     PORTS_CONF_NAME = 'ports'
+
+    def __init__(self, *args, **kwargs):
+        Logger.initialize_logger("MongoDBServiceAdvisor")
+        self.as_super = super(MongoDB32ServiceAdvisor, self)
+        self.as_super.__init__(*args, **kwargs)
 
     """
     If any components of the service should be colocated with other services,
@@ -458,5 +465,3 @@ class MongoDB32ServiceAdvisor(service_advisor.ServiceAdvisor):
         items.extend(resultItems)
 
         return items
-
-ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
