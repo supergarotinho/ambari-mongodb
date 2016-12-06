@@ -52,7 +52,7 @@ ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
 # DefaultStackAdvisor
 # service_advisor.ServiceAdvisor
 
-class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
+class HDP23MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
     """
 
     """
