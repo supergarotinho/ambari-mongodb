@@ -245,8 +245,10 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
                         nodes_ports[node_name] += 1
                     else:
                         nodes_ports[node_name] = 1
-
-        return max(nodes_ports.values())
+        if len(nodes_ports.values) > 0:
+            return max(nodes_ports.values())
+        else:
+            return 0
 
     def validateMongoDBConfigurations(self, properties, recommendedDefaults, configurations, services, hosts):
         validationItems = []
