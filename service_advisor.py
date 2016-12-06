@@ -440,26 +440,22 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
         Logger.info("Initiating MongoDb Configuration Check!")
 
         siteName = "mongodb"
-        method = self.validateMongoDBConfigurations
-        items = self.validateConfigurationsForSite(configurations, recommendedDefaults, services, hosts, siteName,
-                                                   method)
+        items = self.validateMongoDBConfigurations(configurations[siteName]['properties'],None,configurations,services,
+                                                    hosts)
 
         siteName = "mongod"
-        method = self.validateMongoDInstancesConfigurations
-        resultItems = self.validateConfigurationsForSite(configurations, recommendedDefaults, services, hosts, siteName,
-                                                         method)
+        resultItems = self.validateMongoDInstancesConfigurations(configurations[siteName]['properties'],None,
+                                                                 configurations,services, hosts)
         items.extend(resultItems)
 
-        siteName = "mongo-config"
-        method = self.validateMongoConfigInstancesConfigurations
-        resultItems = self.validateConfigurationsForSite(configurations, recommendedDefaults, services, hosts, siteName,
-                                                         method)
+        siteName = "mongo-conf"
+        resultItems = self.validateMongoConfigInstancesConfigurations(configurations[siteName]['properties'],None,
+                                                                 configurations,services, hosts)
         items.extend(resultItems)
 
         siteName = "mongos"
-        method = self.validateMongoSInstancesConfigurations
-        resultItems = self.validateConfigurationsForSite(configurations, recommendedDefaults, services, hosts, siteName,
-                                                         method)
+        resultItems = self.validateMongoSInstancesConfigurations(configurations[siteName]['properties'],None,
+                                                                 configurations,services, hosts)
         items.extend(resultItems)
 
         return items
