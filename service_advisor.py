@@ -52,7 +52,7 @@ ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
 # DefaultStackAdvisor
 # service_advisor.ServiceAdvisor
 
-class MongoDBServiceAdvisor(DefaultStackAdvisor):
+class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
     """
 
     """
@@ -66,7 +66,7 @@ class MongoDBServiceAdvisor(DefaultStackAdvisor):
     def __init__(self, *args, **kwargs):
         Logger.initialize_logger()
         Logger.info("MongoDBServiceAdvisor has been created!")
-        self.as_super = super(MongoDBServiceAdvisor, self)
+        self.as_super = super(HDP23MongoDBServiceAdvisor, self)
         self.as_super.__init__(*args, **kwargs)
 
     """
