@@ -181,8 +181,12 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
                     break
 
     def checkForInexistentNodes(self, properties, validationItems, prop_name, ambari_hosts, component_display_name):
+        Logger.info("Checking for inexistent nodes on " + component_display_name)
+        Logger.info("Configuration name: " + prop_name)
+
         if prop_name in properties:
             cluster_definition = properties[prop_name]
+            Logger.info("Cluster definition: " + cluster_definition)
             if len(cluster_definition.strip()) > 0:
                 nodes_instances = {}
                 cluster_shards = cluster_definition.split(";")
@@ -333,6 +337,8 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
 
     def validateMongoConfigInstancesConfigurations(self, properties, recommendedDefaults, configurations, services,
                                                    hosts):
+        Logger.info("Initiating mongo-conf configuration validation...")
+
         mongoconf_configs = properties
         validationItems = []
 
@@ -431,6 +437,7 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
     """
 
     def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
+        Logger.info("Initiating MongoDb Configuration Check!")
 
         siteName = "mongodb"
         method = self.validateMongoDBConfigurations
