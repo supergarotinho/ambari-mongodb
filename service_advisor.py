@@ -291,7 +291,7 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
 
         return shards
 
-    def validadeMongoDInstancesConfigurations(self, properties, recommendedDefaults, configurations, services, hosts):
+    def validateMongoDInstancesConfigurations(self, properties, recommendedDefaults, configurations, services, hosts):
         mongod_configs = properties
         validationItems = []
 
@@ -331,7 +331,7 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
 
         return validationItems
 
-    def validadeMongoConfigInstancesConfigurations(self, properties, recommendedDefaults, configurations, services,
+    def validateMongoConfigInstancesConfigurations(self, properties, recommendedDefaults, configurations, services,
                                                    hosts):
         mongoconf_configs = properties
         validationItems = []
@@ -387,7 +387,7 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
 
         return validationItems
 
-    def validadeMongoSInstancesConfigurations(self, properties, recommendedDefaults, configurations, services, hosts):
+    def validateMongoSInstancesConfigurations(self, properties, recommendedDefaults, configurations, services, hosts):
         mongos_configs = properties
         validationItems = []
 
@@ -431,36 +431,26 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
     """
 
     def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
-        Logger.info("Passei pelo configuration validation!!!!")
-        Logger.info("Passei pelo configuration validation!!!!")
-        Logger.info("Passei pelo configuration validation!!!!")
-        Logger.info("Passei pelo configuration validation!!!!")
-        Logger.info("Passei pelo configuration validation!!!!")
-        Logger.info("Passei pelo configuration validation!!!!")
-        Logger.info("Passei pelo configuration validation!!!!")
-        Logger.info("Passei pelo configuration validation!!!!")
-        Logger.info("Passei pelo configuration validation!!!!")
-        Logger.info("Passei pelo configuration validation!!!!")
 
         siteName = "mongodb"
-        method = self.validadeMongoDBConfigurations
+        method = self.validateMongoDBConfigurations
         items = self.validateConfigurationsForSite(configurations, recommendedDefaults, services, hosts, siteName,
                                                    method)
 
         siteName = "mongod"
-        method = self.validadeMongoDInstancesConfigurations
+        method = self.validateMongoDInstancesConfigurations
         resultItems = self.validateConfigurationsForSite(configurations, recommendedDefaults, services, hosts, siteName,
                                                          method)
         items.extend(resultItems)
 
         siteName = "mongo-config"
-        method = self.validadeMongoConfigInstancesConfigurations
+        method = self.validateMongoConfigInstancesConfigurations
         resultItems = self.validateConfigurationsForSite(configurations, recommendedDefaults, services, hosts, siteName,
                                                          method)
         items.extend(resultItems)
 
         siteName = "mongos"
-        method = self.validadeMongoSInstancesConfigurations
+        method = self.validateMongoSInstancesConfigurations
         resultItems = self.validateConfigurationsForSite(configurations, recommendedDefaults, services, hosts, siteName,
                                                          method)
         items.extend(resultItems)
