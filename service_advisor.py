@@ -276,7 +276,7 @@ class HDP23MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
                                  component_display_name):
         min_ports = self.getMinimumNumberOfPorts(cluster_definition)
         supplied_ports = len((self.parsePortsConfig(properties[prop_name])))
-        if min_ports < supplied_ports:
+        if min_ports > supplied_ports:
             message = "As your cluster has more than one instance of " + component_display_name +  \
                       " per node, you need to supply more ports. You have supplied " + str(supplied_ports) + \
                       " ports. But there is an instance that requires " + str(min_ports) + " ports."
