@@ -102,15 +102,7 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
     """
 
     def getServiceComponentLayoutValidations(self, services, hosts):
-        Logger.info("Passei pelo layout validation!!!!")
-        Logger.info("Passei pelo layout validation!!!!")
-        Logger.info("Passei pelo layout validation!!!!")
-        Logger.info("Passei pelo layout validation!!!!")
-        Logger.info("Passei pelo layout validation!!!!")
-        Logger.info("Passei pelo layout validation!!!!")
-        Logger.info("Passei pelo layout validation!!!!")
-        Logger.info("Passei pelo layout validation!!!!")
-        Logger.info("Passei pelo layout validation!!!!")
+        Logger.info("Initiating MongoDB layout validation ...")
 
         componentsListList = [service["components"] for service in services["services"]]
         componentsList = [item["StackServiceComponents"] for sublist in componentsListList for item in sublist]
@@ -119,14 +111,18 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
         mongoConfHosts = self.getHosts(componentsList, self.MONGODC_COMPONENT_NAME)
         mongosHosts = self.getHosts(componentsList, self.MONGOS_COMPONENT_NAME)
 
+        Logger.info("Mongod hosts: "+str(mongodHosts))
+        Logger.info("MongoConf hosts: "+str(mongoConfHosts))
+        Logger.info("Mongos hosts: "+str(mongosHosts))
+
         items = []
 
-        if (len(mongosHosts) > 0) or (len(mongoConfHosts) == 0):
+        if (len(mongosHosts) > 0) and (len(mongoConfHosts) == 0):
             message = "For a sharding cluster, it must have Mongo Config Instances"
             items.append({"type": 'host-component', "level": 'ERROR', "message": message,
                           "component-name": self.MONGODC_COMPONENT_NAME})
 
-        if (len(mongoConfHosts) > 0) or (len(mongosHosts) == 0):
+        if (len(mongoConfHosts) > 0) and (len(mongosHosts) == 0):
             message = "For a sharding cluster, it must have one or more Mongos Query Router services"
             items.append({"type": 'host-component', "level": 'ERROR', "message": message,
                           "component-name": self.MONGOS_COMPONENT_NAME})
