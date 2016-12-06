@@ -245,7 +245,7 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
                         nodes_ports[node_name] += 1
                     else:
                         nodes_ports[node_name] = 1
-        if len(nodes_ports.values) > 0:
+        if len(nodes_ports) > 0:
             return max(nodes_ports.values())
         else:
             return 0
