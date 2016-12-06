@@ -48,7 +48,11 @@ from collections import namedtuple
 
 ShardNumbers = namedtuple('ShardNumbers', 'numberOfInstances numberOfArbiters')
 
-class MongoDB32ServiceAdvisor(HDP23StackAdvisor):
+# HDP23StackAdvisor
+# DefaultStackAdvisor
+# service_advisor.ServiceAdvisor
+
+class MongoDBServiceAdvisor(DefaultStackAdvisor):
     """
 
     """

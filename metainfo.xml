@@ -6,7 +6,7 @@
       <name>MongoDB</name>
       <displayName>MongoDB</displayName>
       <comment>The intermediate database in your lambda stack</comment>
-      <version>3.2</version>
+      <version>3.2.9</version>
       <components>
         <component>
           <name>MONGODB</name>
