@@ -141,7 +141,7 @@ class HDP23MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
                 'message': message,
                 'type': 'configuration',
                 'config-name': prop_name,
-                'level': 'WARN'}
+                'level': 'ERROR'}
 
     def validateIfRootDir(self, siteName, properties, validationItems, prop_name, display_name):
         root_dir = '/'
