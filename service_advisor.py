@@ -93,7 +93,7 @@ class HDP23MongoDBServiceAdvisor(DefaultStackAdvisor):
     """
 
     def getServiceConfigurationRecommendations(self, configurations, clusterSummary, services, hosts):
-        pass
+        return []
 
     """
     Returns an array of Validation objects about issues with the hostnames to which components are assigned.
