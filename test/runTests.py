@@ -33,9 +33,18 @@ def configureHosts(hosts):
         os.system(command_str)
 
 def cleanHosts():
-    command_str = "cat /etc/hosts | sed '/\.test\.com/D'"
+    """
+    Clean the modifications made on /etc/hosts file for testing
+
+    :return: None
+    """
+    command_str = "cat /etc/hosts | sed '/\.test\.com/D' > /tmp/hosts"
     Logger.info("Executing the following command: " + command_str)
     os.system(command_str)
+    command_str = "cat /tmp/hosts > /etc/hosts"
+    Logger.info("Executing the following command: " + command_str)
+    os.system(command_str)
+
 
 def getServerObject(server_type):
     if server_type == 'conf':
@@ -84,21 +93,26 @@ def stopMongoInstances(server_type,hosts):
     for p in process_list:
         p.join()
 
+
+env = Environment(SERVICE_DIR, tmp_dir=SERVICE_DIR)
+env.__enter__()
+
 if len(sys.argv) == 3:
+    Logger.info("Initiating process...")
+
     hosts = {'node1.test.com': '127.69.0.1',
              'node2.test.com': '127.69.0.2',
              'node3.test.com': '127.69.0.3'}
     operation = sys.argv[1]
     instanceOp = sys.argv[2]
-    if operation is 'install':
+    if operation == 'install':
+        Logger.info("Installing...")
         configureHosts(hosts)
-    elif operation is 'remove':
+    elif operation == 'remove':
+        Logger.info("Removing...")
         cleanHosts()
-    elif operation is 'simulate':
-
-        env = Environment(SERVICE_DIR, tmp_dir=SERVICE_DIR)
-        env.__enter__()
-
+    elif operation == 'simulate':
+        Logger.info("Simulating...")
         ## Setting up Ambari servers
         Script.config = {'clusterHostInfo': {
             'mongos_hosts': ['node1.test.com',
@@ -110,22 +124,23 @@ if len(sys.argv) == 3:
                              'node2.test.com',
                              'node3.test.com']
         }}
-        params.mongoconf_cluster_definition = 'node1.test.com,node2.test.com,node3.test.com;' \
+        params.mongod_cluster_definition = 'node1.test.com,node2.test.com,node3.test.com;' \
                                               'node1.test.com,node1.test.com/arbiter,node2.test.com;' \
                                               'node2.test.com,node3.test.com,node3.test.com/arbiter'
         params.mongos_cluster_definition = 'node1.test.com,node1.test.com,node2.test.com'
 
-        if instanceOp is 'start':
+        if instanceOp == 'start':
             startMongoInstances('conf',hosts.keys())
             startMongoInstances('mongos',hosts.keys())
             startMongoInstances('mongod',hosts.keys())
-        elif instanceOp is 'status':
+        elif instanceOp == 'status':
             getMongoInstancesStatus('conf',hosts.keys())
             getMongoInstancesStatus('mongos',hosts.keys())
             getMongoInstancesStatus('mongod',hosts.keys())
-        elif instanceOp is 'stop':
+        elif instanceOp == 'stop':
             stopMongoInstances('conf', hosts.keys())
             stopMongoInstances('mongos', hosts.keys())
             stopMongoInstances('mongod', hosts.keys())
-
+else:
+    Logger.info("Wrong usage. Argument length: "+ str(len(sys.argv)) + ". Arguments: " + str(sys.argv))
 

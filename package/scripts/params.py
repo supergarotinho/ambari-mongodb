@@ -28,9 +28,9 @@ log_path = default('configurations/mongodb/log_path', '/var/log/mongodb')
 pid_db_path = default('configurations/mongodb/pid_db_path', '/var/run/mongodb')
 
 # Interval to wait before trying to configure the cluster
-try_interval = default('configurations/mongodb/try_interval', '10')
+try_interval = float(default('configurations/mongodb/try_interval', 10))
 # Times to try to configure the cluster
-times_to_try = default('configurations/mongodb/times_to_try', '10')
+times_to_try = float(default('configurations/mongodb/times_to_try', 10))
 
 # Mongodb user and group that will execute the instances
 mongodb_user = default('configurations/mongodb/mongodb_user', 'mongodb')

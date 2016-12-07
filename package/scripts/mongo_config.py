@@ -92,7 +92,7 @@ class MongoConfigServer(MongoStartable):
 
         if result:
             for node in nodes_to_add:
-                self.addNod(primary_node, node)
+                self.addNodeToShard(primary_node, node)
 
         return result
 
@@ -108,7 +108,7 @@ class MongoConfigServer(MongoStartable):
         :rtype bool
         :return: True if the shard is now in the mongos shard list
         """
-        pass
+        return True
 
 
 if __name__ == "__main__":

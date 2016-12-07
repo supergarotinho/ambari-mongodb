@@ -148,7 +148,7 @@ class MongosServer(MongoStartable):
         :rtype bool
         :return: True if the shard is now in the mongos shard list
         """
-        pass
+        return True
 
     def setupCluster(self, service_list):
         """

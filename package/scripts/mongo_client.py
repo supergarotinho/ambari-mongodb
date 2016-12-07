@@ -136,8 +136,5 @@ class MongoClient(MongoBase):
     def status(self, env):
         pass
 
-
-
-
 if __name__ == "__main__":
     MongoClient().execute()

@@ -2,6 +2,7 @@ import json
 import commands
 import ambari_simplejson as json # simplejson is much faster comparing to Python 2.6 json module and has the same functions set.
 import params
+import os
 
 from collections import *
 from resource_management import *
@@ -228,7 +229,13 @@ class MongoBase(Script):
             shards = resulting_lines[resulting_lines.index('shards:') + 1:resulting_lines.index('active mongoses:')]
             Logger.info("Shard list in this mongos: " + str(shards))
 
-            shards_json = json.loads('[' + reduce(lambda x, y: x + ',' + y, shards) + ']')
+            if len(shards) > 1:
+                shards_json = json.loads('[' + reduce(lambda x, y: x + ',' + y, shards) + ']')
+            elif len(shards) == 1:
+                shards_json = json.loads('[' + shards[0] + ']')
+            else:
+                shards_json = json.loads('[]')
+
             for shard in shards_json:
                 shard_list.append(shard["_id"])
         else:
