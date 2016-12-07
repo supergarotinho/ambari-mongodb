@@ -1,13 +1,15 @@
-import commands
-import os
-import logging
+from resource_management.core.logger import Logger
+from resource_management.core.resources.system import File
+from resource_management.core.source import InlineTemplate
+from resource_management.libraries.script import Script
+from resource_management.libraries.functions.format import format
+from time import sleep
 import params
-from resource_management import *
-from collections import *
-from mongo_base import *
-from mongo_config import *
+from mongo_base import InstanceConfig
+from mongo_base import InstanceStatus
+from mongo_startable import MongoStartable
 
-class MongosServer(MongoBase):
+class MongosServer(MongoStartable):
     def __init__(self):
         # self.hosts_in_ambari = "mandachuva.falometro.com.br,batatinha01.falometro.com.br,batatinha02.falometro.com.br".split(',')
         self.mongodb_config_file = '/etc/mongos.conf'

@@ -65,7 +65,7 @@ class HDP23MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
 
     def __init__(self, *args, **kwargs):
         Logger.initialize_logger()
-        Logger.info("MongoDBServiceAdvisor has been created!")
+        Logger.info("HDP23MongoDBServiceAdvisor has been created!")
         self.as_super = super(HDP23MongoDBServiceAdvisor, self)
         self.as_super.__init__(*args, **kwargs)
 
@@ -209,7 +209,7 @@ class HDP23MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
                             node_name = node
 
                         if node_name not in ambari_hosts:
-                            message = "The node " + node_name + " in the shard " + shard + " does not have the " + \
+                            message = "The node " + node_name + " in the shard \"" + shard + "\" does not have the " + \
                                       component_display_name + " component installed on Ambari. The Ambari nodes " \
                                                                "are: " + str.join(",", ambari_hosts)
                             validationItems.append(self.getErrorItem(siteName,prop_name,message))
@@ -336,7 +336,7 @@ class HDP23MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
             shard_nodes = shard.split(",")
             if shard_nodes[0].find("/arbiter") > -1:
                 message = "The first node of the shard must not be an arbiter. You must change the position of the " + \
-                          shard_nodes[0] + " in the shard " + shard
+                          shard_nodes[0] + " in the shard \"" + shard + "\""
                 validationItems.append(self.getErrorItem(siteName, self.CLUSTER_DEFINITION_CONF_NAME, message))
 
         return validationItems
@@ -459,3 +459,14 @@ class HDP23MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
         items.extend(resultItems)
 
         return items
+
+class HDP24MongoDBServiceAdvisor(HDP23MongoDBServiceAdvisor):
+    """
+
+    """
+
+    def __init__(self, *args, **kwargs):
+        Logger.initialize_logger()
+        Logger.info("HDP24MongoDBServiceAdvisor has been created!")
+        self.as_super = super(HDP23MongoDBServiceAdvisor, self)
+        self.as_super.__init__(*args, **kwargs)

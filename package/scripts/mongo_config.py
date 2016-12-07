@@ -5,8 +5,9 @@ import params
 from resource_management import *
 from collections import *
 from mongo_base import *
+from mongo_startable import MongoStartable
 
-class MongoConfigServer(MongoBase):
+class MongoConfigServer(MongoStartable):
     def __init__(self):
         # self.hosts_in_ambari = "mandachuva.falometro.com.br,batatinha01.falometro.com.br,batatinha02.falometro.com.br".split(',')
         self.mongodb_config_file = '/etc/mongoconfig.conf'
