@@ -18,6 +18,9 @@ class MongoBase(Script):
     mongos_config_file = '/etc/mongos.conf'
     mongo_packages = ['mongodb-org']
 
+    def __init__(self):
+        self.my_hostname = params.my_hostname
+
     def install(self, env):
         Logger.info('Installing mongo...')
         env.set_params(params)
@@ -246,7 +249,7 @@ class MongoBase(Script):
         Logger.info('Getting mongos cluster configuration...')
         cluster_config = params.mongos_cluster_definition
         db_ports = self.parsePortsConfig(params.mongos_ports)
-        my_hostname = params.my_hostname
+        my_hostname = self.my_hostname
         mongos_hosts_in_ambari = self.getMongosHostsInAmabari()
 
         Logger.info('Mongos Cluster definition: ' + cluster_config)
@@ -309,7 +312,7 @@ class MongoBase(Script):
         shard_prefix = self.getShardPrefix()
         db_path = params.db_path
 
-        my_hostname = params.my_hostname
+        my_hostname = self.my_hostname
         hosts_in_ambari = self.getHostsInAmbari()
 
         Logger.info('Cluster definition: ' + cluster_config)
@@ -535,7 +538,7 @@ class MongoBase(Script):
 
         times_to_try = params.times_to_try
         try_interval = params.try_interval
-        my_hostname = params.my_hostname
+        my_hostname = self.my_hostname
 
         cluster_shards_to_configure = service_list
         times = 0

@@ -10,8 +10,10 @@ from mongo_base import InstanceStatus
 from mongo_startable import MongoStartable
 
 class MongosServer(MongoStartable):
-    def __init__(self):
-        # self.hosts_in_ambari = "mandachuva.falometro.com.br,batatinha01.falometro.com.br,batatinha02.falometro.com.br".split(',')
+
+    def __init__(self, *args, **kwargs):
+        self.as_super = super(MongosServer, self)
+        self.as_super.__init__(*args, **kwargs)
         self.mongodb_config_file = '/etc/mongos.conf'
 
     def configureMongo(self, env):
