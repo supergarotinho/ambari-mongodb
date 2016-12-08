@@ -53,7 +53,7 @@ class MongosServer(MongoStartable):
         :return: Hosts list in ambari for this instance
         """
         config = Script.get_config()
-        hosts_in_ambari = config['clusterHostInfo']['mongodb_hosts']   ## Service hosts list
+        hosts_in_ambari = config['clusterHostInfo']['mongos_hosts']   ## Service hosts list
         return hosts_in_ambari
 
     def getConfigServerList(self):
@@ -170,7 +170,7 @@ class MongosServer(MongoStartable):
 
         config_server_instances = []
 
-        for server in  config_server_list:
+        for server in config_server_list:
             server_data = server.split(":")
             node_instance = InstanceConfig(params.mongoconf_shard_prefix + '0', '', '', '',
                                            server_data[1], server_data[0], False)
