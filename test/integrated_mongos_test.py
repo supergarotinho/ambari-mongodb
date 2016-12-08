@@ -98,7 +98,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
 
 
     expected_cluster_status_for_one_host_stopped = [
-        ('0',['node1.test.com','node1.test.com','node1.test.com'], [
+        ('0',['node1.test.com','node1.test.com'], [
             InstanceStatus(shard_name='0',
                            pid_file_name='/var/run/mongodb/node1_0_0.pid',
                            final_db_path='/var/lib/mongodb/node1_0_0',
