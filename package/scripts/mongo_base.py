@@ -268,39 +268,42 @@ class MongoBase(Script):
 
         # prepare to cases where we do not have this config
         if cluster_config == '':
-            Logger.info('Mongos hosts with uma instance per host: ' + str(mongos_hosts_in_ambari))
-            cluster_config = reduce(lambda a, b: a + ',' + b, mongos_hosts_in_ambari)
-
-        node_list = cluster_config.split(',')
-        Logger.info('Number of mongos nodes: ' + str(len(node_list)))
-        Logger.info('Nodes: ' + cluster_config)
-
-        nodes_and_port_indexes = {}
-        for host in mongos_hosts_in_ambari:
-            nodes_and_port_indexes[host] = 0
+            Logger.info('Mongos hosts with one instance per host: ' + str(mongos_hosts_in_ambari))
+            if len(mongos_hosts_in_ambari) == 1:
+                cluster_config = mongos_hosts_in_ambari[0]
+            elif len(mongos_hosts_in_ambari) > 1:
+                cluster_config = reduce(lambda a, b: a + ',' + b, mongos_hosts_in_ambari)
 
         mongos = []
         shards = []
+        if len(cluster_config) > 0:
+            node_list = cluster_config.split(',')
+            Logger.info('Number of mongos nodes: ' + str(len(node_list)))
+            Logger.info('Nodes: ' + cluster_config)
 
-        for index_nodes, node_name in enumerate(node_list, start=0):
-            Logger.info('Processing node #: ' + str(index_nodes))
-            Logger.info('Node name: ' + node_name)
-            pid_file_name = os.path.join(params.pid_db_path,
-                                         node_name.split('.')[0] + '_mongos_' +
-                                         str(nodes_and_port_indexes[node_name]) + '.pid')
-            log_file = os.path.join(params.log_path,
-                                    node_name.split('.')[0] + '_mongos_' +
-                                    str(nodes_and_port_indexes[node_name]) + '.log')
-            db_port = db_ports[nodes_and_port_indexes[node_name]]
-            Logger.info('Node PID file name: ' + pid_file_name)
-            Logger.info('Node log file: ' + log_file)
-            Logger.info('Node db port:' + db_port)
-            # Check the mongos status
-            mongos_status = self.getMongosStatus(node_name + ':' + db_port)
-            shards = mongos_status[1]
-            mongos_instance = Mongos(pid_file_name, log_file,db_port, node_name, mongos_status[0])
-            mongos.append(mongos_instance)
-            nodes_and_port_indexes[node_name] += 1
+            nodes_and_port_indexes = {}
+            for host in mongos_hosts_in_ambari:
+                nodes_and_port_indexes[host] = 0
+
+            for index_nodes, node_name in enumerate(node_list, start=0):
+                Logger.info('Processing node #: ' + str(index_nodes))
+                Logger.info('Node name: ' + node_name)
+                pid_file_name = os.path.join(params.pid_db_path,
+                                             node_name.split('.')[0] + '_mongos_' +
+                                             str(nodes_and_port_indexes[node_name]) + '.pid')
+                log_file = os.path.join(params.log_path,
+                                        node_name.split('.')[0] + '_mongos_' +
+                                        str(nodes_and_port_indexes[node_name]) + '.log')
+                db_port = db_ports[nodes_and_port_indexes[node_name]]
+                Logger.info('Node PID file name: ' + pid_file_name)
+                Logger.info('Node log file: ' + log_file)
+                Logger.info('Node db port:' + db_port)
+                # Check the mongos status
+                mongos_status = self.getMongosStatus(node_name + ':' + db_port)
+                shards = mongos_status[1]
+                mongos_instance = Mongos(pid_file_name, log_file,db_port, node_name, mongos_status[0])
+                mongos.append(mongos_instance)
+                nodes_and_port_indexes[node_name] += 1
 
         return (mongos,shards)
 
@@ -335,73 +338,72 @@ class MongoBase(Script):
 
         # Verify if it is an standalone start
         if (cluster_config == '') & (len(hosts_in_ambari) == 1):
-            ## TODO: Implement standalone set up
-            Logger.info('Standalone does not implemented yet')
-        else:
+            Logger.info('Standalone implemented as a replicaset with only one node')
+            cluster_config = hosts_in_ambari[0]
+        elif cluster_config == '':
             # Prepare for cases with just one shard
-            if cluster_config == '':
-                Logger.info('Cluster with just one shard or is a replicaset with this members: ' + str(hosts_in_ambari))
-                cluster_config = reduce(lambda a, b: a + ',' + b, hosts_in_ambari)
+            Logger.info('Cluster with just one shard or is a replicaset with this members: ' + str(hosts_in_ambari))
+            cluster_config = reduce(lambda a, b: a + ',' + b, hosts_in_ambari)
 
-            nodes_and_port_indexes = {}
-            for host in hosts_in_ambari:
-                nodes_and_port_indexes[host] = 0
+        nodes_and_port_indexes = {}
+        for host in hosts_in_ambari:
+            nodes_and_port_indexes[host] = 0
 
-            cluster_shards = cluster_config.split(';')
-            Logger.info('Number of shards: ' + str(len(cluster_shards)))
-            for index_shards, shard_nodes in enumerate(cluster_shards, start=0):
-                shard_node_list = shard_nodes.split(',')
-                shard_name = shard_prefix + str(index_shards)
-                Logger.info('Processing shard: ' + shard_name)
-                Logger.info('Number of shard nodes: ' + str(len(shard_node_list)))
-                Logger.info('Shard nodes: ' + shard_nodes)
-                result_nodes = []
-                instances_on_this_shard = False
-                for index_nodes, node_name in enumerate(shard_node_list, start=0):
-                    Logger.info('Processing node #: ' + str(index_nodes))
-                    Logger.info('Node name: ' + node_name)
+        cluster_shards = cluster_config.split(';')
+        Logger.info('Number of shards: ' + str(len(cluster_shards)))
+        for index_shards, shard_nodes in enumerate(cluster_shards, start=0):
+            shard_node_list = shard_nodes.split(',')
+            shard_name = shard_prefix + str(index_shards)
+            Logger.info('Processing shard: ' + shard_name)
+            Logger.info('Number of shard nodes: ' + str(len(shard_node_list)))
+            Logger.info('Shard nodes: ' + str(shard_node_list))
+            result_nodes = []
+            instances_on_this_shard = False
+            for index_nodes, node_name in enumerate(shard_node_list, start=0):
+                Logger.info('Processing node #: ' + str(index_nodes))
+                Logger.info('Node name: ' + node_name)
 
-                    is_arbiter = node_name.find('/arbiter') > 0
-                    if is_arbiter:
-                        Logger.info('Node is an arbiter!')
-                        node_name = node_name[:node_name.find('/arbiter')]
+                is_arbiter = node_name.find('/arbiter') > 0
+                if is_arbiter:
+                    Logger.info('Node is an arbiter!')
+                    node_name = node_name[:node_name.find('/arbiter')]
 
-                    if node_name == my_hostname:
-                        Logger.info('Node is on this server!')
-                        instances_on_this_shard = True
+                if node_name == my_hostname:
+                    Logger.info('Node is on this server!')
+                    instances_on_this_shard = True
 
-                    pid_file_name = os.path.join(params.pid_db_path,
-                                                 node_name.split('.')[0] + '_' +
-                                                 shard_name + '_' +
-                                                 str(nodes_and_port_indexes[node_name]) + '.pid')
+                pid_file_name = os.path.join(params.pid_db_path,
+                                             node_name.split('.')[0] + '_' +
+                                             shard_name + '_' +
+                                             str(nodes_and_port_indexes[node_name]) + '.pid')
 
-                    log_file = os.path.join(params.log_path,
-                                            node_name.split('.')[0] + '_' +
-                                            shard_name + '_' +
-                                            str(nodes_and_port_indexes[node_name]) + '.log')
+                log_file = os.path.join(params.log_path,
+                                        node_name.split('.')[0] + '_' +
+                                        shard_name + '_' +
+                                        str(nodes_and_port_indexes[node_name]) + '.log')
 
-                    # get db_path
-                    final_db_path = os.path.join(db_path,
-                                                 node_name.split('.')[0] + '_' +
-                                                 shard_name + '_' +
-                                                 str(nodes_and_port_indexes[node_name]))
+                # get db_path
+                final_db_path = os.path.join(db_path,
+                                             node_name.split('.')[0] + '_' +
+                                             shard_name + '_' +
+                                             str(nodes_and_port_indexes[node_name]))
 
-                    db_port = db_ports[nodes_and_port_indexes[node_name]]
+                db_port = db_ports[nodes_and_port_indexes[node_name]]
 
-                    Logger.info('Node PID file name: ' + pid_file_name)
-                    Logger.info('Node log file: ' + log_file)
-                    Logger.info('Node db path: ' + final_db_path)
-                    Logger.info('Node db port:' + db_port)
+                Logger.info('Node PID file name: ' + pid_file_name)
+                Logger.info('Node log file: ' + log_file)
+                Logger.info('Node db path: ' + final_db_path)
+                Logger.info('Node db port:' + db_port)
 
-                    instance_config = InstanceConfig(shard_name, pid_file_name, final_db_path, log_file,
-                                                     db_port, node_name, is_arbiter)
+                instance_config = InstanceConfig(shard_name, pid_file_name, final_db_path, log_file,
+                                                 db_port, node_name, is_arbiter)
 
-                    result_nodes.append(instance_config)
-                    nodes_and_port_indexes[node_name] += 1
+                result_nodes.append(instance_config)
+                nodes_and_port_indexes[node_name] += 1
 
-                # if len(result_nodes) > 0:
-                if instances_on_this_shard:
-                    results.append((shard_name, shard_node_list, result_nodes))
+            # if len(result_nodes) > 0:
+            if instances_on_this_shard:
+                results.append((shard_name, shard_node_list, result_nodes))
 
         return results
 

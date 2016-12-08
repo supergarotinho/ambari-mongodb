@@ -9,7 +9,7 @@ class MongoStartable(MongoBase):
         self.configure(env)
         Logger.info("Starting the servers...")
 
-        my_hostname = params.my_hostname
+        my_hostname = self.my_hostname
         hosts_in_ambari = self.getHostsInAmbari()
         Logger.info("Current Hostname :" + my_hostname)
         Logger.info("DB Nodes List: " + str(hosts_in_ambari))
@@ -38,7 +38,7 @@ class MongoStartable(MongoBase):
 
     def stop(self, env):
         Logger.info("Stopping services..")
-        my_hostname = params.my_hostname
+        my_hostname = self.my_hostname
         Logger.info('My hostname: ' + my_hostname)
         cluster_status = self.getClusterStatus(self.getClusterData())
         Logger.info('Shards to process: ' + str(len(cluster_status)))
@@ -55,20 +55,9 @@ class MongoStartable(MongoBase):
                     except:
                         Logger.info('Can not find pid process,skipping this noe')
 
-    """
-    This method probably wont be needed anymore.
-
-    def restart(self, env):
-        self.configure(env)
-        Logger.info("Restarting mongodb conf instance(s)")
-        self.stop(env)
-        self.start(env)
-
-    """
-
     def status(self, env):
         self.configure(env)
-        my_hostname = params.my_hostname
+        my_hostname = self.my_hostname
         Logger.info('My hostname: ' + my_hostname)
         Logger.info("Checking mongodb conf instances status...")
         cluster_status = self.getClusterStatus(self.getClusterData())
@@ -77,9 +66,10 @@ class MongoStartable(MongoBase):
             Logger.info('Processing shard: ' + shard[0])
             Logger.info('Nodes to process: ' + str(len(shard[2])))
             for node in shard[2]:
-                Logger.info('Processing node: ' + node.host_name + node.db_port)
+                Logger.info('Processing node: ' + node.host_name + ":" + node.db_port)
                 Logger.info('The node is started: ' + str(node.is_started))
-                if (node.host_name == my_hostname):
+                if node.host_name == my_hostname:
+                    Logger.info('Checking process id ...')
                     check_process_status(node.pid_file_name)
 
 

@@ -7,3 +7,4 @@ archive.zip
 .idea
 *.iml
 *.pyc
+.coverage

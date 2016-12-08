@@ -1,0 +1,10 @@
+[report]
+omit =
+    # Omit the ambari packages
+    */ambari_commons/*
+    */ambari_jinja2/*
+    */pkg_resources/*
+    */resource_management/*
+    */ambari_simplejson/*
+    # omit the test classes
+    # *_test.py
