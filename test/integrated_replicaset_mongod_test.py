@@ -304,7 +304,6 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
                            repl_role=None)])]
 
         clusterStatus = server3.getClusterStatus(server3.getClusterData())
-        print "\n\n\n\n\n\n\n\n\n\n Cluster status after server 3 on: " + str(clusterStatus) + "\n\n\n\n\n\n\n\n\n\n"
         self.assertEqual(clusterStatus, expectedClusterStatusServer3On, "The cluster status result for a started node3 "
                                                                         "in the replicaset is not right")
         server2.start(self.env)
@@ -355,7 +354,6 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
                            repl_role=None)])]
 
         clusterStatus = server2.getClusterStatus(server2.getClusterData())
-        print "\n\n\n\n\n\n\n\n\n\n Cluster status  after server 2 on: " + str(clusterStatus) + "\n\n\n\n\n\n\n\n\n\n"
         self.assertEqual(clusterStatus, expectedClusterStatusServer2On, "The cluster status result for a started node2"
                                                                         " in the replicaset is not right")
         server1.start(self.env)
@@ -406,7 +404,6 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
                            repl_role="SECONDARY")])]
 
         clusterStatus = server1.getClusterStatus(server1.getClusterData())
-        print "\n\n\n\n\n\n\n\n\n\n Cluster status  after server 1 on: " + str(clusterStatus) + "\n\n\n\n\n\n\n\n\n\n"
         self.assertEqual(clusterStatus, expectedClusterStatusServer1On, "The cluster status result for a started node1"
                                                                         " in the replicaset is not right")
 

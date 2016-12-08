@@ -337,7 +337,7 @@ class MongoBase(Script):
         results = []
 
         # Verify if it is an standalone start
-        if (cluster_config == '') & (len(hosts_in_ambari) == 1):
+        if (cluster_config == '') and (len(hosts_in_ambari) == 1):
             Logger.info('Standalone implemented as a replicaset with only one node')
             cluster_config = hosts_in_ambari[0]
         elif cluster_config == '':
