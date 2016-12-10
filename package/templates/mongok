@@ -10,40 +10,70 @@ if [[ "$@" == *"--help"* ]]; then
   echo "e.g.: mongok top #starts mongotop --host mongo_host:mongo_port"
 fi
 
-mongo_host=''
-mongo_port=''
-known_commands="export import perf stat dump files oplog restore top"
-if [ -f /etc/mongoclient.conf ]; then
-  mongo_host_tmp=`grep -e mongo_host /etc/mongoclient.conf | awk -F ":" '{print $2}' | tr -d '[[:space:]]'`
-  mongo_port_tmp=`grep -e mongo_port /etc/mongoclient.conf | awk -F ":" '{print $2}' | tr -d '[[:space:]]'`
-  if [ ! -z "$mongo_host_tmp" ]; then
-    mongo_host=$mongo_host_tmp
+## Funcion to secure and open the config file in a secure way
+secureAndOpenConfigFile() {
+	configfile='/etc/mongoclient.conf'
+
+	# Saves the actual directory
+	local actualDir=$(pwd)
+
+	cd ~
+	if ([ -r $configfile ]) then
+		local configfile_secured='/tmp/mongoclient.conf'
+
+		# check if the file contains something we don't want
+		if egrep -q -v '^#|^[^ ]*=[^;]*' "$configfile"; then
+		  	echo -e "Config file is unclean, cleaning it..."
+			# filter the original to a new file
+		  	egrep '^#|^[^ ]*=[^;&]*'  "$configfile" > "$configfile_secured"
+		  	configfile="$configfile_secured"
+		fi
+
+		echo "Reading config...."
+
+		source "$configfile"
+	else
+		echo -e "/etc/mongoclient.conf was not found!"
+	fi
+
+	# Returns to the directory saved
+	cd "$actualDir"
+}
+
+checkListeningPort() {
+	local server=$(echo ":$1" | tr ":" " ")
+
+	# For multiple local host names: lsof -Pi @someLocalName:8080 -sTCP:LISTEN
+	# Or you can use n: nc -vz 127.0.0.1 8080 (nc -l 1234 # escuta a porta 1234)
+	if nc -z -w1 $server > /dev/null; then
+    echo "RUNNING"
+	else
+    echo "NOT RUNNING"
+	fi
+}
+
+mongo_hosts=node1.test.com:27017,localhost:27919,neuroserver.com.br:79
+
+declare -A mongoServersStatus
+
+hosts=$(echo $mongo_hosts | tr "," " ")
+
+for host in $hosts
+do
+  mongoServersStatus[$host]=$(checkListeningPort $host)
+  echo "$host is $(checkListeningPort $host)"
+  if [[ ${mongoServersStatus[$host]} == "RUNNING" ]]; then
+    if [ -z "$1" ]; then
+      mongo ${host}
+    elif [[ "$known_commands" == *"$1"* ]]; then
+      mongo$@ --host ${host}
+    elif [[ "${1:0:1}" == "/" ]]; then
+      mongo ${host}$@
+    else
+      mongo ${host} $@
+    fi
+
+    # End the loop
+    break
   fi
-  if [ ! -z "$mongo_port_tmp" ]; then
-    mongo_port=$mongo_port_tmp
-  fi
-else
-  echo "Error: no /etc/mongoclient.conf found!"
-  exit 1
-fi
-
-if [ -z "$mongo_host" ]; then
-  echo "Error: no mongo_host found from /etc/mongoclient.conf"
-  exit 1
-fi
-if [ -z "$mongo_port" ]; then
-  echo "Error: no mongo_port found from /etc/mongoclient.conf"
-  exit 1
-fi
-
-
-
-if [ -z "$1" ]; then
-  mongo ${mongo_host}:${mongo_port}
-elif [[ "$known_commands" == *"$1"* ]]; then
-  mongo$@ --host ${mongo_host}:${mongo_port}
-elif [[ "${1:0:1}" == "/" ]]; then
-  mongo ${mongo_host}:${mongo_port}$@
-else
-  mongo ${mongo_host}:${mongo_port} $@
-fi
+done
