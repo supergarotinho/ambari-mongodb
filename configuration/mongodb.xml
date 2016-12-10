@@ -64,7 +64,7 @@
     <display-name>Interval to wait before configuring the cluster</display-name>
     <value-attributes>
       <type>int</type>
-      <minimum>0</minimum>
+      <minimum>5</minimum>
       <maximum>120</maximum>
       <unit>seconds</unit>
       <increment-step>5</increment-step>
