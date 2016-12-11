@@ -70,14 +70,16 @@ class MongosServer(MongoStartable):
         port = node.db_port
         log_file_name = node.log_file
         host_name = node.host_name
+        db_user = params.mongodb_user
+        config_file = self.mongodb_config_file
 
         mongo_config_servers = self.getConfigServerList()
 
         config_db_str = params.mongoconf_shard_prefix + '0/' + reduce(lambda x, y: x + ',' + y, mongo_config_servers)
 
-        return format('sudo -u mongodb mongos --fork --bind_ip {host_name} '
+        return format('sudo -u {db_user} mongos --fork --bind_ip {host_name} '
                       ' --port {port} --configdb {config_db_str} '
-                      ' --logappend --logpath {log_file_name} --pidfilepath {pid_file_name}')
+                      ' --logappend --logpath {log_file_name} --pidfilepath {pid_file_name} --config {config_file}')
 
 
     def startServer(self, node):
