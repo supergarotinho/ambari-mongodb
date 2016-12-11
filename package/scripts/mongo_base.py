@@ -17,7 +17,7 @@ class MongoBase(Script):
     repos_file_path = '/etc/yum.repos.d/mongodb.repo'
     mongoconf_config_file = '/etc/mongoconf.conf'
     mongos_config_file = '/etc/mongos.conf'
-    mongo_packages = ['mongodb-org']
+    mongo_packages = ['mongodb-org','sudo']
 
     def __init__(self):
         self.my_hostname = socket.getfqdn(socket.gethostname())
