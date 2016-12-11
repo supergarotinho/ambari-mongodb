@@ -37,7 +37,7 @@
 
   <property require-input="true">
     <name>mongodb_user</name>
-    <value>mongodb</value>
+    <value>mongod</value>
     <description>Mongodb user that will execute the instances</description>
     <display-name>Mongodb OS User</display-name>
     <propertyType>USER</propertyType>
@@ -48,7 +48,7 @@
 
   <property require-input="true">
     <name>mongodb_user_group</name>
-    <value>mongodb</value>
+    <value>mongod</value>
     <description>Mongodb user group that will execute the instances</description>
     <display-name>Mongodb OS User Group</display-name>
     <propertyType>GROUP</propertyType>

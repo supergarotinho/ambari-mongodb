@@ -33,6 +33,6 @@ try_interval = float(default('configurations/mongodb/try_interval', 10))
 times_to_try = float(default('configurations/mongodb/times_to_try', 10))
 
 # Mongodb user and group that will execute the instances
-mongodb_user = default('configurations/mongodb/mongodb_user', 'mongodb')
-mongodb_user_group = default('configurations/mongodb/mongodb_user_group', 'mongodb')
-my_hostname = socket.getfqdn(socket.gethostname())
+mongodb_user = default('configurations/mongodb/mongodb_user', 'mongod')
+mongodb_user_group = default('configurations/mongodb/mongodb_user_group', 'mongod')
+#my_hostname = socket.getfqdn(socket.gethostname())

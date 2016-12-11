@@ -1,8 +1,8 @@
 import json
 import commands
 import ambari_simplejson as json # simplejson is much faster comparing to Python 2.6 json module and has the same functions set.
-import params
 import os
+import socket
 
 from collections import *
 from resource_management import *
@@ -20,9 +20,10 @@ class MongoBase(Script):
     mongo_packages = ['mongodb-org']
 
     def __init__(self):
-        self.my_hostname = params.my_hostname
+        self.my_hostname = socket.getfqdn(socket.gethostname())
 
     def install(self, env):
+        import params
         Logger.info('Installing mongo...')
         env.set_params(params)
         self.installMongo(env)
@@ -44,6 +45,7 @@ class MongoBase(Script):
                 Package(pack)
 
     def configure(self, env):
+        import params
         Logger.info('Configuring mongo...')
         env.set_params(params)
         self.configureMongo(env)
@@ -252,6 +254,7 @@ class MongoBase(Script):
         :rtype  list(tuple(str,list(str),list(InstanceStatus))]
         :return: The mongod shard list with all nodes
         """
+        import params
         config = Script.get_config()
         mongod_hosts_in_ambari = config['clusterHostInfo']['mongodb_hosts']   ## Service hosts list
         cluster_config = params.mongod_cluster_definition
@@ -267,6 +270,7 @@ class MongoBase(Script):
         :rtype list[str]
         :return: List of config servers in form of "host:port"
         """
+        import params
         config = Script.get_config()
         ambari_mongoconfig_hosts = config['clusterHostInfo']['mongodc_hosts']   ## Service hosts list
         cluster_config = params.mongoconf_cluster_definition
@@ -291,6 +295,7 @@ class MongoBase(Script):
         :rtype tuple(list[Mongos],list[str])
         :return: This method returns the data of all mongos instances in the cluster and the shards that they know of
         """
+        import params
         Logger.info('Getting mongos cluster configuration...')
         cluster_config = params.mongos_cluster_definition
         db_ports = self.parsePortsConfig(params.mongos_ports)
@@ -352,6 +357,7 @@ class MongoBase(Script):
         :return Returns a list of shards and nodes that are important for this instance: [(shard_name,shard_node_list,[InstanceConfig])]
         :rtype: list(tuple(str,list(str),list(InstanceConfig))]
         """
+        import params
 
         Logger.info('Getting cluster configuration...')
 
@@ -517,6 +523,7 @@ class MongoBase(Script):
         :type node: InstanceConfig
         :return: None
         """
+        import params
 
         # Verbose output
         Logger.info("...")
@@ -581,6 +588,7 @@ class MongoBase(Script):
         :rtype None
         :return: None
         """
+        import params
         # The standalone cluster will be a replicaset with a primari node only
         Logger.info('Initiating the cluster setup phase ...')
 

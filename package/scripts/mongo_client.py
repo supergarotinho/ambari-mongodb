@@ -1,13 +1,13 @@
 from resource_management import *
 
 from mongo_base import MongoBase
-import params
 
 class MongoClient(MongoBase):
     client_config_path="/etc/mongoclient.conf"
     mongo_packages=['mongodb-org-shell', 'mongodb-org-tools']
 
     def install(self, env):
+        import params
         env.set_params(params)
         self.installMongo(env)
         self.configure(env)
@@ -17,6 +17,7 @@ class MongoClient(MongoBase):
              )
 
     def configure(self,env):
+        import params
         self.configureMongoClient()
         env.set_params(params)
         File(self.client_config_path,
@@ -28,6 +29,7 @@ class MongoClient(MongoBase):
         """
             Configure the params needed to create the config template
         """
+        import params
         Logger.info("Configuring Mongo Client...")
         hosts_str = ""
 

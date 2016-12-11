@@ -1,7 +1,6 @@
 import commands
 import os
 import logging
-import params
 from resource_management import *
 from collections import *
 from mongo_base import *
@@ -18,6 +17,7 @@ class MongoDBServer(MongoStartable):
         """
             Create the config file based on the user configuration
         """
+        import params
         Logger.info("Configuring the file: " + self.mongodb_config_file)
         config_content = InlineTemplate(params.mongodb_config_content)
         File(self.mongodb_config_file, content=config_content)
@@ -27,6 +27,7 @@ class MongoDBServer(MongoStartable):
         :rtype list[str]
         :return: The port list for this instance type
         """
+        import params
         return self.parsePortsConfig(params.mongod_ports)
 
     def getClusterDefinition(self):
@@ -34,6 +35,7 @@ class MongoDBServer(MongoStartable):
         :rtype str
         :return: The cluster architecture configuration string
         """
+        import params
         return params.mongod_cluster_definition
 
     def getShardPrefix(self):
@@ -41,6 +43,7 @@ class MongoDBServer(MongoStartable):
         :rtype str
         :return: The shard prefix configuration for this instance type
         """
+        import params
         return params.mongod_shard_prefix
 
     def getHostsInAmbari(self):

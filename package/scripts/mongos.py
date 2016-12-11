@@ -4,7 +4,6 @@ from resource_management.core.source import InlineTemplate
 from resource_management.libraries.script import Script
 from resource_management.libraries.functions.format import format
 from time import sleep
-import params
 from mongo_base import InstanceConfig
 from mongo_base import InstanceStatus
 from mongo_startable import MongoStartable
@@ -20,6 +19,7 @@ class MongosServer(MongoStartable):
         """
             Create the config file based on the user configuration
         """
+        import params
         Logger.info("Configuring the file: " + self.mongodb_config_file)
         config_content = InlineTemplate(params.mongos_config_content)
         File(self.mongodb_config_file, content=config_content)
@@ -29,6 +29,7 @@ class MongosServer(MongoStartable):
         :rtype list[str]
         :return: The port list for this instance type
         """
+        import params
         return self.parsePortsConfig(params.mongos_ports)
 
     def getClusterDefinition(self):
@@ -36,6 +37,7 @@ class MongosServer(MongoStartable):
         :rtype str
         :return: The cluster architecture configuration string
         """
+        import params
         return params.mongos_cluster_definition
 
     def getShardPrefix(self):
@@ -62,6 +64,7 @@ class MongosServer(MongoStartable):
         :rtype str
         :return: The command to start the given node for the given instance type
         """
+        import params
         Logger.info("Starting a mongos instance in this machine...")
         pid_file_name = node.pid_file_name
         port = node.db_port
@@ -130,6 +133,7 @@ class MongosServer(MongoStartable):
 
 
     def start(self, env):
+        import params
         self.configure(env)
         Logger.info("Checking if the primary config server is alive ...")
 
