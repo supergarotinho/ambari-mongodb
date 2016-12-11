@@ -59,8 +59,8 @@ def startMongoInstances(server_type,hosts):
     process_list = []
     for server_name in hosts:
         Logger.info("Server name: " + server_name)
-        params.my_hostname = server_name
         server = getServerObject(server_type)
+        server.my_hostname = server_name
         p = Process(target=server.start, args=(env,))
         process_list.append(p)
         p.start()
@@ -72,8 +72,8 @@ def getMongoInstancesStatus(server_type,hosts):
     process_list = []
     for server_name in hosts:
         Logger.info("Server name: " + server_name)
-        params.my_hostname = server_name
         server = getServerObject(server_type)
+        server.my_hostname = server_name
         p = Process(target=server.status, args=(env,))
         process_list.append(p)
         p.start()
@@ -85,8 +85,8 @@ def stopMongoInstances(server_type,hosts):
     process_list = []
     for server_name in hosts:
         Logger.info("Server name: " + server_name)
-        params.my_hostname = server_name
         server = getServerObject(server_type)
+        server.my_hostname = server_name
         p = Process(target=server.stop, args=(env,))
         process_list.append(p)
         p.start()
