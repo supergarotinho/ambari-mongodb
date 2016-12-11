@@ -16,7 +16,7 @@ sys.path.append(SERVICE_DIR)
 
 # Custom service scripts includes
 import params
-from mongo_db import *
+from mongo_db import MongoDBServer
 
 class IntegratedStandaloneMongodTestCase(IntegratedBaseTestCase):
 

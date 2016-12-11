@@ -311,10 +311,11 @@ class HDP23MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
         componentsList = [item["StackServiceComponents"] for sublist in componentsListList for item in sublist]
 
         mongodHosts = self.getHosts(componentsList, self.MONGOD_COMPONENT_NAME)
+        mongoConfHosts = self.getHosts(componentsList, self.MONGODC_COMPONENT_NAME)
 
         # 1. Check if all nodes in the cluster_configuration has the component installed on ambari
-        self.checkForInexistentNodes(siteName, properties, validationItems, self.CLUSTER_DEFINITION_CONF_NAME, mongodHosts,
-                                     "Mongo DB Server")
+        self.checkForInexistentNodes(siteName, properties, validationItems, self.CLUSTER_DEFINITION_CONF_NAME,
+                                     mongodHosts, "Mongo DB Server")
 
         # 2. Check the port configurations
         self.validatePortConfig(siteName, properties, validationItems, self.PORTS_CONF_NAME)
@@ -338,6 +339,13 @@ class HDP23MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
                 message = "The first node of the shard must not be an arbiter. You must change the position of the " + \
                           shard_nodes[0] + " in the shard \"" + shard + "\""
                 validationItems.append(self.getErrorItem(siteName, self.CLUSTER_DEFINITION_CONF_NAME, message))
+
+        # 6. Check if we have more than one shard without mongoconf instances
+        if (len(cluster_shards) > 0) and (len(mongoConfHosts) == 0):
+            message = "You can not have more than one shard without mongoconf and mongos instances. You have " \
+                      "configurated " + str(len(cluster_shards)) + " shards. Reduce the number of shards ro add " \
+                                                                   "mongoconf instances."
+            validationItems.append(self.getErrorItem(siteName, self.CLUSTER_DEFINITION_CONF_NAME, message))
 
         return validationItems
 

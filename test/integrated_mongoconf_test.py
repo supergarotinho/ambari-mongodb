@@ -175,7 +175,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
                          "The cluster status result before stating the replicaset is not right")
 
         server.start(self.env)
-        sleep(4)
+        sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         server.status(self.env)
 
         expectedClusterStatus = [('configReplSet0', ['node1.test.com', 'node1.test.com', 'node1.test.com'], [
@@ -247,7 +247,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
                          "The cluster status result before stating the replicaset is not right")
 
         server3.start(self.env)
-        sleep(2)
+        sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         server3.status(self.env)
 
         expectedClusterStatusServer3On = [
@@ -287,7 +287,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
         self.assertEqual(clusterStatus, expectedClusterStatusServer3On, "The cluster status result for a started node3 "
                                                                         "in the replicaset is not right")
         server2.start(self.env)
-        sleep(2)
+        sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         server2.status(self.env)
 
         expectedClusterStatusServer2On = [
@@ -327,7 +327,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
         self.assertEqual(clusterStatus, expectedClusterStatusServer2On, "The cluster status result for a started node2"
                                                                         " in the replicaset is not right")
         server1.start(self.env)
-        sleep(5)
+        sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         server1.status(self.env)
 
         expectedClusterStatusServer1On = [

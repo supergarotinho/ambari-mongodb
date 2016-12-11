@@ -55,7 +55,7 @@ class IntegratedShardedClusterTestCase(IntegratedBaseTestCase):
         params.my_hostname = 'node1.test.com'
         self.config_server = MongoConfigServer()
         self.config_server.start(self.env)
-        sleep(4)
+        sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         # Starting the mongos server
         self.mongos_server = MongosServer()
         self.mongos_server.start(self.env)
@@ -154,7 +154,7 @@ class IntegratedShardedClusterTestCase(IntegratedBaseTestCase):
         self.assertEqual(len(shard_list),0,'The mongos must not know any shard at this first point!')
 
         server3.start(self.env)
-        sleep(2)
+        sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         server3.status(self.env)
 
         mongos_status, shard_list = server3.getMongosStatus('node1.test.com:27017')
@@ -240,7 +240,7 @@ class IntegratedShardedClusterTestCase(IntegratedBaseTestCase):
         self.assertEqual(clusterStatus, expectedClusterStatusServer3On, "The cluster status result for a started node3 "
                                                                         "in the replicaset is not right")
         server2.start(self.env)
-        sleep(2)
+        sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         server2.status(self.env)
 
         mongos_status, shard_list = server3.getMongosStatus('node1.test.com:27017')
@@ -326,7 +326,7 @@ class IntegratedShardedClusterTestCase(IntegratedBaseTestCase):
         self.assertEqual(clusterStatus, expectedClusterStatusServer2On, "The cluster status result for a started node2"
                                                                         " in the replicaset is not right")
         server1.start(self.env)
-        sleep(5)
+        sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         server1.status(self.env)
 
         mongos_status, shard_list = server3.getMongosStatus('node1.test.com:27017')
@@ -409,7 +409,6 @@ class IntegratedShardedClusterTestCase(IntegratedBaseTestCase):
         ]
 
         clusterStatus = server2.getClusterStatus(server2.getClusterData())
-        print "\n\n\n\n\n\n\n\n\n\n" + str(clusterStatus) + "\n\n" + str(expectedClusterStatusServer1On) + "\n\n\n\n\n\n\n\n\n\n"
         self.assertEqual(clusterStatus, expectedClusterStatusServer1On, "The cluster status result for a started node1"
                                                                         " in the replicaset is not right")
 

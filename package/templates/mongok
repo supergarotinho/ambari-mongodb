@@ -52,12 +52,11 @@ checkListeningPort() {
 	fi
 }
 
-mongo_hosts=node1.test.com:27017,localhost:27919,neuroserver.com.br:79
+#mongo_hosts=node1.test.com:27017,localhost:27919,neuroserver.com.br:79
+secureAndOpenConfigFile
 
 declare -A mongoServersStatus
-
 hosts=$(echo $mongo_hosts | tr "," " ")
-
 for host in $hosts
 do
   mongoServersStatus[$host]=$(checkListeningPort $host)

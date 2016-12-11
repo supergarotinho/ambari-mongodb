@@ -174,7 +174,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
                          "The cluster status result before stating the mongos is not right")
 
         server.start(self.env)
-        sleep(4)
+        sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         server.status(self.env)
 
         expectedClusterStatus = [('0', ['node1.test.com', 'node1.test.com'], [
@@ -234,7 +234,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
                          "The cluster status result before stating the mongos is not right")
 
         server2.start(self.env)
-        sleep(2)
+        sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         server2.status(self.env)
 
         expectedClusterStatusServer2On = [
@@ -261,11 +261,10 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
                            repl_role=None)])]
 
         clusterStatus = server2.getClusterStatus(server2.getClusterData())
-        print "\n\n\n\n\n\n\n\n\n\n Cluster status  after server 2 on: " + str(clusterStatus) + "\n\n\n\n\n\n\n\n\n\n"
         self.assertEqual(clusterStatus, expectedClusterStatusServer2On, "The cluster status result for a started node2"
                                                                         " in the mongos is not right")
         server1.start(self.env)
-        sleep(5)
+        sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         server1.status(self.env)
 
         expectedClusterStatusServer1On = [
@@ -292,7 +291,6 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
                            repl_role=None)])]
 
         clusterStatus = server1.getClusterStatus(server1.getClusterData())
-        print "\n\n\n\n\n\n\n\n\n\n Cluster status  after server 1 on: " + str(clusterStatus) + "\n\n\n\n\n\n\n\n\n\n"
         self.assertEqual(clusterStatus, expectedClusterStatusServer1On, "The cluster status result for a started node1"
                                                                         " in the mongos is not right")
 

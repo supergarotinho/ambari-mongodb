@@ -56,39 +56,6 @@ class MongosServer(MongoStartable):
         hosts_in_ambari = config['clusterHostInfo']['mongos_hosts']   ## Service hosts list
         return hosts_in_ambari
 
-    def getConfigServerList(self):
-        """
-
-        :rtype list[str]
-        :return: List of config servers in form of "host:port"
-        """
-        db_conf_ports = self.parsePortsConfig(params.mongoconf_ports)
-        config = Script.get_config()
-        ambari_mongoconfig_hosts = config['clusterHostInfo']['mongodc_hosts']   ## Service hosts list
-
-        #ambari_mongoconfig_hosts = "mandachuva.falometro.com.br,batatinha01.falometro.com.br,batatinha02.falometro.com.br".split(
-         #   ',')
-
-        if len(params.mongoconf_cluster_definition.lstrip().rstrip()) > 0:
-            mongod_cluster = params.mongoconf_cluster_definition.split(",")
-        else:
-            mongod_cluster = ambari_mongoconfig_hosts
-
-        nodes_and_port_indexes = {}
-        for host in ambari_mongoconfig_hosts:
-            nodes_and_port_indexes[host] = 0
-
-        mongo_config_servers = []
-
-        for index_nodes, node_name in enumerate(mongod_cluster, start=0):
-            Logger.info('Processing config server node #: ' + str(index_nodes))
-            Logger.info('Config Server Name: ' + node_name)
-            db_port = db_conf_ports[nodes_and_port_indexes[node_name]]
-            Logger.info('Config Server db port:' + db_port)
-            mongo_config_servers.append(node_name + ":" + db_port)
-
-        return mongo_config_servers
-
     def getStartServerCommand(self,node):
         """
         :type node: InstanceConfig

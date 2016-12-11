@@ -243,13 +243,51 @@ class MongoBase(Script):
 
         return (result_ok, shard_list)
 
+    # Helpfull discorvery methods
+    def getMongoDClusterStatus(self):
+        """
+        Returns the mongod hosts in all nodes and shards
+        This method is implemented here because it is need in some of the child classes.
+
+        :rtype  list(tuple(str,list(str),list(InstanceStatus))]
+        :return: The mongod shard list with all nodes
+        """
+        config = Script.get_config()
+        mongod_hosts_in_ambari = config['clusterHostInfo']['mongodb_hosts']   ## Service hosts list
+        cluster_config = params.mongod_cluster_definition
+        shard_prefix = params.mongod_shard_prefix
+        db_ports = self.parsePortsConfig(params.mongod_ports)
+        shardList = self.getClusterData(mongod_hosts_in_ambari, cluster_config, db_ports, shard_prefix, False)
+
+        return self.getClusterStatus(shardList)
+
+    def getConfigServerList(self):
+        """
+
+        :rtype list[str]
+        :return: List of config servers in form of "host:port"
+        """
+        config = Script.get_config()
+        ambari_mongoconfig_hosts = config['clusterHostInfo']['mongodc_hosts']   ## Service hosts list
+        cluster_config = params.mongoconf_cluster_definition
+        shard_prefix = params.mongoconf_shard_prefix
+        db_ports = self.parsePortsConfig(params.mongoconf_ports)
+        shardList = self.getClusterData(ambari_mongoconfig_hosts, cluster_config, db_ports, shard_prefix, False)
+
+        mongo_config_servers = []
+        for node in shardList[0][2]:
+            mongo_config_servers.append(node.host_name + ":" + node.db_port)
+
+        return mongo_config_servers
+
     def getMongosList(self):
         """
         This method returns the data of all mongos instances in the cluster.
         This method is implemented here because it is need for most of the child classes.
 
-        :type primary_node: InstanceStatus
-        :type nodes_to_add: list[InstanceStatus]
+        PS: We did not reused getClusterData method because we are going go respond a different type of object and
+        get a different kind of status.
+
         :rtype tuple(list[Mongos],list[str])
         :return: This method returns the data of all mongos instances in the cluster and the shards that they know of
         """
@@ -269,9 +307,7 @@ class MongoBase(Script):
         # prepare to cases where we do not have this config
         if cluster_config == '':
             Logger.info('Mongos hosts with one instance per host: ' + str(mongos_hosts_in_ambari))
-            if len(mongos_hosts_in_ambari) == 1:
-                cluster_config = mongos_hosts_in_ambari[0]
-            elif len(mongos_hosts_in_ambari) > 1:
+            if len(mongos_hosts_in_ambari) > 0:
                 cluster_config = reduce(lambda a, b: a + ',' + b, mongos_hosts_in_ambari)
 
         mongos = []
@@ -300,7 +336,8 @@ class MongoBase(Script):
                 Logger.info('Node db port:' + db_port)
                 # Check the mongos status
                 mongos_status = self.getMongosStatus(node_name + ':' + db_port)
-                shards = mongos_status[1]
+                if len(mongos_status[1]) > 0:
+                    shards = mongos_status[1]
                 mongos_instance = Mongos(pid_file_name, log_file,db_port, node_name, mongos_status[0])
                 mongos.append(mongos_instance)
                 nodes_and_port_indexes[node_name] += 1
@@ -310,20 +347,22 @@ class MongoBase(Script):
     """Returns a list for this server of shards and server instances of this node:
      [(shard_name,shard_node_list,[InstanceConfig])]
     """
-    def getClusterData(self):
+    def getClusterData(self,hosts_in_ambari=None,cluster_config=None,db_ports=None,shard_prefix=None,only_lists_with_my_hostname=False):
         """
         :return Returns a list of shards and nodes that are important for this instance: [(shard_name,shard_node_list,[InstanceConfig])]
         :rtype: list(tuple(str,list(str),list(InstanceConfig))]
         """
 
         Logger.info('Getting cluster configuration...')
-        cluster_config = self.getClusterDefinition()
-        db_ports = self.getPorts()
-        shard_prefix = self.getShardPrefix()
-        db_path = params.db_path
 
+        if hosts_in_ambari is None:
+            cluster_config = self.getClusterDefinition()
+            db_ports = self.getPorts()
+            shard_prefix = self.getShardPrefix()
+            hosts_in_ambari = self.getHostsInAmbari()
+
+        db_path = params.db_path
         my_hostname = self.my_hostname
-        hosts_in_ambari = self.getHostsInAmbari()
 
         Logger.info('Cluster definition: ' + cluster_config)
         Logger.info('Database ports: ' + str(db_ports))
@@ -358,7 +397,7 @@ class MongoBase(Script):
             Logger.info('Number of shard nodes: ' + str(len(shard_node_list)))
             Logger.info('Shard nodes: ' + str(shard_node_list))
             result_nodes = []
-            instances_on_this_shard = False
+            instances_on_this_shard = not only_lists_with_my_hostname
             for index_nodes, node_name in enumerate(shard_node_list, start=0):
                 Logger.info('Processing node #: ' + str(index_nodes))
                 Logger.info('Node name: ' + node_name)
