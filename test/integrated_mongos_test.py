@@ -56,8 +56,8 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
         params.mongos_cluster_definition = ''
 
         # Starting the required config server
-        params.my_hostname = 'node1.test.com'
         self.config_server = MongoConfigServer()
+        self.config_server.my_hostname = 'node1.test.com'
         self.config_server.start(self.env)
 
     expected_cluster_status_for_several_hosts_stopped = [
@@ -92,10 +92,9 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
 
         params.mongos_cluster_definition = 'node1.test.com,node1.test.com'
 
-        params.my_hostname = 'node1.test.com'
         self.config_server = MongoConfigServer()
+        self.config_server.my_hostname = 'node1.test.com'
         self.config_server.start(self.env)
-
 
     expected_cluster_status_for_one_host_stopped = [
         ('0',['node1.test.com','node1.test.com'], [
@@ -123,6 +122,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
     def test_get_cluster_data_with_one_host(self):
         self.one_host_setup()
         server = MongosServer()
+        server.my_hostname = 'node1.test.com'
 
         expectedClusterData = [('0', ['node1.test.com', 'node1.test.com'],
                                 [InstanceConfig(shard_name='0',
@@ -145,6 +145,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
     def test_get_cluster_status_with_one_host(self):
         self.one_host_setup()
         server = MongosServer()
+        server.my_hostname = 'node1.test.com'
 
         clusterStatus = server.getClusterStatus(server.getClusterData())
         self.assertEqual(clusterStatus,self.expected_cluster_status_for_one_host_stopped,
@@ -153,6 +154,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
     def test_stopping_an_already_stopped_cluster(self):
         self.one_host_setup()
         server = MongosServer()
+        server.my_hostname = 'node1.test.com'
         clusterStatus = server.getClusterStatus(server.getClusterData())
         self.assertEqual(clusterStatus,self.expected_cluster_status_for_one_host_stopped,
                          "The cluster status result before stating the mongos is not right")
@@ -165,6 +167,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
         self.one_host_setup()
 
         server = MongosServer()
+        server.my_hostname = 'node1.test.com'
 
         with self.assertRaises(ComponentIsNotRunning):
             server.status(self.env)
@@ -213,8 +216,8 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
 
     def test_get_cluster_status_with_several_hosts(self):
         self.several_hosts_setup_with_config_server()
-        params.my_hostname = 'node1.test.com'
         server = MongosServer()
+        server.my_hostname = 'node1.test.com'
 
         clusterStatus = server.getClusterStatus(server.getClusterData())
         self.assertEqual(clusterStatus, self.expected_cluster_status_for_several_hosts_stopped,
@@ -224,10 +227,10 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
     def test_mongos_with_several_hosts(self):
         self.several_hosts_setup_with_config_server()
 
-        params.my_hostname = 'node2.test.com'
         server2 = MongosServer()
-        params.my_hostname = 'node1.test.com'
+        server2.my_hostname = 'node2.test.com'
         server1 = MongosServer()
+        server1.my_hostname = 'node1.test.com'
 
         clusterStatus = server2.getClusterStatus(server2.getClusterData())
         self.assertEqual(clusterStatus, self.expected_cluster_status_for_several_hosts_stopped,
@@ -309,8 +312,8 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
     def test_must_not_start_if_all_config_servers_are_off(self):
         self.several_hosts_setup()
 
-        params.my_hostname = 'node1.test.com'
         server1 = MongosServer()
+        server1.my_hostname = 'node1.test.com'
 
         clusterStatus = server1.getClusterStatus(server1.getClusterData())
         self.assertEqual(clusterStatus, self.expected_cluster_status_for_several_hosts_stopped,
@@ -326,20 +329,20 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
     def test_must_not_start_if_no_config_servers_primary_on(self):
         self.several_hosts_setup()
 
-        params.my_hostname = 'node1.test.com'
         server1 = MongosServer()
+        server1.my_hostname = 'node1.test.com'
 
         clusterStatus = server1.getClusterStatus(server1.getClusterData())
         self.assertEqual(clusterStatus, self.expected_cluster_status_for_several_hosts_stopped,
                          "The cluster status result before stating the mongos is not right")
 
         # Starting only the secondary config servers
-        params.my_hostname = 'node2.test.com'
         config_server2 = MongoConfigServer()
+        config_server2.my_hostname = 'node2.test.com'
         config_server2.start(self.env)
 
-        params.my_hostname = 'node3.test.com'
         config_server3 = MongoConfigServer()
+        config_server3.my_hostname = 'node3.test.com'
         config_server3.start(self.env)
 
         server1.start(self.env)

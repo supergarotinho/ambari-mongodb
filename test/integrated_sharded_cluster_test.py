@@ -52,12 +52,13 @@ class IntegratedShardedClusterTestCase(IntegratedBaseTestCase):
                                            'node2.test.com,node2.test.com,node3.test.com/arbiter'
 
         # Starting the required config server
-        params.my_hostname = 'node1.test.com'
         self.config_server = MongoConfigServer()
+        self.config_server.my_hostname = 'node1.test.com'
         self.config_server.start(self.env)
         sleep(self.SLEEP_INTERVAL_AFTER_START_A_INSTANCE)
         # Starting the mongos server
         self.mongos_server = MongosServer()
+        self.mongos_server.my_hostname = 'node1.test.com'
         self.mongos_server.start(self.env)
 
     expected_cluster_status_stopped = [
@@ -138,12 +139,12 @@ class IntegratedShardedClusterTestCase(IntegratedBaseTestCase):
     def test_sharded_cluster(self):
         self.cluster_setup()
 
-        params.my_hostname = 'node3.test.com'
         server3 = MongoDBServer()
-        params.my_hostname = 'node2.test.com'
+        server3.my_hostname = 'node3.test.com'
         server2 = MongoDBServer()
-        params.my_hostname = 'node1.test.com'
+        server2.my_hostname = 'node2.test.com'
         server1 = MongoDBServer()
+        server1.my_hostname = 'node1.test.com'
 
         clusterStatus = server3.getClusterStatus(server3.getClusterData())
         self.assertEqual(clusterStatus, self.expected_cluster_status_stopped,

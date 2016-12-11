@@ -88,7 +88,6 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
             'mongodc_hosts': []
         }}
 
-        params.my_hostname = 'node1.test.com'
         params.mongod_cluster_definition = 'node1.test.com,node1.test.com/arbiter,node1.test.com'
 
     expected_cluster_status_for_one_host_stopped = [
@@ -127,6 +126,7 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
     def test_get_cluster_data_with_one_host(self):
         self.one_host_setup()
         server = MongoDBServer()
+        server.my_hostname = 'node1.test.com'
 
         expectedClusterData = [('shard0', ['node1.test.com', 'node1.test.com/arbiter', 'node1.test.com'],
                                 [InstanceConfig(shard_name='shard0',
@@ -156,6 +156,7 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
     def test_get_cluster_status_with_one_host(self):
         self.one_host_setup()
         server = MongoDBServer()
+        server.my_hostname = 'node1.test.com'
 
         clusterStatus = server.getClusterStatus(server.getClusterData())
         self.assertEqual(clusterStatus,self.expected_cluster_status_for_one_host_stopped,
@@ -164,6 +165,7 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
     def test_stopping_an_already_stopped_cluster(self):
         self.one_host_setup()
         server = MongoDBServer()
+        server.my_hostname = 'node1.test.com'
         clusterStatus = server.getClusterStatus(server.getClusterData())
         self.assertEqual(clusterStatus,self.expected_cluster_status_for_one_host_stopped,
                          "The cluster status result before stating the replicaset is not right")
@@ -176,6 +178,7 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
         self.one_host_setup()
 
         server = MongoDBServer()
+        server.my_hostname = 'node1.test.com'
 
         with self.assertRaises(ComponentIsNotRunning):
             server.status(self.env)
@@ -234,8 +237,8 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
 
     def test_get_cluster_status_with_several_hosts(self):
         self.several_hosts_setup()
-        params.my_hostname = 'node1.test.com'
         server = MongoDBServer()
+        server.my_hostname = 'node1.test.com'
 
         clusterStatus = server.getClusterStatus(server.getClusterData())
         self.assertEqual(clusterStatus, self.expected_cluster_status_for_several_hosts_stopped,
@@ -245,12 +248,12 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
     def test_replicaset_with_several_hosts(self):
         self.several_hosts_setup()
 
-        params.my_hostname = 'node3.test.com'
         server3 = MongoDBServer()
-        params.my_hostname = 'node2.test.com'
+        server3.my_hostname = 'node3.test.com'
         server2 = MongoDBServer()
-        params.my_hostname = 'node1.test.com'
+        server2.my_hostname = 'node2.test.com'
         server1 = MongoDBServer()
+        server1.my_hostname = 'node1.test.com'
 
         clusterStatus = server3.getClusterStatus(server3.getClusterData())
         self.assertEqual(clusterStatus, self.expected_cluster_status_for_several_hosts_stopped,

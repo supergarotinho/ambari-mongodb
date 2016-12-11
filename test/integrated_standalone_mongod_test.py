@@ -23,9 +23,6 @@ class IntegratedStandaloneMongodTestCase(IntegratedBaseTestCase):
     def setUp(self):
         self.as_super = super(IntegratedStandaloneMongodTestCase, self)
         self.as_super.setUp()
-
-        params.my_hostname = 'node1.test.com'
-
         Script.config = {'clusterHostInfo': {
             'mongos_hosts': [],
             'mongodb_hosts': ['node1.test.com'],
@@ -34,6 +31,7 @@ class IntegratedStandaloneMongodTestCase(IntegratedBaseTestCase):
 
     def test_start_status_stop_mongod(self):
         server = MongoDBServer()
+        server.my_hostname = 'node1.test.com'
 
         with self.assertRaises(ComponentIsNotRunning):
             server.status(self.env)
