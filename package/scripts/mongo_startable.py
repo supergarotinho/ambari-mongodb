@@ -1,4 +1,3 @@
-import params
 from mongo_base import MongoBase
 from resource_management.core.logger import Logger
 from resource_management.core.resources.system import Execute
