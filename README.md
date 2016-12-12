@@ -41,7 +41,6 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
 
 #### Features in development stage
 
-- Better configuration screen
 - Add logOpSize config option 
 - An alert when the cluster is up but the shards are not 100% ok
   - If there are missing nodes on it
