@@ -28,18 +28,18 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
 
 #### MongoDB Replicaset Cluster Architecture 
 
-![Image](../master/docs/images/mongodb-repl-cluster.png?raw=true)
+![Image](docs/images/mongodb-repl-cluster.png?raw=true)
 
 #### MongoDB Sharding Cluster Architecture 
 
-![Image](../master/docs/images/mongodb-shard-cluster.png?raw=true)
+![Image](docs/images/mongodb-shard-cluster.png?raw=true)
 
-###Assumptions
+### Assumptions
 
 - Ambari is installed and running.
 - No previous installations of Mongo DB exist. If there any, you can either remove it or rename it.
 
-###Setup
+### Setup
 
 Follow given step to install and manage Mongo DB using Ambari.
 
@@ -72,12 +72,12 @@ sudo service ambari-server restart
 
 ![Image](docs/images/summary.png?raw=true)
 
-####Default ports
+#### Default ports
 - mongos port 27017
 - mongo config port 27019
 - mongo replica port 27018
 
-####[mongodb scale out](docs/scale.md)
+####[Scalling out the cluster](docs/scale.md)
 
 ####Managing by rest
 
