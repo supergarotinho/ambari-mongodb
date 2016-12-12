@@ -55,10 +55,11 @@ class MongoStartable(MongoBase):
                         Logger.info('Can not find pid process,skipping this noe')
 
     def status(self, env):
-        self.configure(env)
         import logging
-        logger = logging.getLogger()
-
+        logging.basicConfig(filename='/var/log/ambari-agent/mongo.log',level=logging.DEBUG)
+        logger = logging.getLogger('Mongo')
+        logger.info("Initiating mongo status...")
+        self.configure(env)
         my_hostname = self.my_hostname
         logger.info('My hostname: ' + my_hostname)
         logger.info("Checking mongo instances status...")
