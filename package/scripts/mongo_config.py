@@ -63,7 +63,6 @@ class MongoConfigServer(MongoStartable):
         :rtype str
         :return: The command to start the given node for the given instance type
         """
-        import params
         Logger.info("Starting a config server instance in this machine...")
         shard_name = node.shard_name
         pid_file_name = node.pid_file_name
@@ -71,10 +70,9 @@ class MongoConfigServer(MongoStartable):
         port = node.db_port
         log_file_name = node.log_file
         host_name = node.host_name
-        db_user = params.mongodb_user
         config_file = self.mongodb_config_file
 
-        return format('sudo -u {db_user} mongod --configsvr --replSet {shard_name} --bind_ip {host_name} '
+        return format('mongod --configsvr --replSet {shard_name} --bind_ip {host_name} '
                       ' --port {port} --dbpath {final_db_path} --oplogSize 100 '
                       ' --fork --logappend --logpath {log_file_name} --pidfilepath {pid_file_name} --config {config_file}')
 
