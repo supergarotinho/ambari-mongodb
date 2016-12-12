@@ -187,15 +187,15 @@
           "subsection-name": "subsection-mongod-col1"
         },
         {
-          "config": "mongo-config/cluster_definition",
+          "config": "mongo-conf/cluster_definition",
           "subsection-name": "subsection-mongoconf-col1"
         },
         {
-          "config": "mongo-config/ports",
+          "config": "mongo-conf/ports",
           "subsection-name": "subsection-mongoconf-col1"
         },
         {
-          "config": "mongo-config/shard_prefix",
+          "config": "mongo-conf/shard_prefix",
           "subsection-name": "subsection-mongoconf-col1"
         },
         {
