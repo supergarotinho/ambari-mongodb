@@ -183,6 +183,10 @@ curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo"
     sudo service ambari-server restart
     ```
 
+#### Some configurations
+
+![Image](docs/images/configs.png?raw=true)
+
 #### Last Test Coverage Report
 
 ![Image](docs/images/tests.png?raw=true)
