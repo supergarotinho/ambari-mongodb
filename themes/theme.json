@@ -78,7 +78,7 @@
             "display-name": "Servers",
             "layout": {
               "tab-columns": "2",
-              "tab-rows": "2",
+              "tab-rows": "1",
               "sections": [
                 {
                   "name": "section-mongod",
