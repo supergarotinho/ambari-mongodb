@@ -46,8 +46,6 @@ class MongoBase(Script):
         import params
         Logger.info('Configuring mongo...')
         env.set_params(params)
-        mongod_db_content = InlineTemplate(params.mongod_db_content)
-        File(self.db_file_path, content=mongod_db_content)
         self.configureMongo(env)
 
     def configureMongo(self, env):
