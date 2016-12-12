@@ -38,6 +38,7 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
   - It checks if the server is on before trying to connect
   - It can be called using ```mogok```
   - You can also use any mongo paramer such as: ```mogok --user admin --eval 'rs.status()'```
+- **Well documented and tested**
 
 #### Features in development stage
 
