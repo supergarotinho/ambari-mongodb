@@ -72,6 +72,35 @@
                 }
               ]
             }
+          },
+          {
+            "name": "servers",
+            "display-name": "Servers",
+            "layout": {
+              "tab-columns": "2",
+              "tab-rows": "2",
+              "sections": [
+                {
+                  "name": "section-mongod",
+                  "display-name": "Mongod Instances",
+                  "row-index": "0",
+                  "column-index": "0",
+                  "row-span": "1",
+                  "column-span": "2",
+                  "section-columns": "2",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "subsection-mongod-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "2"
+                    }
+                  ]
+                }
+              ]
+            }
           }
         ]
       }
@@ -106,6 +135,18 @@
         {
           "config": "mongodb/pid_db_path",
           "subsection-name": "subsection-path-col1"
+        },
+        {
+          "config": "mongod/cluster_definition",
+          "subsection-name": "subsection-mongod-col1"
+        },
+        {
+          "config": "mongod/ports",
+          "subsection-name": "subsection-mongod-col1"
+        },
+        {
+          "config": "mongod/shard_prefix",
+          "subsection-name": "subsection-mongod-col1"
         }
       ]
     },
@@ -160,6 +201,24 @@
         "config": "mongodb/pid_db_path",
         "widget": {
           "type": "directory"
+        }
+      },
+      {
+        "config": "mongod/cluster_definition",
+        "widget": {
+          "type": "list"
+        }
+      },
+      {
+        "config": "mongod/ports",
+        "widget": {
+          "type": "list"
+        }
+      },
+      {
+        "config": "mongod/shard_prefix",
+        "widget": {
+          "type": "text-field"
         }
       }
     ]

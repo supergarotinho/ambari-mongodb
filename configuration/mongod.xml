@@ -24,7 +24,7 @@
         One instance will be in the first shard and the other with participate in the second shard.
         If this value is empty, just one shard will be created and one instance will be set up for each mongod server in ambari mongodb service install.
     </description>
-    <display-name>Define the mongod cluster architecture</display-name>
+    <display-name>Mongod cluster shards</display-name>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
@@ -38,7 +38,7 @@
         Or complex setting like: 27017,27019,27025-27027.
         The resulting list of the example will be folling ports: 27017,27019,27025,27026,27027
     </description>
-    <display-name>Avaliable ports for mongod instances on each server</display-name>
+    <display-name>Ports for mongod instances on each server</display-name>
     <value-attributes>
       <empty-value-valid>false</empty-value-valid>
     </value-attributes>

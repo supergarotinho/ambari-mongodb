@@ -12,7 +12,7 @@
         You can't define more the one replicaset (more than one shard) for mongodb config instances.
         If this value is empty, a replicaset will be created with one instance for each mongoconf server in ambari mongodb service install.
     </description>
-    <display-name>Define the mongodb config server replicaset architecture</display-name>
+    <display-name>Mongodb config server instances</display-name>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>

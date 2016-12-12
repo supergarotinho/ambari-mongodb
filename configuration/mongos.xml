@@ -22,7 +22,7 @@
         You can't define more the one replicaset (more than one shard) for mongos instances. It is just a node list.
         If this value is empty, will set up one instance for each mongos server in ambari mongodb service install.
     </description>
-    <display-name>Define the mongos instance list</display-name>
+    <display-name>Mongos instance list</display-name>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
@@ -36,7 +36,7 @@
         Or complex setting like: 27017,27019,27025-27027.
         The resulting list of the example will be folling ports: 27017,27019,27025,27026,27027
     </description>
-    <display-name>Avaliable ports for mongod instances on each server</display-name>
+    <display-name>Ports for mongod instances on each server</display-name>
     <value-attributes>
       <empty-value-valid>false</empty-value-valid>
     </value-attributes>
