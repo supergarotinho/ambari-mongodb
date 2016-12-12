@@ -212,7 +212,7 @@
       {
         "config": "mongod/ports",
         "widget": {
-          "type": "list"
+          "type": "text-field"
         }
       },
       {
