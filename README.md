@@ -183,6 +183,10 @@ curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo"
     sudo service ambari-server restart
     ```
 
+#### Last Test Coverage Report
+
+![Image](docs/images/tests.png?raw=true)
+
 ###References:
 
 - This is a 99% rewritten version of the "geniuszhe" version: https://github.com/cas-bigdatalab/ambari-mongodb-cluster
