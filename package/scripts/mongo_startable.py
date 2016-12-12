@@ -58,6 +58,7 @@ class MongoStartable(MongoBase):
         Execute('echo "' + info + '" >> /var/log/ambari-agent/mongo.log')
 
     def status(self, env):
+        # This custom log was added because the normal ambari logging does not work here
         import logging
         logger = logging.getLogger('mongo')
         logger.setLevel(logging.DEBUG)
@@ -70,6 +71,9 @@ class MongoStartable(MongoBase):
         my_hostname = self.my_hostname
         self.log('My hostname: ' + my_hostname)
         self.log("Checking mongo instances status...")
+
+        # the parameter withThisHostInstancesOnly is being used because when the agent executes this commmand, we do not
+        # have the ambari hosts lists available. The ambari config "clusterHostInfo" is not available here
         cluster_status = self.getClusterStatus(self.getClusterData(withThisHostInstancesOnly=True))
         self.log('Shards to process: ' + str(len(cluster_status)))
         for shard in cluster_status:
