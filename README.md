@@ -8,6 +8,7 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
 - Auto install mongodb in the following ways:
   - As a sharding cluster
   - As a replicaset
+  - As a standalone deploy
 - Auto install the following components;
   - Mongod server instances
   - Mongo config server instances
@@ -28,15 +29,40 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
 - It has a service advisor that will warn if the cluster architecture is not recommendable
   - It also validates the configuration
   - The validation list is [here](docs/validator.md)
+- A client script that automatically detects the mongo server that is online and must be used
+  - It automatically detects the hostname and port of the available servers
+  - It considers the architecture before deciding which server
+  - It checks if the server is on before trying to connect
+  - It can be called using ```mogok```
+  - You can also use any mongo paramer such as: ```mogok --user admin --eval 'rs.status()'```
 
 #### Features in development stage
 
+- Better configuration screen
+- Add logOpSize config option 
 - An alert when the cluster is up but the shards are not 100% ok
   - If there are missing nodes on it
 - An alert when the shards are not in the mongos (Query Router) shard list
 - An command to re-configure the cluster:
-  - Adding the missing to the shard
-  - Adding the shard to the mongos list
+  - Adding the missing nodes to the shard
+  - Adding the missing shards to the mongos list
+
+#### Future Features and development
+
+We are needing help for these features. We have already developed some draft scripts and solutions for it.
+
+- **Testing**
+  - The tests for the service_advisor script
+  - An docker instance to setup an testing environment and execute the integrated tests for CentOS and Redhat distros 
+- Few modifications to support other linux distros
+  - And docker instances to execute the integrated tests
+- **A metrics monitor** to send several metrics from the mongo instances to ambari
+  - And the ambari metrics screen :)
+- **Useeful Tasks:**  
+  - A command to delete nodes and shards
+  - A command to change the shard order
+  - A command to backup the databases
+  - A command to restore the databases
 
 #### MongoDB Replicaset Cluster Architecture 
 
@@ -96,7 +122,19 @@ sudo service ambari-server restart
 - mongo config port 27019
 - mongo replica port 27018
 
-####[Scalling out the cluster](docs/scale.md)
+#### [Scalling out the cluster](docs/scale.md)
+
+#### What must be done carefully
+
+You must consider to backup the databases and understand how the database and log names are chosen by the script  
+
+- Change the sharding order
+  - The shards have numbered names, removing a shard must be done carefully as the shard names are used to locate the node database and logs
+- Removing a shard
+  - The shards have numbered names, removing a shard must be done carefully as the shard names are used to locate the node database and logs
+  - If are doing this, it is advisable to delete or move the database files and logs of the removed shard
+- Removing a node
+  - It is advisable to remove or move the database files and logs of the removed node
 
 ####Managing by rest
 
