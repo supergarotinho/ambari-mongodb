@@ -39,7 +39,7 @@ class MongoStartable(MongoBase):
         Logger.info("Stopping services..")
         my_hostname = self.my_hostname
         Logger.info('My hostname: ' + my_hostname)
-        cluster_status = self.getClusterStatus(self.getClusterData())
+        cluster_status = self.getClusterStatus(self.getClusterData(withThisHostInstancesOnly=True))
         Logger.info('Shards to process: ' + str(len(cluster_status)))
         for shard in cluster_status:
             Logger.info('Processing shard: ' + shard[0])
