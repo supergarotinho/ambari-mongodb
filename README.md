@@ -70,7 +70,7 @@ sudo service ambari-server restart
 
 6. On successful deployment you will see the MongoDB as part of Ambari stack and will be able to start/stop the service from here:
 
-![Image](../master/docs/images/summary.png?raw=true)
+![Image](docs/images/summary.png?raw=true)
 
 ####Default ports
 - mongos port 27017
