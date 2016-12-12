@@ -39,7 +39,7 @@ class MongoStartable(MongoBase):
         Logger.info("Stopping services..")
         my_hostname = self.my_hostname
         Logger.info('My hostname: ' + my_hostname)
-        cluster_status = self.getClusterStatus(self.getClusterData(withThisHostInstancesOnly=True))
+        cluster_status = self.getClusterStatus(self.getClusterData())
         Logger.info('Shards to process: ' + str(len(cluster_status)))
         for shard in cluster_status:
             Logger.info('Processing shard: ' + shard[0])
@@ -57,19 +57,19 @@ class MongoStartable(MongoBase):
     def status(self, env):
         self.configure(env)
         my_hostname = self.my_hostname
-        Logger.info('My hostname: ' + my_hostname)
-        Logger.info("Checking mongo instances status...")
+        print 'My hostname: ' + my_hostname
+        print "Checking mongo instances status..."
         cluster_status = self.getClusterStatus(self.getClusterData())
-        Logger.info('Shards to process: ' + str(len(cluster_status)))
+        print 'Shards to process: ' + str(len(cluster_status))
         for shard in cluster_status:
-            Logger.info('Processing shard: ' + shard[0])
-            Logger.info('Nodes to process: ' + str(len(shard[2])))
+            print 'Processing shard: ' + shard[0]
+            print 'Nodes to process: ' + str(len(shard[2]))
             for node in shard[2]:
-                Logger.info('Processing node: ' + node.host_name + ":" + node.db_port)
-                Logger.info('The node is started: ' + str(node.is_started))
-                Logger.info('Pid file :' + node.pid_file_name)
+                print 'Processing node: ' + node.host_name + ":" + node.db_port
+                print 'The node is started: ' + str(node.is_started)
+                print 'Pid file :' + node.pid_file_name
                 if node.host_name == my_hostname:
-                    Logger.info('Checking process id ...')
+                    print 'Checking process id ...'
                     check_process_status(node.pid_file_name)
 
 
