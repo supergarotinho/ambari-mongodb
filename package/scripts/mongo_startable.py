@@ -54,6 +54,9 @@ class MongoStartable(MongoBase):
                     except:
                         Logger.info('Can not find pid process,skipping this noe')
 
+    def log(self,info):
+        Execute('echo "' + info + '" >> /var/log/ambari-agent/mongo.log')
+
     def status(self, env):
         import logging
         logger = logging.getLogger('mongo')
@@ -62,22 +65,22 @@ class MongoStartable(MongoBase):
         fh = logging.FileHandler('/var/log/ambari-agent/mongo.log')
         fh.setLevel(logging.DEBUG)
         logger.addHandler(fh)
-        logger.info("Initiating mongo status...")
+        self.log("Initiating mongo status...")
         self.configure(env)
         my_hostname = self.my_hostname
-        logger.info('My hostname: ' + my_hostname)
-        logger.info("Checking mongo instances status...")
+        self.log('My hostname: ' + my_hostname)
+        self.log("Checking mongo instances status...")
         cluster_status = self.getClusterStatus(self.getClusterData(withThisHostInstancesOnly=True))
-        logger.info('Shards to process: ' + str(len(cluster_status)))
+        self.log('Shards to process: ' + str(len(cluster_status)))
         for shard in cluster_status:
-            logger.info('Processing shard: ' + shard[0])
-            logger.info('Nodes to process: ' + str(len(shard[2])))
+            self.log('Processing shard: ' + shard[0])
+            self.log('Nodes to process: ' + str(len(shard[2])))
             for node in shard[2]:
-                logger.info('Processing node: ' + node.host_name + ":" + node.db_port)
-                logger.info('The node is started: ' + str(node.is_started))
-                logger.info('Pid file :' + node.pid_file_name)
+                self.log('Processing node: ' + node.host_name + ":" + node.db_port)
+                self.log('The node is started: ' + str(node.is_started))
+                self.log('Pid file :' + node.pid_file_name)
                 if node.host_name == my_hostname:
-                    logger.info('Checking process id ...')
+                    self.log('Checking process id ...')
                     check_process_status(node.pid_file_name)
 
 
