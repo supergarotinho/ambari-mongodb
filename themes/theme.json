@@ -206,7 +206,7 @@
       {
         "config": "mongod/cluster_definition",
         "widget": {
-          "type": "list"
+          "type": "text-field"
         }
       },
       {
