@@ -84,7 +84,7 @@
     </depends-on>
     <value-attributes>
       <type>int</type>
-      <minimum>0</minimum>
+      <minimum>1</minimum>
       <maximum>60</maximum>
       <unit>times</unit>
       <increment-step>1</increment-step>

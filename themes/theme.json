@@ -127,7 +127,7 @@
           "type": "slider",
           "units": [
             {
-              "unit-name": "int"
+              "unit-name": "times"
             }
           ]
         }
