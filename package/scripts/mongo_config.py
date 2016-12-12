@@ -18,9 +18,9 @@ class MongoConfigServer(MongoStartable):
             Create the config file based on the user configuration
         """
         import params
-        Logger.info("Configuring the file: " + self.mongoconf_config_file)
+        Logger.info("Configuring the file: " + self.mongodb_config_file)
         config_content = InlineTemplate(params.mongoconf_config_content)
-        File(self.mongoconf_config_file, content=config_content)
+        File(self.mongodb_config_file, content=config_content)
 
     def getPorts(self):
         """
