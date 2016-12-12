@@ -278,6 +278,36 @@
         "widget": {
           "type": "text-field"
         }
+      },
+      {
+        "config": "mongo-conf/cluster_definition",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
+        "config": "mongo-conf/ports",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
+        "config": "mongo-conf/shard_prefix",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
+        "config": "mongos/cluster_definition",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
+        "config": "mongos/ports",
+        "widget": {
+          "type": "text-field"
+        }
       }
     ]
   }
