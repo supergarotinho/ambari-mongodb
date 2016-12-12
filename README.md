@@ -3,7 +3,7 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
 
 **Author:** [Anderson Santos](https://br.linkedin.com/in/andersonrss)
 
-####Features
+#### Features
 
 - Auto install mongodb in the following ways:
   - As a sharding cluster
@@ -61,7 +61,7 @@ We are needing help for these features. We have already developed some draft scr
   - And docker instances to execute the integrated tests
 - **A metrics monitor** to send several metrics from the mongo instances to ambari
   - And the ambari metrics screen :)
-- **Useeful Tasks:**  
+- **Useful Tasks:**  
   - A command to delete nodes and shards
   - A command to change the shard order
   - A command to backup the databases
@@ -187,6 +187,6 @@ curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo"
 
 ![Image](docs/images/tests.png?raw=true)
 
-###References:
+### References:
 
 - This is a 99% rewritten version of the "geniuszhe" version: https://github.com/cas-bigdatalab/ambari-mongodb-cluster

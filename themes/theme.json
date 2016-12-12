@@ -1,0 +1,167 @@
+{
+  "name": "default",
+  "description": "Default theme for MongoDB service",
+  "configuration": {
+    "layouts": [
+      {
+        "name": "default",
+        "tabs": [
+          {
+            "name": "general",
+            "display-name": "General",
+            "layout": {
+              "tab-columns": "3",
+              "tab-rows": "1",
+              "sections": [
+                {
+                  "name": "section-setup-tries",
+                  "display-name": "Cluster Setup Tries",
+                  "row-index": "0",
+                  "column-index": "0",
+                  "row-span": "1",
+                  "column-span": "1",
+                  "section-columns": "1",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "subsection-setup-tries-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "section-users",
+                  "display-name": "System User",
+                  "row-index": "0",
+                  "column-index": "1",
+                  "row-span": "1",
+                  "column-span": "1",
+                  "section-columns": "1",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "subsection-users-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "section-path",
+                  "display-name": "System Paths",
+                  "row-index": "0",
+                  "column-index": "2",
+                  "row-span": "1",
+                  "column-span": "1",
+                  "section-columns": "1",
+                  "section-rows": "1",
+                  "subsections": [
+                    {
+                      "name": "subsection-path-col1",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "placement": {
+      "configuration-layout": "default",
+      "configs": [
+        {
+          "config": "mongodb/try_interval",
+          "subsection-name": "subsection-setup-tries-col1"
+        },
+        {
+          "config": "mongodb/times_to_try",
+          "subsection-name": "subsection-setup-tries-col1"
+        },
+        {
+          "config": "mongodb/mongodb_user",
+          "subsection-name": "subsection-users-col1"
+        },
+        {
+          "config": "mongodb/mongodb_user_group",
+          "subsection-name": "subsection-users-col1"
+        },
+        {
+          "config": "mongodb/db_path",
+          "subsection-name": "subsection-path-col1"
+        },
+        {
+          "config": "mongodb/log_path",
+          "subsection-name": "subsection-path-col1"
+        },
+        {
+          "config": "mongodb/pid_db_path",
+          "subsection-name": "subsection-path-col1"
+        }
+      ]
+    },
+    "widgets": [
+      {
+        "config": "mongodb/try_interval",
+        "widget": {
+          "type": "time-interval-spinner",
+          "units": [
+            {
+              "unit-name": "minutes,seconds"
+            }
+          ]
+        }
+      },
+      {
+        "config": "mongodb/times_to_try",
+        "widget": {
+          "type": "slider",
+          "units": [
+            {
+              "unit-name": "int"
+            }
+          ]
+        }
+      },
+      {
+        "config": "mongodb/mongodb_user",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
+        "config": "mongodb/mongodb_user_group",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
+        "config": "mongodb/db_path",
+        "widget": {
+          "type": "directory"
+        }
+      },
+      {
+        "config": "mongodb/log_path",
+        "widget": {
+          "type": "directory"
+        }
+      },
+      {
+        "config": "mongodb/pid_db_path",
+        "widget": {
+          "type": "directory"
+        }
+      }
+    ]
+  }
+}

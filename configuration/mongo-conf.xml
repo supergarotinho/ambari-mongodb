@@ -3,17 +3,6 @@
 
 <configuration supports_adding_forbidden="true">
   <property require-input="false">
-    <name>conf_file</name>
-    <display-name>Config File Template</display-name>
-    <value></value>
-    <description>Config File Template to be used with for mongodb config instances</description>
-    <value-attributes>
-      <type>multiLine</type>
-      <empty-value-valid>true</empty-value-valid>
-    </value-attributes>
-  </property>
-
-  <property require-input="false">
     <name>cluster_definition</name>
     <value></value>
     <description>This property is used to set up the mongodb config server replicaset instances.
@@ -53,5 +42,14 @@
     </value-attributes>
   </property>
 
-
+  <property require-input="false">
+    <name>conf_file</name>
+    <display-name>Config File Template</display-name>
+    <value></value>
+    <description>Config File Template to be used with for mongodb config instances</description>
+    <value-attributes>
+      <type>multiLine</type>
+      <empty-value-valid>true</empty-value-valid>
+    </value-attributes>
+  </property>
 </configuration>
