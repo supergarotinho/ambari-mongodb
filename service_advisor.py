@@ -260,7 +260,7 @@ class HDP23MongoDBServiceAdvisor(service_advisor.ServiceAdvisor):
         siteName = "mongodb"
         validationItems = []
 
-        # 1. Check in some of directories are the root dir or with special chars
+        # 1. Check in some of directories are the root dir or if they have with special chars
         directories = {
             'db_path': 'MongoDB DB Path Prefix',
             'log_path': 'MongoDB Log Path',

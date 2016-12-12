@@ -16,6 +16,9 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
   - A client wrapper to be used to connect to the cluster
 - Supports executing more than one instance of the same server type per host
   - This is useful when the number of hosts are limited
+  - In order to do that, you must specify more than one port in the port list configuration for that instance type
+- Supports a very flexible port configuration string
+  - Eg.: 27019,27020,27025-27027 
 - Shard architecture configuration:
   - Configure witch instances will be in witch shard
   - Configure witch instances will act as an arbiter
@@ -104,7 +107,7 @@ sudo service ambari-server restart
 4. Then you can click on 'Add Service' from the 'Actions' dropdown menu in the bottom left of the Ambari dashboard:
 5. On bottom left -> Actions -> Add service -> check MongoDB -> Next -> Next -> Next -> Deploy
 
-    - The images of the installation sequence is [here](docs/setup.md)
+    - The images of the installation sequence are [here](docs/setup.md)
 
 6. On successful deployment you will see the MongoDB as part of Ambari stack and will be able to start/stop the service from here:
 
