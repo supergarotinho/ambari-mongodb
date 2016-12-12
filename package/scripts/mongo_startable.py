@@ -58,8 +58,8 @@ class MongoStartable(MongoBase):
         self.configure(env)
         my_hostname = self.my_hostname
         print 'My hostname: ' + my_hostname
-        print "Checking mongo instances status..."
-        cluster_status = self.getClusterStatus(self.getClusterData())
+        Logger.info("Checking mongo instances status...")
+        cluster_status = self.getClusterStatus(self.getClusterData(withThisHostInstancesOnly=True))
         print 'Shards to process: ' + str(len(cluster_status))
         for shard in cluster_status:
             print 'Processing shard: ' + shard[0]
