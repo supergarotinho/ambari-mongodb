@@ -73,6 +73,13 @@
           </commandScript>
         </component>
       </components>
+      
+      <themes>
+        <theme>
+          <fileName>theme.json</fileName>
+          <default>true</default>
+        </theme>
+      </themes>
 
       <osSpecifics>
         <osSpecific>
