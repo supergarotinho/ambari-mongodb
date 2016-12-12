@@ -9,24 +9,6 @@
       <version>3.2.9</version>
       <components>
         <component>
-          <name>MONGODB</name>
-          <displayName>Mongo DB Server</displayName>
-          <category>SLAVE</category>
-		  <cardinality>1+</cardinality>
-          <commandScript>
-            <script>scripts/mongo_db.py</script>
-            <scriptType>PYTHON</scriptType>
-            <timeout>600</timeout>
-          </commandScript>
-          <configFiles>
-            <configFile>
-              <type>xml</type>
-              <fileName>mongod.xml</fileName>
-              <dictionaryName>mongod</dictionaryName>
-            </configFile>
-          </configFiles>
-        </component>
-        <component>
           <name>MONGODC</name>
           <displayName>Mongo Config Server</displayName>
           <category>SLAVE</category>
@@ -63,6 +45,24 @@
           </configFiles>
         </component>
         <component>
+          <name>MONGODB</name>
+          <displayName>Mongo DB Server</displayName>
+          <category>SLAVE</category>
+		  <cardinality>1+</cardinality>
+          <commandScript>
+            <script>scripts/mongo_db.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+          <configFiles>
+            <configFile>
+              <type>xml</type>
+              <fileName>mongod.xml</fileName>
+              <dictionaryName>mongod</dictionaryName>
+            </configFile>
+          </configFiles>
+        </component>
+        <component>
           <name>MONGODB_CLIENT</name>
           <displayName>MongoDB Client</displayName>
           <category>CLIENT</category>
@@ -73,7 +73,7 @@
           </commandScript>
         </component>
       </components>
-      
+
       <themes>
         <theme>
           <fileName>theme.json</fileName>

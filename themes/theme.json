@@ -11,23 +11,23 @@
             "display-name": "General",
             "layout": {
               "tab-columns": "3",
-              "tab-rows": "1",
+              "tab-rows": "2",
               "sections": [
                 {
                   "name": "section-setup-tries",
                   "display-name": "Cluster Setup Tries",
                   "row-index": "0",
                   "column-index": "0",
-                  "row-span": "1",
+                  "row-span": "2",
                   "column-span": "1",
                   "section-columns": "1",
-                  "section-rows": "1",
+                  "section-rows": "2",
                   "subsections": [
                     {
                       "name": "subsection-setup-tries-col1",
                       "row-index": "0",
                       "column-index": "0",
-                      "row-span": "1",
+                      "row-span": "2",
                       "column-span": "1"
                     }
                   ]
@@ -37,16 +37,16 @@
                   "display-name": "System User",
                   "row-index": "0",
                   "column-index": "1",
-                  "row-span": "1",
+                  "row-span": "2",
                   "column-span": "1",
                   "section-columns": "1",
-                  "section-rows": "1",
+                  "section-rows": "2",
                   "subsections": [
                     {
                       "name": "subsection-users-col1",
                       "row-index": "0",
                       "column-index": "0",
-                      "row-span": "1",
+                      "row-span": "2",
                       "column-span": "1"
                     }
                   ]
@@ -56,16 +56,16 @@
                   "display-name": "System Paths",
                   "row-index": "0",
                   "column-index": "2",
-                  "row-span": "1",
+                  "row-span": "2",
                   "column-span": "1",
                   "section-columns": "1",
-                  "section-rows": "1",
+                  "section-rows": "2",
                   "subsections": [
                     {
                       "name": "subsection-path-col1",
                       "row-index": "0",
                       "column-index": "0",
-                      "row-span": "1",
+                      "row-span": "2",
                       "column-span": "1"
                     }
                   ]
@@ -113,10 +113,10 @@
       {
         "config": "mongodb/try_interval",
         "widget": {
-          "type": "time-interval-spinner",
+          "type": "slider",
           "units": [
             {
-              "unit-name": "minutes,seconds"
+              "unit-name": "seconds"
             }
           ]
         }
