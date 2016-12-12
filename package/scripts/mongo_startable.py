@@ -56,8 +56,12 @@ class MongoStartable(MongoBase):
 
     def status(self, env):
         import logging
-        logging.basicConfig(filename='/var/log/ambari-agent/mongo.log',level=logging.DEBUG)
-        logger = logging.getLogger('Mongo')
+        logger = logging.getLogger('mongo')
+        logger.setLevel(logging.DEBUG)
+        # create file handler which logs even debug messages
+        fh = logging.FileHandler('/var/log/ambari-agent/mongo.log')
+        fh.setLevel(logging.DEBUG)
+        logger.addHandler(fh)
         logger.info("Initiating mongo status...")
         self.configure(env)
         my_hostname = self.my_hostname
