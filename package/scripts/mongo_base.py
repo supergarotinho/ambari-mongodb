@@ -350,7 +350,7 @@ class MongoBase(Script):
     """Returns a list for this server of shards and server instances of this node:
      [(shard_name,shard_node_list,[InstanceConfig])]
     """
-    def getClusterData(self,hosts_in_ambari=None,cluster_config=None,db_ports=None,shard_prefix=None,only_lists_with_my_hostname=False):
+    def getClusterData(self,hosts_in_ambari=None,cluster_config=None,db_ports=None,shard_prefix=None,only_lists_with_my_hostname=False,withThisHostInstancesOnly=False):
         """
         :return Returns a list of shards and nodes that are important for this instance: [(shard_name,shard_node_list,[InstanceConfig])]
         :rtype: list(tuple(str,list(str),list(InstanceConfig))]
@@ -359,14 +359,24 @@ class MongoBase(Script):
 
         Logger.info('Getting cluster configuration...')
 
+        db_path = params.db_path
+        my_hostname = self.my_hostname
+
         if hosts_in_ambari is None:
             cluster_config = self.getClusterDefinition()
             db_ports = self.getPorts()
             shard_prefix = self.getShardPrefix()
-            hosts_in_ambari = self.getHostsInAmbari()
 
-        db_path = params.db_path
-        my_hostname = self.my_hostname
+            # Check when we do not have the ambari hosts info available
+            if not withThisHostInstancesOnly:
+                hosts_in_ambari = self.getHostsInAmbari()
+            else:
+                # Find a way to discover it
+                if len(cluster_config) > 0:
+                    hosts_in_ambari = list(set(reduce(lambda x, y: x + ',' + y,
+                                                      cluster_config.replace("/arbiter", "").split(';')).split(',')))
+                else:
+                    hosts_in_ambari = [my_hostname]
 
         Logger.info('Cluster definition: ' + cluster_config)
         Logger.info('Database ports: ' + str(db_ports))

@@ -58,7 +58,7 @@ class MongoStartable(MongoBase):
         self.configure(env)
         my_hostname = self.my_hostname
         Logger.info('My hostname: ' + my_hostname)
-        Logger.info("Checking mongodb conf instances status...")
+        Logger.info("Checking mongo instances status...")
         cluster_status = self.getClusterStatus(self.getClusterData())
         Logger.info('Shards to process: ' + str(len(cluster_status)))
         for shard in cluster_status:
@@ -67,6 +67,7 @@ class MongoStartable(MongoBase):
             for node in shard[2]:
                 Logger.info('Processing node: ' + node.host_name + ":" + node.db_port)
                 Logger.info('The node is started: ' + str(node.is_started))
+                Logger.info('Pid file :' + node.pid_file_name)
                 if node.host_name == my_hostname:
                     Logger.info('Checking process id ...')
                     check_process_status(node.pid_file_name)
