@@ -18,6 +18,9 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
 - Shard architecture configuration:
   - Configure witch instances will be in witch shard
   - Configure witch instances will act as an arbiter
+- Automatically configure the shards adding the nodes to it
+  - Automatically detect the primary host to do it
+- Automatically add the shard to the mongos (Query Router) shard list
 - Support cluster scaling:
   - Adding new shards to the cluster
   - Adding new instances to the shard
@@ -25,6 +28,15 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
 - It has a service advisor that will warn if the cluster architecture is not recommendable
   - It also validates the configuration
   - The validation list is [here](docs/validator.md)
+
+#### Features in development stage
+
+- An alert when the cluster is up but the shards are not 100% ok
+  - If there are missing nodes on it
+- An alert when the shards are not in the mongos (Query Router) shard list
+- An command to re-configure the cluster:
+  - Adding the missing to the shard
+  - Adding the shard to the mongos list
 
 #### MongoDB Replicaset Cluster Architecture 
 
@@ -71,6 +83,13 @@ sudo service ambari-server restart
 6. On successful deployment you will see the MongoDB as part of Ambari stack and will be able to start/stop the service from here:
 
 ![Image](docs/images/summary.png?raw=true)
+
+> **Important Notes:**
+> - It is recommended to start all nodes of the same component type together
+> - If you are not going to restart all components at the same time, use the following recommended order:
+>   1. Start the mongo config servers first
+>   2. The start the mongos (Query Route) servers
+>   3. Start the mongod instances
 
 #### Default ports
 - mongos port 27017
