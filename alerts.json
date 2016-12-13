@@ -10,7 +10,7 @@
         "enabled": true,
         "source": {
           "type": "SCRIPT",
-          "path": "package/alerts/alert_shards_not_in_mongos_list.py",
+          "path": "HDP/2.3/services/MongoDB/package/alerts/alert_shards_not_in_mongos_list.py",
           "parameters": []
         }
       }
