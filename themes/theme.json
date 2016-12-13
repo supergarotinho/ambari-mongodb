@@ -15,7 +15,7 @@
               "sections": [
                 {
                   "name": "section-setup-tries",
-                  "display-name": "Cluster Setup Tries",
+                  "display-name": "Cluster Setup",
                   "row-index": "0",
                   "column-index": "0",
                   "row-span": "2",

@@ -20,8 +20,8 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
 - Supports a very flexible port configuration string
   - Eg.: 27019,27020,27025-27027 
 - Shard architecture configuration:
-  - Configure witch instances will be in witch shard
-  - Configure witch instances will act as an arbiter
+  - Configure which instances will be in which shard
+  - Configure which instances will act as an arbiter
 - Automatically configure the shards adding the nodes to it
   - Automatically detect the primary host to do it
 - Automatically add the shard to the mongos (Query Router) shard list
@@ -124,8 +124,6 @@ sudo service ambari-server restart
 - mongos port 27017
 - mongo config port 27019
 - mongo replica port 27018
-
-#### [Scalling out the cluster](docs/scale.md)
 
 #### What must be done carefully
 
