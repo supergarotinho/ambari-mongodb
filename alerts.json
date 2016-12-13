@@ -1,17 +1,19 @@
 {
-  "AlertDefinition": {
-    "service_name": "MongoDB",
-    "component_name": "MONGODC",
-    "name": "mongodb_shards_not_in_mongos",
-    "label": "Number of shards that are not in Mongos Shard List",
-    "description": "This service-level alert is triggered if some of the shards are not in the mongos Query Route shard list. This alert is only triggered if you have a sharding cluster with more than one shard",
-    "interval": 1,
-    "scope": "SERVICE",
-    "enabled": true,
-    "source": {
-      "type": "SCRIPT",
-      "path": "HDP/2.3/services/MongoDB/package/alerts/alert_shards_not_in_mongos_list.py",
-      "parameters": []
-    }
+  "MongoDB": {
+     "service": [
+        {
+            "name": "mongodb_shards_not_in_mongos",
+            "label": "Number of shards that are not in Mongos",
+            "description": "This service-level alert is triggered if some of the shards are not in the mongos Query Route shard list. This alert is only triggered if you have a sharding cluster with more than one shard",
+            "interval": 1,
+            "scope": "SERVICE",
+            "enabled": true,
+            "source": {
+              "type": "SCRIPT",
+              "path": "HDP/2.3/services/MongoDB/package/alerts/alert_shards_not_in_mongos_list.py",
+              "parameters": []
+            }
+        }
+     ]
   }
 }
