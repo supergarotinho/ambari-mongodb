@@ -1,6 +1,6 @@
 {
   "MongoDB": {
-     "service": [
+     "MONGODC": [
         {
             "name": "mongodb_shards_in_mongos",
             "label": "Number of shards that are not in Mongos",
