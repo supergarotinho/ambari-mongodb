@@ -43,5 +43,5 @@ def execute(configurations={}, parameters={}, host_name=None):
 
   return (result_code,[label])
 
-if __name__ == '__main__':
-  execute()
+#if __name__ == '__main__':
+#  execute()
