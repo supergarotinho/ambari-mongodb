@@ -6,7 +6,7 @@
         "label": "Number of shards that are not in Mongos Shard List",
         "description": "This service-level alert is triggered if some of the shards are not in the mongos Query Route shard list. This alert is only triggered if you have a sharding cluster with more than one shard",
         "interval": 1,
-        "scope": "ANY",
+        "scope": "SERVICE",
         "enabled": true,
         "source": {
           "type": "SCRIPT",
