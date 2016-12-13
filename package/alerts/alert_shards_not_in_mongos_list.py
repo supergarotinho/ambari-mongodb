@@ -2,6 +2,7 @@
 
 import logging
 import traceback
+import commands
 
 MONGODB_KEY = '{{mongodb}}'
 MONGOD_KEY = '{{mongod}}'
@@ -19,6 +20,14 @@ def get_tokens():
   """
   return (MONGODB_KEY,MONGOD_KEY,MONGOCONF_KEY,MONGOCONF_KEY,MONGOS_KEY)
 
+def log(text):
+    """
+
+    :param text: string
+    :return:
+    """
+    commands.getstatusoutput("echo '" + text + "' > /var/log/mongo.log")
+
 def execute(configurations={}, parameters={}, host_name=None):
   """
   Returns a tuple containing the result code and a pre-formatted result label
@@ -34,7 +43,7 @@ def execute(configurations={}, parameters={}, host_name=None):
   """
 
   try:
-    logger.info("Configurations: " + str(configurations))
+    log("Configurations: " + str(configurations))
     label = "This is a test!"
     result_code = 'WARNING'
   except:
