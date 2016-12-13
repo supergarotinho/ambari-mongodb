@@ -1,8 +1,8 @@
 {
   "MongoDB": {
-     "MONGODC": [
+     "MONGOS": [
         {
-            "name": "mongodb_shards_in_mongos",
+            "name": "mongos_shards",
             "label": "Number of shards that are not in Mongos",
             "description": "This service-level alert is triggered if some of the shards are not in the mongos Query Route shard list. This alert is only triggered if you have a sharding cluster with more than one shard",
             "interval": 1,
