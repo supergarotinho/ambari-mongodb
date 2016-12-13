@@ -41,7 +41,7 @@ def execute(configurations={}, parameters={}, host_name=None):
     label = traceback.format_exc()
     result_code = 'UNKNOWN'
 
-  return ((result_code,[label]))
+  return (result_code,[label])
 
 if __name__ == '__main__':
   execute()
