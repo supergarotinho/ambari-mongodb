@@ -10,7 +10,7 @@ from resource_management.libraries.script import Script
 from integrated_base_test import IntegratedBaseTestCase
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PACKAGE_DIR = os.path.join(SCRIPT_DIR, '../package/scripts/')
+PACKAGE_DIR = os.path.join(SCRIPT_DIR, '../scripts/')
 SERVICE_DIR = os.path.join(SCRIPT_DIR, '../')
 sys.path.append(PACKAGE_DIR)
 sys.path.append(SERVICE_DIR)
@@ -31,11 +31,11 @@ class UnitClientTest(IntegratedBaseTestCase):
 
     def test_configure_mongo_client_for_sharding_cluster(self):
         self.cleanup()
-        Script.config = {'clusterHostInfo': {
+        Script.config['clusterHostInfo'] = {
             'mongos_hosts': ['node1.test.com','node2.test.com'],
             'mongodb_hosts': ['node1.test.com'],
             'mongodc_hosts': []
-        }}
+        }
 
         # Test without_mongos cluster definition
         client = MongoClient()

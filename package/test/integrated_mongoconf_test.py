@@ -10,7 +10,7 @@ from resource_management.libraries.script import Script
 from integrated_base_test import IntegratedBaseTestCase
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PACKAGE_DIR = os.path.join(SCRIPT_DIR, '../package/scripts/')
+PACKAGE_DIR = os.path.join(SCRIPT_DIR, '../scripts/')
 SERVICE_DIR = os.path.join(SCRIPT_DIR, '../')
 sys.path.append(PACKAGE_DIR)
 sys.path.append(SERVICE_DIR)
@@ -35,11 +35,11 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
         server.install(self.env)
 
     def several_hosts_setup(self):
-        Script.config = {'clusterHostInfo': {
+        Script.config['clusterHostInfo'] = {
             'mongos_hosts': [],
             'mongodb_hosts': [],
             'mongodc_hosts': ['node1.test.com','node2.test.com','node3.test.com']
-        }}
+        }
 
         params.mongoconf_cluster_definition = ''
 
@@ -77,11 +77,11 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
                            repl_role=None)])]
 
     def one_host_setup(self):
-        Script.config = {'clusterHostInfo': {
+        Script.config['clusterHostInfo'] = {
             'mongos_hosts': [],
             'mongodb_hosts': [],
             'mongodc_hosts': ['node1.test.com']
-        }}
+        }
 
         params.mongoconf_cluster_definition = 'node1.test.com,node1.test.com,node1.test.com'
 

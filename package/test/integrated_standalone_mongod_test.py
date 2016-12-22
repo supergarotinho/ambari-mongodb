@@ -9,7 +9,7 @@ from resource_management.libraries.script import Script
 from integrated_base_test import IntegratedBaseTestCase
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PACKAGE_DIR = os.path.join(SCRIPT_DIR, '../package/scripts/')
+PACKAGE_DIR = os.path.join(SCRIPT_DIR, '../scripts/')
 SERVICE_DIR = os.path.join(SCRIPT_DIR, '../')
 sys.path.append(PACKAGE_DIR)
 sys.path.append(SERVICE_DIR)
@@ -23,11 +23,11 @@ class IntegratedStandaloneMongodTestCase(IntegratedBaseTestCase):
     def setUp(self):
         self.as_super = super(IntegratedStandaloneMongodTestCase, self)
         self.as_super.setUp()
-        Script.config = {'clusterHostInfo': {
+        Script.config['clusterHostInfo'] = {
             'mongos_hosts': [],
             'mongodb_hosts': ['node1.test.com'],
             'mongodc_hosts': []
-        }}
+        }
 
         # Configuring and Installing mongo config dependencies
         server = MongoDBServer()

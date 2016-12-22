@@ -10,7 +10,7 @@ from resource_management.libraries.script import Script
 from integrated_base_test import IntegratedBaseTestCase
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PACKAGE_DIR = os.path.join(SCRIPT_DIR, '../package/scripts/')
+PACKAGE_DIR = os.path.join(SCRIPT_DIR, '../scripts/')
 SERVICE_DIR = os.path.join(SCRIPT_DIR, '../')
 sys.path.append(PACKAGE_DIR)
 sys.path.append(SERVICE_DIR)

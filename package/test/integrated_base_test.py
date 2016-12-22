@@ -1,10 +1,11 @@
 import unittest
 import os
+from resource_management.libraries.script import Script
 
 from resource_management.core.environment import Environment
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PACKAGE_DIR = os.path.join(SCRIPT_DIR, '../package/scripts/')
+PACKAGE_DIR = os.path.join(SCRIPT_DIR, '../scripts/')
 SERVICE_DIR = os.path.join(SCRIPT_DIR, '../')
 
 class IntegratedBaseTestCase(unittest.TestCase):
@@ -21,6 +22,14 @@ class IntegratedBaseTestCase(unittest.TestCase):
         IntegratedBaseTestCase.env.__exit__(None,None,None)
 
     def setUp(self):
+        Script.config = {u'hostLevelParams': {
+            u'host_sys_prepped': u'false',
+            u'package_list': u'[{"name":"glibc","condition":"","skipUpgrade":false}]',
+            u'agent_stack_retry_on_unavailability': u'false',
+            u'agent_stack_retry_count': u'5',
+            u'stack_version': u'2.3',
+            u'repository_version_id': u'1'
+        }}
         self.configureHosts()
 
     def tearDown(self):
