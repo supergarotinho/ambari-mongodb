@@ -29,6 +29,12 @@ class IntegratedStandaloneMongodTestCase(IntegratedBaseTestCase):
             'mongodc_hosts': []
         }}
 
+        # Configuring and Installing mongo config dependencies
+        server = MongoDBServer()
+        server.my_hostname = 'node1.test.com'
+        server.configure(self.env)
+        server.install(self.env)
+
     def test_start_status_stop_mongod(self):
         server = MongoDBServer()
         server.my_hostname = 'node1.test.com'

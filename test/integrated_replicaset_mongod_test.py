@@ -28,6 +28,11 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
         self.as_super.setUp()
         params.try_interval = 4
         params.times_to_try = 2
+        # Configuring and Installing mongod dependencies
+        server = MongoDBServer()
+        server.my_hostname = 'node1.test.com'
+        server.configure(self.env)
+        server.install(self.env)
 
     def several_hosts_setup(self):
         Script.config = {'clusterHostInfo': {

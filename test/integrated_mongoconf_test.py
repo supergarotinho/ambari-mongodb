@@ -28,6 +28,11 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
         self.as_super.setUp()
         params.try_interval = 4
         params.times_to_try = 2
+        # Configuring and Installing mongo config dependencies
+        server = MongoConfigServer()
+        server.my_hostname = 'node1.test.com'
+        server.configure(self.env)
+        server.install(self.env)
 
     def several_hosts_setup(self):
         Script.config = {'clusterHostInfo': {

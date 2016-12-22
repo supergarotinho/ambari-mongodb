@@ -33,6 +33,22 @@ class IntegratedShardedClusterTestCase(IntegratedBaseTestCase):
         params.try_interval = 4
         params.times_to_try = 2
 
+        # Configuring and Installing mongo config dependencies
+        server = MongoDBServer()
+        server.my_hostname = 'node1.test.com'
+        server.configure(self.env)
+        server.install(self.env)
+        # Configuring and Installing mongo config dependencies
+        server = MongoConfigServer()
+        server.my_hostname = 'node1.test.com'
+        server.configure(self.env)
+        server.install(self.env)
+        # Configuring and Installing mongos dependencies
+        server = MongosServer()
+        server.my_hostname = 'node1.test.com'
+        server.configure(self.env)
+        server.install(self.env)
+
     def tearDown(self):
         self.as_super = super(IntegratedShardedClusterTestCase, self)
         self.as_super.tearDown()

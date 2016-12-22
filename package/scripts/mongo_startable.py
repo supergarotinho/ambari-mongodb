@@ -55,17 +55,19 @@ class MongoStartable(MongoBase):
                         Logger.info('Can not find pid process,skipping this noe')
 
     def log(self,info):
-        Execute('echo "' + info + '" >> /var/log/ambari-agent/mongo.log')
+        # Execute('echo "' + info + '" >> /var/log/ambari-agent/mongo.log')
+        import logging
+        logging.info(info)
 
     def status(self, env):
         # This custom log was added because the normal ambari logging does not work here
-        import logging
-        logger = logging.getLogger('mongo')
-        logger.setLevel(logging.DEBUG)
+        # import logging
+        # logger = logging.getLogger('mongo')
+        # logger.setLevel(logging.DEBUG)
         # create file handler which logs even debug messages
-        fh = logging.FileHandler('/var/log/ambari-agent/mongo.log')
-        fh.setLevel(logging.DEBUG)
-        logger.addHandler(fh)
+        # fh = logging.FileHandler('/var/log/ambari-agent/mongo.log')
+        # fh.setLevel(logging.DEBUG)
+        # logger.addHandler(fh)
         self.log("Initiating mongo status...")
         self.configure(env)
         my_hostname = self.my_hostname

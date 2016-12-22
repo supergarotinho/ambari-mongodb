@@ -30,6 +30,16 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
         self.config_server = None
         params.try_interval = 4
         params.times_to_try = 2
+        # Configuring and Installing mongo config dependencies
+        server = MongoConfigServer()
+        server.my_hostname = 'node1.test.com'
+        server.configure(self.env)
+        server.install(self.env)
+        # Configuring and Installing mongos dependencies
+        server = MongosServer()
+        server.my_hostname = 'node1.test.com'
+        server.configure(self.env)
+        server.install(self.env)
 
     def tearDown(self):
         self.as_super = super(IntegratedMongoConfTestCase, self)
