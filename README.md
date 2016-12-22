@@ -92,7 +92,7 @@ ssh root@ambari.machine
 2. To deploy the Mongo DB, run below
 ```bash
 VERSION=`hdp-select status hadoop-client | sed 's/hadoop-client - \([0-9]\.[0-9]\).*/\1/'`
-sudo git clone https://github.com/maocorte/ambari-tachyon-service.git  /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/MongoDB
+sudo git clone https://github.com/supergarotinho/ambari-mongodb /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/MongoDB
 ```
 
 3. Restart ambari server
