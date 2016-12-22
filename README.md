@@ -137,7 +137,7 @@ You must consider to backup the databases and understand how the database and lo
 - Removing a node
   - It is advisable to remove or move the database files and logs of the removed node
 
-####Managing by rest
+### Managing by rest
 
 - One benefit to wrapping the component in Ambari service is that you can now monitor/manage this service remotely via REST API
 
@@ -170,7 +170,7 @@ curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo"
 
     ```bash
     VERSION=`hdp-select status hadoop-client | sed 's/hadoop-client - \([0-9]\.[0-9]\).*/\1/'`
-    rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/mongo-ambari
+    rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/MongoDB
     ```
   - Restart Ambari
     ```bash
