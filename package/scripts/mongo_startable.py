@@ -8,6 +8,9 @@ class MongoStartable(MongoBase):
         self.configure(env)
         Logger.info("Starting the servers...")
 
+        config = self.get_config()
+        Logger.info("Host Level params: " + str(config['hostLevelParams']))
+
         my_hostname = self.my_hostname
         hosts_in_ambari = self.getHostsInAmbari()
         Logger.info("Current Hostname :" + my_hostname)

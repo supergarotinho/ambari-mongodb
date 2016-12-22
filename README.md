@@ -1,9 +1,9 @@
-### An Ambari Stack for MongoDB Cluster
+## An Ambari Stack for MongoDB Cluster
 Ambari stack for easily installing and managing MongoDB on HDP cluster with any kind of cluster architecture.
 
 **Author:** [Anderson Santos](https://br.linkedin.com/in/andersonrss)
 
-#### Features
+### Features
 
 - Auto install mongodb in the following ways:
   - As a sharding cluster
@@ -40,7 +40,7 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
   - You can also use any mongo paramer such as: ```mogok --user admin --eval 'rs.status()'```
 - **Well documented and tested**
 
-#### Features in development stage
+### Features in development stage
 
 - Add logOpSize config option 
 - An alert when the cluster is up but the shards are not 100% ok
@@ -50,7 +50,7 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
   - Adding the missing nodes to the shard
   - Adding the missing shards to the mongos list
 
-#### Future Features and development
+### Future Features and development
 
 We are needing help for these features. We have already developed some draft scripts and solutions for it.
 
@@ -67,15 +67,15 @@ We are needing help for these features. We have already developed some draft scr
   - A command to backup the databases
   - A command to restore the databases
 
-#### MongoDB Replicaset Cluster Architecture 
+### MongoDB Replicaset Cluster Architecture 
 
 ![Image](docs/images/mongodb-repl-cluster.png?raw=true)
 
-#### MongoDB Sharding Cluster Architecture 
+### MongoDB Sharding Cluster Architecture 
 
 ![Image](docs/images/mongodb-shard-cluster.png?raw=true)
 
-### Assumptions
+## Assumptions
 
 - Ambari is installed and running.
 - No previous installations of Mongo DB exist. If there any, you can either remove it or rename it.
@@ -125,7 +125,7 @@ sudo service ambari-server restart
 - mongo config port 27019
 - mongo replica port 27018
 
-#### What must be done carefully
+### What must be done carefully
 
 You must consider to backup the databases and understand how the database and log names are chosen by the script  
 
@@ -157,7 +157,7 @@ curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo"
 curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop $SERVICE via REST"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' http://$AMBARI_HOST:8080/api/v1/clusters/$CLUSTER/services/$SERVICE
 ```
 
-#### Removing the service
+### Removing the service
 
 - To remove the MongoDB:
   - Stop the service via Ambari
@@ -181,11 +181,11 @@ curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo"
     sudo service ambari-server restart
     ```
 
-#### Some configurations
+### Some configurations
 
 ![Image](docs/images/configs.png?raw=true)
 
-#### Last Test Coverage Report
+### Last Test Coverage Report
 
 ![Image](docs/images/tests.png?raw=true)
 
