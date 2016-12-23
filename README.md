@@ -38,7 +38,11 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
   - It checks if the server is on before trying to connect
   - It can be called using ```mogok```
   - You can also use any mongo paramer such as: ```mogok --user admin --eval 'rs.status()'```
+- **Testing**
+  - An test wrapper that execute integrated tests at various linux distros using docker 
+  - An docker instance to setup an testing environment and execute the integrated tests for CentOS 7 distro
 - **Well documented and tested**
+
 
 ### Features in development stage
 
@@ -56,9 +60,7 @@ We are needing help for these features. We have already developed some draft scr
 
 - **Testing**
   - The tests for the service_advisor script
-  - An docker instance to setup an testing environment and execute the integrated tests for CentOS and Redhat distros 
-- Few modifications to support other linux distros
-  - And docker instances to execute the integrated tests
+- Few modifications to support other linux distros (including testing)
 - **A metrics monitor** to send several metrics from the mongo instances to ambari
   - And the ambari metrics screen :)
 - **Useful Tasks:**  
@@ -184,6 +186,12 @@ curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo"
 ### Some configurations
 
 ![Image](docs/images/configs.png?raw=true)
+
+### Running the tests
+
+```bash
+package/test/runAllTests.sh
+```
 
 ### Last Test Coverage Report
 

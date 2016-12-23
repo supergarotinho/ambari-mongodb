@@ -28,6 +28,7 @@ class IntegratedStandaloneMongodTestCase(IntegratedBaseTestCase):
             'mongodb_hosts': ['node1.test.com'],
             'mongodc_hosts': []
         }
+        params.times_to_try = 0
 
         # Configuring and Installing mongo config dependencies
         server = MongoDBServer()

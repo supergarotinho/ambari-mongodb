@@ -597,7 +597,7 @@ class MongoBase(Script):
         :return: None
         """
         import params
-        # The standalone cluster will be a replicaset with a primari node only
+        # The standalone cluster will be a replicaset with a primary node only
         Logger.info('Initiating the cluster setup phase ...')
 
         times_to_try = params.times_to_try

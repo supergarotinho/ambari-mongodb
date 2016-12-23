@@ -6,5 +6,7 @@ omit =
     */pkg_resources/*
     */resource_management/*
     */ambari_simplejson/*
+    */site-packages/*
+    */yum-plugins/*
     # omit the test classes
     # *_test.py

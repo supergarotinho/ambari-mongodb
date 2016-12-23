@@ -121,7 +121,7 @@ class MongoDBServer(MongoStartable):
 
         result = False
 
-        if shard_name in shard_list:
+        if (shard_name in shard_list) or (len(mongos_list) == 0):
             result = True
         else:
             online_mongos = filter(lambda node: node.is_started == True, mongos_list)
