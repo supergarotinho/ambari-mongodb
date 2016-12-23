@@ -21,6 +21,7 @@ before_install:
 
 install:
   - pip install coveralls
+  #- pip install python-coveralls
 
 services:
   - docker
@@ -29,6 +30,6 @@ script:
   - package/test/runAllTests.sh
 
 after_success:
-  - sudo cp . /app -R
-  - sudo cd /app/package/test/
-  - sudo coveralls
+  #- sudo cp . /app -R
+  #- sudo cd /app/package/test/
+  - sudo coveralls debug

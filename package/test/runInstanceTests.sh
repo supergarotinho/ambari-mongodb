@@ -2,12 +2,12 @@
 
 rm -rf /var/lib/mongodb/node*
 rm -rf /var/log/mongodb/node*
-rm -f /app/package/test/coverage.xml
+rm -f /app/coverage.xml
 
-cd /app/package/test
+#cd /app/package/test
 
 #coverage run -m unittest discover . "*_test.py"
-coverage run -m unittest discover . "*install_test.py"
+coverage run -m unittest discover package/test "*install_test.py"
 result=$?
 
 if [[ $result == 0 ]]; then
