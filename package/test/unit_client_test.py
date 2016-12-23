@@ -17,10 +17,10 @@ sys.path.append(SERVICE_DIR)
 
 # Custom service scripts includes
 import params
+from mongo_client import MongoClient
 #from mongos import MongosServer
 #from mongo_base import InstanceConfig
 #from mongo_base import InstanceStatus
-from mongo_client import MongoClient
 
 class UnitClientTest(IntegratedBaseTestCase):
 

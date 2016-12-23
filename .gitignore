@@ -8,3 +8,4 @@ archive.zip
 *.iml
 *.pyc
 .coverage
+coverage.xml
