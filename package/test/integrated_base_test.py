@@ -10,7 +10,7 @@ SERVICE_DIR = os.path.join(SCRIPT_DIR, '../')
 
 class IntegratedBaseTestCase(unittest.TestCase):
 
-    SLEEP_INTERVAL_AFTER_START_A_INSTANCE = 5
+    SLEEP_INTERVAL_AFTER_START_A_INSTANCE = 10
 
     @classmethod
     def setUpClass(cls):

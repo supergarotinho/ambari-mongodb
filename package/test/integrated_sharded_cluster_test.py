@@ -31,7 +31,7 @@ class IntegratedShardedClusterTestCase(IntegratedBaseTestCase):
         self.config_server = None
         self.mongos_server = None
         params.try_interval = 4
-        params.times_to_try = 2
+        params.times_to_try = 10
 
         # Configuring and Installing mongo config dependencies
         server = MongoDBServer()

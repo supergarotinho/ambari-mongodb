@@ -27,7 +27,7 @@ class IntegratedMongoConfTestCase(IntegratedBaseTestCase):
         self.as_super = super(IntegratedMongoConfTestCase, self)
         self.as_super.setUp()
         params.try_interval = 4
-        params.times_to_try = 2
+        params.times_to_try = 10
         # Configuring and Installing mongo config dependencies
         server = MongoConfigServer()
         server.my_hostname = 'node1.test.com'

@@ -27,7 +27,7 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
         self.as_super = super(IntegratedReplicaMongodTestCase, self)
         self.as_super.setUp()
         params.try_interval = 4
-        params.times_to_try = 2
+        params.times_to_try = 10
         # Configuring and Installing mongod dependencies
         server = MongoDBServer()
         server.my_hostname = 'node1.test.com'
@@ -412,6 +412,9 @@ class IntegratedReplicaMongodTestCase(IntegratedBaseTestCase):
                            repl_role="SECONDARY")])]
 
         clusterStatus = server1.getClusterStatus(server1.getClusterData())
+        print "\n\n\n\n\n clusterStatus: " + str(clusterStatus) + '\n\n\n\n\n\n'
+        print "\n\n\n\n\n expectedClusterStatusServer1On: " + str(expectedClusterStatusServer1On) + '\n\n\n\n\n\n'
+
         self.assertEqual(clusterStatus, expectedClusterStatusServer1On, "The cluster status result for a started node1"
                                                                         " in the replicaset is not right")
 

@@ -6,8 +6,8 @@ rm -f /app/package/test/coverage.xml
 
 cd /app/package/test
 
-#coverage run -m --branch unittest discover . "*_test.py"
-coverage run -m unittest discover . "*_standalone_mongod_test.py"
+coverage run -m unittest discover . "*_test.py"
+#coverage run -m unittest discover . "*_standalone_mongod_test.py"
 result=$?
 
 if [[ $result == 0 ]]; then

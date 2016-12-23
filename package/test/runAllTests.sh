@@ -3,7 +3,7 @@
 distros=(centos7)
 
 for distro in ${distros[@]}; do
-  docker run -it -v $(pwd):/app ambari-tests:$distro /app/package/test/runInstanceTests.sh
+  docker run -it -v $(pwd):/app supergarotinho/ambari-tests:$distro /app/package/test/runInstanceTests.sh
   result=$?
 
   if [[ $result != 0 ]]; then
