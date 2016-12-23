@@ -88,30 +88,33 @@ We are needing help for these features. We have already developed some draft scr
 
 Follow given step to install and manage Mongo DB using Ambari.
 
-1. Connect to the VM via SSH (password hadoop for sandbox image) and start Ambari server
-```bash
-ssh root@ambari.machine
-```
+1. Connect to the VM via SSH (password hadoop for sandbox image) and start Ambari server 
 
-2. To deploy the Mongo DB, run below
-```bash
-VERSION=`hdp-select status hadoop-client | sed 's/hadoop-client - \([0-9]\.[0-9]\).*/\1/'`
-sudo git clone https://github.com/supergarotinho/ambari-mongodb /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/MongoDB
-```
+  ```bash
+  ssh root@ambari.machine
+  ```
+  
+2. To deploy the Mongo DB, run below 
 
+  ```bash
+  VERSION=`hdp-select status hadoop-client | sed 's/hadoop-client - \([0-9]\.[0-9]\).*/\1/'`
+  sudo git clone https://github.com/supergarotinho/ambari-mongodb /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/MongoDB
+  ```
+  
 3. Restart ambari server
-```bash
-#sandbox
-service ambari restart
 
-#non sandbox
-sudo service ambari-server restart
-```
+  ```bash
+  #sandbox
+  service ambari restart
 
+  #non sandbox
+  sudo service ambari-server restart
+  ```
 4. Then you can click on 'Add Service' from the 'Actions' dropdown menu in the bottom left of the Ambari dashboard:
+
 5. On bottom left -> Actions -> Add service -> check MongoDB -> Next -> Next -> Next -> Deploy
 
-    - The images of the installation sequence are [here](docs/setup.md)
+  - The images of the installation sequence are [here](docs/setup.md)
 
 6. On successful deployment you will see the MongoDB as part of Ambari stack and will be able to start/stop the service from here:
 
