@@ -29,6 +29,6 @@ script:
   - package/test/runAllTests.sh
 
 after_success:
-  - cp . /app -R
+  - sudo cp . /app -R
   - cd /app/package/test/
   - coveralls -d coverage.xml
