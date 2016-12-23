@@ -19,8 +19,8 @@ before_install:
   # Load cached docker images
   - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 
-install:
-  - pip install coveralls
+#install:
+#  - pip install coveralls
 
 services:
   - docker
@@ -28,6 +28,6 @@ services:
 script:
   - package/test/runAllTests.sh
 
-after_success:
-  - cd package/test/
-  - coveralls
+#after_success:
+#  - cd package/test/
+#  - coveralls
