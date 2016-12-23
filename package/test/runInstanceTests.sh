@@ -12,7 +12,6 @@ result=$?
 if [[ $result == 0 ]]; then
     coverage report
     coverage xml
-    coveralls
 fi
 
 ps -aux | grep mongo | sed '/grep/D' | cut -f3 -d " " | xargs --no-run-if-empty kill -9
