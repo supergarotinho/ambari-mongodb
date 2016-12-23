@@ -30,6 +30,6 @@ script:
   - package/test/runAllTests.sh
 
 after_success:
-  #- sudo cp . /app -R
+  - sudo cp . /app -R
   #- sudo cd /app/package/test/
   - coveralls debug
