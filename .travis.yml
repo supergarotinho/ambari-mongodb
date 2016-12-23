@@ -29,4 +29,5 @@ script:
   - package/test/runAllTests.sh
 
 after_success:
+  - cd package/test/
   - coveralls
