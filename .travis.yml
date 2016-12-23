@@ -30,5 +30,5 @@ script:
 
 after_success:
   - sudo cp . /app -R
-  - cd /app/package/test/
+  - sudo cd /app/package/test/
   - coveralls -d coverage.xml
