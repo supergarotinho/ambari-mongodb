@@ -31,4 +31,4 @@ script:
 after_success:
   - cp . /app -R
   - cd /app/package/test/
-  - coveralls
+  - coveralls -d coverage.xml
