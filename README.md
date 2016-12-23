@@ -1,6 +1,8 @@
 ## An Ambari Stack for MongoDB Cluster
 Ambari stack for easily installing and managing MongoDB on HDP cluster with any kind of cluster architecture.
 
+[![Build Status](https://travis-ci.org/supergarotinho/ambari-mongodb.svg?branch=master)](https://travis-ci.org/supergarotinho/ambari-mongodb) [![Coverage Status](https://coveralls.io/repos/github/supergarotinho/ambari-mongodb/badge.svg?branch=master)](https://coveralls.io/github/supergarotinho/ambari-mongodb?branch=master)
+
 **Author:** [Anderson Santos](https://br.linkedin.com/in/andersonrss)
 
 ### Features
