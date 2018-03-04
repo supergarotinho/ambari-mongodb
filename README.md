@@ -1,11 +1,73 @@
-## An Ambari Stack for MongoDB Cluster
-Ambari stack for easily installing and managing MongoDB on HDP cluster with any kind of cluster architecture.
+<h1 align="center">An Ambari Stack for MongoDB Cluster &nbsp; <a href="https://twitter.com/intent/tweet?text=Deploy%2C%20configure%20and%20monitor%20MongoDB%20cluster%20with%20Apache%20Ambari%20and%20supergarotinho%2Fambari-mongodb%20!&amp;url=https://www.gruponeuro.com.br&amp;via=supergarotinho&amp;hashtags=ambari,bigdata,big-data,hdp,hortonworks,mongodb,mongo,data" rel="nofollow"><img src="https://camo.githubusercontent.com/83d4084f7b71558e33b08844da5c773a8657e271/68747470733a2f2f696d672e736869656c64732e696f2f747769747465722f75726c2f687474702f736869656c64732e696f2e7376673f7374796c653d736f6369616c" alt="Tweet" data-canonical-src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social" style="max-width:100%;"></a>
+</h1>
+<div align="center">
+  Ambari stack for easily installing and managing MongoDB on HDP cluster with any kind of cluster architecture.
+</div>
 
-[![Build Status](https://travis-ci.org/supergarotinho/ambari-mongodb.svg?branch=master)](https://travis-ci.org/supergarotinho/ambari-mongodb) [![Coverage Status](https://coveralls.io/repos/github/supergarotinho/ambari-mongodb/badge.svg?branch=master)](https://coveralls.io/github/supergarotinho/ambari-mongodb?branch=master)
+<br />
 
-**Author:** [Anderson Santos](https://br.linkedin.com/in/andersonrss)
+<div align="center">
 
-### Features
+  <!-- Build Status -->
+  <a href="https://travis-ci.org/supergarotinho/ambari-mongodb">
+    <img src="https://travis-ci.org/supergarotinho/ambari-mongodb.svg?branch=master"
+      alt="Build Status" />
+  </a>
+  <!-- Coverage Status -->
+  <a href="https://coveralls.io/github/supergarotinho/ambari-mongodb?branch=master">
+    <img src="https://coveralls.io/repos/github/supergarotinho/ambari-mongodb/badge.svg?branch=master" />
+  </a>
+  <!-- Price -->
+  <a href="https://github.com/supergarotinho/bashtest-example/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/price-FREE-0098f7.svg"
+      alt="Price" />
+  </a>
+  <!-- License: BSD-3 -->
+  <a href="https://github.com/supergarotinho/bashtest-example/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/license-BSD3-blue.svg"
+      alt="License: BSD-3" />
+  </a>
+  <!-- Contributions welcome -->
+  <img src="https://img.shields.io/badge/contributions-welcome-orange.svg"
+    alt="Contributions welcome" />
+</div>
+
+<br/>
+
+<div align="center">
+  <strong>Author:</strong> <a href="https://br.linkedin.com/in/andersonrss">Anderson Santos</a>
+</div>
+
+<div align="center">
+  <sub>Built with ❤︎ by
+  <a href="https://br.linkedin.com/in/andersonrss">Anderson Santos</a> and
+  <a href="https://github.com/supergarotinho/bashtest-example/graphs/contributors">
+    contributors
+  </a>
+</div>
+
+## Table of contents
+
+- [Features](#features)
+  - [Some configurations](#some-configurations)
+  - [Features in development stage](#features-in-development-stage)
+  - [Future Features and development](#future-features-and-development)
+- [MongoDB Replicaset Cluster Architecture](#mongodb-replicaset-cluster-architecture)
+- [MongoDB Sharding Cluster Architecture](#mongodb-sharding-cluster-architecture)
+- [Assumptions](#assumptions)
+- [Getting Started](#getting-started)
+  - [Setup](#setup)
+  - [Default ports](#default-ports)
+  - [What must be done carefully](#what-must-be-done-carefully)
+  - [Managing by rest](#managing-by-rest)
+- [Removing the service](#removing-the-service)
+- [Running the tests](#running-the-tests)
+  - [Last Test Coverage Report](#last-test-coverage-report)
+- [Authors](#authors)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
+## Features
 
 - Auto install mongodb in the following ways:
   - As a sharding cluster
@@ -45,6 +107,9 @@ Ambari stack for easily installing and managing MongoDB on HDP cluster with any 
   - An docker instance to setup an testing environment and execute the integrated tests for CentOS 7 distro
 - **Well documented and tested**
 
+### Some configurations
+
+![Image](docs/images/configs.png?raw=true)
 
 ### Features in development stage
 
@@ -71,11 +136,11 @@ We are needing help for these features. We have already developed some draft scr
   - A command to backup the databases
   - A command to restore the databases
 
-### MongoDB Replicaset Cluster Architecture 
+## MongoDB Replicaset Cluster Architecture 
 
 ![Image](docs/images/mongodb-repl-cluster.png?raw=true)
 
-### MongoDB Sharding Cluster Architecture 
+## MongoDB Sharding Cluster Architecture 
 
 ![Image](docs/images/mongodb-shard-cluster.png?raw=true)
 
@@ -83,6 +148,8 @@ We are needing help for these features. We have already developed some draft scr
 
 - Ambari is installed and running.
 - No previous installations of Mongo DB exist. If there any, you can either remove it or rename it.
+
+## Getting Started
 
 ### Setup
 
@@ -127,7 +194,7 @@ Follow given step to install and manage Mongo DB using Ambari.
 >   2. The start the mongos (Query Route) servers
 >   3. Start the mongod instances
 
-#### Default ports
+### Default ports
 - mongos port 27017
 - mongo config port 27019
 - mongo replica port 27018
@@ -164,7 +231,7 @@ curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo"
 curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop $SERVICE via REST"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' http://$AMBARI_HOST:8080/api/v1/clusters/$CLUSTER/services/$SERVICE
 ```
 
-### Removing the service
+## Removing the service
 
 - To remove the MongoDB:
   - Stop the service via Ambari
@@ -188,11 +255,8 @@ curl -u admin:$PASSWORD -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo"
     sudo service ambari-server restart
     ```
 
-### Some configurations
 
-![Image](docs/images/configs.png?raw=true)
-
-### Running the tests
+## Running the tests
 
 ```bash
 package/test/runAllTests.sh
@@ -202,6 +266,16 @@ package/test/runAllTests.sh
 
 ![Image](docs/images/tests.png?raw=true)
 
-### References:
+## Authors
+
+* **Anderson Santos** - *Initial work* - [supergarotinho](https://github.com/supergarotinho)
+
+See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the BSD-3 License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
 
 - This is a 99% rewritten version of the "geniuszhe" version: https://github.com/cas-bigdatalab/ambari-mongodb-cluster
